@@ -37,7 +37,6 @@ Front-end:
 <li>Next JS</li>
 <li>Material-UI</li>
 </ul>
-<br>
 
 Back-end:
 
