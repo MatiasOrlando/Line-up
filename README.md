@@ -1,4 +1,4 @@
-# LINE-UP APP
+# LINE-UP APP :hourglass_flowing_sand:
 
 LINE-UP, es una aplicacion web que le permite a sus usuarios poder reservar turnos online en distintas sucursales.
 Ofrece comodidad y flexibilidad para el usuario, permitiéndole reservar y administrar sus turnos de manera rápida y fácil. Tambien le permite a los operadores de dichas sucursales poder gestionar el flujo de reservas de manera eficiente y controlada.
@@ -22,6 +22,7 @@ Si desea correr este proyecto, simplemente clone este repositorio y ejecute npm 
 | npm run server | npm run dev |
 
 Git clone: https://github.com/MatiasOrlando/line-up.git
+<br>
 Abra [http://localhost:3000](http://localhost:3000) para verlo en su navegador.
 <br>
 <br>
@@ -44,7 +45,6 @@ Back-end:
 <li>Node - Express JS</li>
 <li>MongoDB - Mongoose</li>
 </ul>
-<br><br>
 
 ## Versionado 📝
 
