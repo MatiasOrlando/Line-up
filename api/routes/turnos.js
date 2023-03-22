@@ -6,12 +6,24 @@
 // Exito: En caso de que la reserva se cree con exito, se enviaria un status 201 y se enviaria la reserva creada.
 // Fallo: En caso de que la reserva no se cree con exito, se enviaria  un status 404 y un mensaje de {error: usuario no encontrado}.
 
+routes.post("/agregar", (req, res) => {
+    return res.send("ruta para crear una reserva");
+  });
+
+
 // ACCEDER A TODAS TUS RESERVAS.
-// Ruta GET para que un usuario acceda a todas sus reservas, req.body = userDni.
+// Ruta GET para que un usuario acceda a todas sus reservas req.params = id
 // se buscaria Todos los turnos y se comprobaria si el usuario guardado en turno coincide con el dni pasado del usuario, en caso de que conincida se guardaria todos los turnos en una variable.
 // Exito: Una vez que se compare todos los turnos y se encuentre turnos de ese usuario,
 // se enviaria un status 200 y se enviaria todas las reservas.
 // Fallo: En caso de que no se encuentre reservas de ese usuario, se enviaria un status 404 y un mensaje {error: reservas no encontradas}.
+
+
+routes.get("/:id", (req, res) => {
+    return res.send("ruta para buscar todas las reservas de un usuario");
+  });
+
+
 
 // EDITAR UNA DE TUS RESERVAS.
 // Ruta PUT para que un usuario edite una de sus reservas, req.params = reservaId   req.body sucursalEdit, HorarioEdit, nombreEdit, TelefonoEdir, MailEdit.
@@ -19,6 +31,14 @@
 // una vez encontrada, se modificaria la reserva con los datos pasados por el req.body.
 // Exito: Una vez modificados los datos de la reserva, se enviaria un estado 200 y la reserva modificada.
 // Error: Si falla en encontrar una reserva para modificar, se enviaria un estado 404 y un mensaje {error: no se encontro la reserva}.
+
+
+
+routes.put("/:reservaId", (req, res) => {
+    return res.send("ruta para modificar una reserva");
+});
+  
+
 
 // CANCELAR UNA RESERVA.
 // Ruta PUT para que un usuario elimine una de sus reservas, req.params = reservaId, req.body = motivoDeCancelacion.
@@ -28,3 +48,8 @@
 // Exito: En caso de que la reserva sea encontrada y pueda ser modificada satisfactoriamente,
 // se envia un estado 200 y la reserva modificada.
 // Fallo: Si falla en encontrar la reserva o modificar la reserva encontrada, se enviaria un estado 400 y un mensaje {error: Fallo la cancelacion de la reserva}.
+
+
+routes.put("/cancelar/:reservaId", (req, res) => {
+    return res.send("ruta para modificar el estado del turno a cancelado");
+});

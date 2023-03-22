@@ -1,11 +1,13 @@
-
-
 // SINGUP.
 // Ruta POST para que un usurio registre su cuenta. req.body = nombreApellido, DNI, mail, contrasenia.
 // Exito:
 // En caso de que se cree satisfactoriamente la cuenta, se enviaria el nuevo usuario con el status 201.
 // Fallo:
-// En caso de que no se cree la cuenta, se enviaria un status 200 con un mensaje de {error: no se pudo crear la cuenta}.
+// En caso de que no se cree la cuenta, se enviaria un status 400 con un mensaje de {error: no se pudo crear la cuenta}.
+
+routes.post("/singup", (req, res) => {
+  return res.send("ruta para crear una cuenta");
+});
 
 // LOGIN
 // Ruta Get para que un usuario se loguee en su cuenta. req.params = userId, req.body = nombreCompleto, contrasenia, se buscaria el usuario por el id que llega por parametro en el modelo User, y se compararia si coincide el nombre y contrasenia con los datos que llegan del req body,
@@ -14,7 +16,15 @@
 // Fallo:
 // En caso de que la comparacion falle, se enviaria un status 401 y un mensaje de {error: usuario o contrasania no coincide}.
 
+routes.post("/login", (req, res) => {
+  return res.send("ruta para loguar tu cuenta");
+});
+
 // LOGOUT ???.
+
+routes.post("/logout", (req, res) => {
+  return res.send("ruta para desloguear tu cuenta");
+});
 
 // USER INFO.
 // Ruta GET para que un usuario acceda y pueda ver los datos de su cuenta. req.params = id, se buscaria el usuario por el id que pasa del req params en el modelo User.
@@ -23,6 +33,9 @@
 // Fallo:
 // En caso de que no se encuentre el usuario buscado, se enviaria un status 404, con el mensaje {error: usuario no encontrado}.
 
+routes.get("/:id", (req, res) => {
+  return res.send("ruta para ver los datos de tu cuenta");
+});
 
 // EDIT PASSWORD.
 // Ruta put para encontrar un usuario y modificar su contrasania, req.params = id, req.body = ContraseniaNueva,
@@ -31,6 +44,12 @@
 // Error
 // En caso de que no se pueda modificar la contrasenia, se enviaria un status 404, con el mensaje {error: usuario no encontrado}.
 
+routes.put("/:id", (req, res) => {
+  return res.send("ruta para editar tu contraseña");
+});
 
 // EDIT USER INFO ??? (name, email, dni telefono).
 
+routes.put("/:id", (req, res) => {
+  return res.send("ruta para editar los datos de tu cuenta");
+});
