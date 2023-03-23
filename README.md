@@ -22,7 +22,7 @@ Git clone: https://github.com/MatiasOrlando/line-up.git
 | npm run server | npm run dev |
 
 <br>
-Abra http://localhost:3000 para verlo en su navegador.
+Abra http://localhost:3000(http://localhost:3000) para verlo en su navegador.
 <br>
 <br>
 
