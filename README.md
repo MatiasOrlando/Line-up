@@ -14,6 +14,7 @@ Usuario administrador: Creación, edición y eliminación de nuevas sucursales. 
 ## Instalación 🔧
 
 Si desea correr este proyecto en un etorno de desarollo, simplemente clone este repositorio.
+<br>
 Git clone: https://github.com/MatiasOrlando/line-up.git
 
 | /api           | /client     |
@@ -21,7 +22,7 @@ Git clone: https://github.com/MatiasOrlando/line-up.git
 | npm run server | npm run dev |
 
 <br>
-Abra [http://localhost:3000](http://localhost:3000) para verlo en su navegador.
+Abra http://localhost:3000 para verlo en su navegador.
 <br>
 <br>
 
