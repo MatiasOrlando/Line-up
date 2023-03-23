@@ -1,8 +1,15 @@
 @import "./colors.scss";
+@import "./form";
+@import "./header";
+@import "./button";
 
-
-.titulo {
-     background-color:  $tcolor;
-     color: brown;
+* {
+  box-sizing: border-box;
+  margin: 0;
 }
-
+html {
+  font-size: 62.5%;
+}
+body {
+  font-size: 1.6rem;
+}

@@ -1,0 +1,18 @@
+@import "./colors";
+
+.btn-sec{
+    height: 44px;
+    width: 137px;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba($color: $primaryColor, $alpha: 0.1);
+    color: $primaryColor;
+    font-size: 16px;
+    font-weight: 600;
+    &:hover{
+        background-color: rgba($color: $secondaryColor, $alpha: 0.2);
+    }
+    &:active{
+        box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.24);
+    }
+}

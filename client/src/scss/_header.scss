@@ -1,0 +1,24 @@
+@import "./colors";
+
+.header-box {
+  height: 64px;
+  /* background-color: aqua; */
+  display: flex;
+  align-items: center;
+  .nav-box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  a {
+    text-decoration: none;
+  }
+  button{
+    margin-left: 80px;
+  }
+  .options{
+    margin-right: 80px;
+    display: flex;
+    gap: 20px;
+  }
+}
