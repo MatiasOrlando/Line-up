@@ -1,18 +1,84 @@
 @import "./colors";
 
-.btn-sec{
-    height: 44px;
-    width: 137px;
-    border: none;
-    border-radius: 8px;
-    background-color: rgba($color: $primaryColor, $alpha: 0.1);
+.btn-primary {
+  height: 44px;
+  width: 174px;
+  border: none;
+  border-radius: 8px;
+  background-color: $primaryColor;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  &:hover {
+    background-color: $secondaryColor;
+  }
+  &:active {
+    box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.24);
+  }
+  &:disabled {
+    background-color: $tertiaryGrey;
+    color: $senaryGrey;
+  }
+}
+
+.btn-secondary {
+  height: 44px;
+  width: 137px;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba($color: $primaryColor, $alpha: 0.1);
+  color: $primaryColor;
+  font-size: 16px;
+  font-weight: 600;
+  &:hover {
+    background-color: rgba($color: $secondaryColor, $alpha: 0.2);
+  }
+  &:active {
+    box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.24);
+  }
+  &:disabled {
+    background-color: $tertiaryGrey;
+    color: $senaryGrey;
+  }
+}
+
+.btn-tertiary {
+  height: 16px;
+  width: 122px;
+  border: none;
+  color: $primaryColor;
+  background: none;
+  font-size: 16px;
+  font-weight: 600;
+  &:hover {
+    color: $secondaryColor;
+  }
+  &:active {
     color: $primaryColor;
-    font-size: 16px;
-    font-weight: 600;
-    &:hover{
-        background-color: rgba($color: $secondaryColor, $alpha: 0.2);
-    }
-    &:active{
-        box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.24);
-    }
+  }
+  &:disabled {
+    color: $senaryGrey;
+  }
+}
+
+.btn-quaternary {
+  height: 44px;
+  width: 129px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background-color: $primaryGrey;
+  color: $primaryColor;
+  font-size: 16px;
+  font-weight: 600;
+  &:hover {
+    background-color: $secondaryGrey;
+  }
+  &:active {
+    box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.24);
+  }
+  &:disabled {
+    background-color: $tertiaryGrey;
+    color: $senaryGrey;
+  }
 }
