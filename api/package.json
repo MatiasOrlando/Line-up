@@ -20,10 +20,11 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.2",
     "nodemailer": "^6.9.1",
-    "nodemon": "^2.0.21"
+    "nodemailer-smtp-transport": "^2.7.4",
+    "nodemon": "^2.0.21",
+    "validator": "^13.9.0"
   },
   "devDependencies": {
     "dotenv": "^16.0.3"
   }
 }
-
