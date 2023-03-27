@@ -57,6 +57,14 @@ export default function FormLogin() {
         <hr />
       </form>
       <div>
+        <label class="checkbox-primary">
+          <input type="checkbox" />
+          Opcion
+        </label>
+        <span class="checkmark"></span>
+      </div>
+
+      <div>
         <button>No tenes cuenta? Registrate</button>
       </div>
     </div>
