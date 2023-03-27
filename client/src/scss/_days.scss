@@ -1,0 +1,24 @@
+@import "./colors";
+
+.calendary-days {
+  width: 54px;
+  height: 40px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: $nonaryGrey;
+  background: none;
+  &:focus {
+    color: white;
+    background-color: $primaryColor;
+  }
+  &:hover {
+    background-color: $tertiaryGrey;
+    color: $primaryColor;
+  }
+  &:disabled {
+    background-color: $secondaryGrey;
+    color: $quinaryGrey;
+  }
+}
