@@ -1,12 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const  dbConnection  = require('./db');
-require('dotenv').config();
-const User = require("./models/user")
-const Branch = require("./models/branch")
-const Appointment = require("./models/appointment")
-const route = require("./routes/usuario")
-const seed = require("./config/seed")
+const express = require("express");
+const cors = require("cors");
+const dbConnection = require("./db");
+require("dotenv").config();
+const User = require("./models/user");
+const Branch = require("./models/branch");
+const Appointment = require("./models/appointment");
+const seed = require("./config/seed");
+const routerIndex = require("./routes");
 
 // Crear el servidor/aplicación de express
 const app = express();
@@ -14,25 +14,21 @@ const app = express();
 // Base de datos
 dbConnection();
 
-
 // Directorio Público
-app.use( express.static('public') );
+app.use(express.static("public"));
 
 // CORS
-app.use( cors() );
+app.use(cors());
 
 // Lectura y parseo del body
-app.use( express.json() );
+app.use(express.json());
 
-app.use("/api", route)
+app.use("/api", routerIndex);
 // Rutas
 
 app.listen(3001, () => {
-    console.log(`Servidor corriendo en puerto ${3001 }`);
+  console.log(`Servidor corriendo en puerto ${3001}`);
 });
-
-
-
 
 /*  const newUser = new User({
         name: 'newperson',
@@ -45,7 +41,6 @@ app.listen(3001, () => {
 })
 newUser.save() */
 
- 
 /* const usuario = User.findOne({name: "newperson"}).exec().then((user)=> {
     console.log("USER", user)
      const newBranch = new Branch({
@@ -60,9 +55,7 @@ newUser.save() */
     newBranch.save()
 }) */
 
-  
- 
-  /* const newAppoinment = new Appointment({
+/* const newAppoinment = new Appointment({
     date: '2022-04-01',
     timeOfAppontment: '14:30',
     status: 'pending',
@@ -79,5 +72,3 @@ newUser.save() */
     }
   }) 
   newAppoinment.save() */
-
-  
