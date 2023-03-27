@@ -2,7 +2,6 @@
 
 .btn-primary {
   height: 44px;
-  width: 174px;
   border: none;
   border-radius: 8px;
   background-color: $primaryColor;
@@ -23,7 +22,6 @@
 
 .btn-secondary {
   height: 44px;
-  width: 137px;
   border: none;
   border-radius: 8px;
   background-color: rgba($color: $primaryColor, $alpha: 0.1);
@@ -44,7 +42,6 @@
 
 .btn-tertiary {
   height: 16px;
-  width: 122px;
   border: none;
   color: $primaryColor;
   background: none;
@@ -63,8 +60,6 @@
 
 .btn-quaternary {
   height: 44px;
-  width: 129px;
-  padding: 12px 24px;
   border: none;
   border-radius: 8px;
   background-color: $primaryGrey;
