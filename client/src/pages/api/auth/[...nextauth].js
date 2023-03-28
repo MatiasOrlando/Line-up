@@ -1,47 +1,59 @@
+import { compare } from "bcryptjs";
 import NextAuth from "next-auth";
-import Providers from "next-auth/providers";
-import { MongoClient } from "mongodb";
-
-const client = new MongoClient(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+import CredentialsProvider from "next-auth/providers/credentials";
+import dbConnection from "../../../../../api/db";
+import User from "../../../models/user";
 
 export default NextAuth({
-  // Configure one or more authentication providers
   providers: [
-    Providers.Google({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
+    CredentialsProvider({
+      id: "credentials",
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        await dbConnection().catch((err) => {
+          throw new Error(err);
+        });
+
+        const user = await User.findOne({
+          email: credentials?.email,
+        });
+
+        if (!user) {
+          throw new Error("Invalid credentials");
+        }
+
+        const isPasswordCorrect = await compare(
+          credentials.password,
+          user.password
+        );
+
+        if (!isPasswordCorrect) {
+          throw new Error("Invalid credentials");
+        }
+
+        return user;
+      },
     }),
-    // ...add more providers here
   ],
-
-  // A database is optional, but required to persist accounts in a database
-  database: process.env.MONGODB_URI,
-
-  // Use MongoDB for database
-  adapter: {
-    async getAdapter() {
-      await client.connect();
-      const db = client.db(process.env.MONGODB_DB);
-      return {
-        async getUser(id) {
-          return await db.collection("users").findOne({ _id: id });
-        },
-        async getUserByEmail(email) {
-          return await db.collection("users").findOne({ email });
-        },
-        async updateUser(user) {
-          await db
-            .collection("users")
-            .updateOne({ _id: user.id }, { $set: user }, { upsert: true });
-        },
-        async createUser(user) {
-          await db.collection("users").insertOne(user);
-          return user;
-        },
-      };
+  pages: {
+    signIn: "/",
+  },
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      user && (token.user = user);
+      return token;
+    },
+    session: async ({ session, token }) => {
+      const user = token.user;
+      session.user = user;
+      return session;
     },
   },
 });

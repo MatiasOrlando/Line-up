@@ -15,6 +15,7 @@ router.post("/register", async (req, res) => {
   try {
     const userCreated = await User.create(newUser);
     const userRegistered = mapUser([userCreated]);
+    console.log(userCreated);
     userCreated.save();
     return res.send(userRegistered[0]);
   } catch (error) {

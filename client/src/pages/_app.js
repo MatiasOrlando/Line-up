@@ -1,6 +1,11 @@
 import "../buildStyles/app.css";
-import 'typeface-roboto';
+import "typeface-roboto";
+import { SessionProvider } from "next-auth/react";
 
 export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+  return (
+    <SessionProvider>
+      <Component {...pageProps} />;
+    </SessionProvider>
+  );
 }
