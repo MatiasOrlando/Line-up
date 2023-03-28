@@ -25,7 +25,7 @@ export default function FormLogin() {
           <div className="login-form_box-input">
             <label htmlFor="user">Usuario</label>
             <input
-              className={`input-primary ten ${
+              className={`input-primary width-100 ${
                 formik.touched.user && formik.errors.user ? "error-input" : ""
               }`}
               type="text"
@@ -38,7 +38,7 @@ export default function FormLogin() {
           <div className="login-form_box-input">
             <label htmlFor="pass">Contraseña</label>
             <input
-              className={`input-primary ten ${
+              className={`input-primary width-100 ${
                 formik.touched.pass && formik.errors.pass ? "error-input" : ""
               }`}
               type="text"
@@ -52,7 +52,7 @@ export default function FormLogin() {
           </div>
           <div>
             <button
-              className="btn-primary ten"
+              className="btn-primary width-100"
               type="submit"
               onClick={(e) => {
                 e.preventDefault();
@@ -64,7 +64,7 @@ export default function FormLogin() {
           </div>
           <hr />
           <div>
-            <button className="btn-secondary ten" type="button">
+            <button className="btn-secondary width-100" type="button">
               ¿No tenes cuenta? Registrate
             </button>
           </div>
