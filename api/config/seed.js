@@ -340,7 +340,6 @@ const CreateAppoitments = async () => {
             name: nombre,
           } = branches[i];
           const ID = branches[i].id;
-          // console.log(ID, `${nombre}`);
           const newAppoinment = await Appointment.create({
             date: generateRandomDate(),
             timeOfAppontment: generateAppointmentTime(),

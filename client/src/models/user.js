@@ -1,6 +1,7 @@
+
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import { isEmail } from "validator";
+import bcrypt from "bcrypt"
+import {isEmail} from ("validator")
 
 const userSchema = new mongoose.Schema({
   dni: { type: Number },
@@ -38,4 +39,4 @@ userSchema.methods.validatePassword = async function (password) {
 
 const User = mongoose.model("user", userSchema);
 
-export default User;
+export default User

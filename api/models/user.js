@@ -14,27 +14,35 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   password: { type: String, required: true },
-  salt: {
-    type: String,
-  },
+  salt: { type: String },
   admin: { type: Boolean, default: false },
   operator: { type: Boolean, default: false },
 });
 
 userSchema.pre("save", async function () {
-  const user = this;
-  // if (!user.isModified("password")) {
-  //   console.log("error password");
-  // }
-  const salt = bcrypt.genSaltSync(9);
-  user.salt = salt;
-  const hashedPassword = await bcrypt.hash(user.password, user.salt);
-  return (user.password = hashedPassword);
+  try {
+    const user = this;
+    const salt = bcrypt.genSaltSync(9);
+    user.salt = salt;
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 userSchema.methods.validatePassword = async function (password) {
-  const hashedPasswordInput = await bcrypt.hash(password, this.salt);
-  return hashedPasswordInput === this.password;
+  // console.log(password, "PASSWORD INPUT USER");
+  try {
+    console.log(this.password, "PASSWORD DB HASHEADA");
+    console.log(this.salt, "SALT DB");
+    console.log(password);
+    const hashedPasswordInput = await bcrypt.hash(password, this.salt);
+    console.log(hashedPasswordInput, "PASSWORD HASH ULTIMA");
+    return hashedPasswordInput === this.password;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 const User = mongoose.model("user", userSchema);
