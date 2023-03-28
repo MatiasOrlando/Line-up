@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
 
+
 export default function FormLogin() {
   const formik = useFormik({
     initialValues: {
@@ -9,63 +10,65 @@ export default function FormLogin() {
     },
     onSubmit: (data) => {
       console.log(data);
+      formik.handleReset();
     },
     validationSchema: validationLogin.validationSchema,
   });
 
   return (
-    <div>
-      <form
-        className="login-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          formik.handleSubmit();
-        }}
-      >
-        <div>
-          <h2>Iniciar Sesion</h2>
-        </div>
-        <div>
-          <label htmlFor="user">Usuario</label>
-          <input
-            type="text"
-            id="user"
-            onChange={formik.handleChange}
-            value={formik.values.user}
-          />
-          <div className="box-span">
-            {formik.errors.user && (
-              <span className="box-span">{formik.errors.user}</span>
-            )}
+    <div className="container-form-login">
+      <div className="container-form-login__first-div">
+        <form className="login-form">
+          <div className="login-form_box-title">
+            <h2>Iniciar sesión</h2>
           </div>
-        </div>
-        <div>
-          <label htmlFor="pass">Contraseña</label>
-          <input
-            type="text"
-            id="pass"
-            onChange={formik.handleChange}
-            value={formik.values.pass}
-          />
-        </div>
-        <div>
-          <p>Olvidaste tu contraseña ? </p>
-        </div>
-        <div>
-          <button type="submit">Ingresar</button>
-        </div>
-        <hr />
-      </form>
-      <div>
-        <label class="checkbox-primary">
-          <input type="checkbox" />
-          Opcion
-        </label>
-        <span class="checkmark"></span>
-      </div>
-
-      <div>
-        <button>No tenes cuenta? Registrate</button>
+          <div className="login-form_box-input">
+            <label htmlFor="user">Usuario</label>
+            <input
+              className={`input-primary ten ${
+                formik.touched.user && formik.errors.user ? "error-input" : ""
+              }`}
+              type="text"
+              id="user"
+              onChange={formik.handleChange}
+              value={formik.values.user}
+            />
+            <div className="box-span"></div>
+          </div>
+          <div className="login-form_box-input">
+            <label htmlFor="pass">Contraseña</label>
+            <input
+              className={`input-primary ten ${
+                formik.touched.pass && formik.errors.pass ? "error-input" : ""
+              }`}
+              type="text"
+              id="pass"
+              onChange={formik.handleChange}
+              value={formik.values.pass}
+            />
+          </div>
+          <div className="login-form_box-pass">
+            <button className="btn-tertiary">¿Olvidaste tu contraseña?</button>
+          </div>
+          <div>
+            <button
+              className="btn-primary ten"
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                formik.handleSubmit();
+              }}
+            >
+              Ingresar
+            </button>
+          </div>
+          <hr />
+          <div>
+            <button className="btn-secondary ten" type="button">
+              ¿No tenes cuenta? Registrate
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
