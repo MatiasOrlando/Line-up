@@ -2,8 +2,8 @@ import * as Yup from "yup";
 
 const validationLogin = {
     validationSchema: Yup.object({
-        user: Yup.string().required("Es requerido"),
-        pass: Yup.string().required("Password required"),
+        user: Yup.string().required(),
+        pass: Yup.string().required(),
     }),
 };
 

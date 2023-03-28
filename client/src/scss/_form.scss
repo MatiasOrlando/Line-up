@@ -1,7 +1,43 @@
 @import "./colors";
 
-.login-form{
-    input{
-        background-color: gray;
-    }
+.container-form-login {
+  height: calc(100vh - 76px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-form-login__first-div {
+  width: 580px;
+  height: 444px;
+  padding: 32px;
+  border-radius: 12px;
+  background-color: "#FFFFFF";
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.12);
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .login-form_box-title {
+    text-align: center;
+  }
+  .login-form_box-input {
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    font-size: 14px;
+    color: black;
+    line-height: 20px;
+  }
+  .login-form_box-pass {
+    display: flex;
+    align-self: center;
+  }
+  hr {
+    background-color: $tertiaryGrey;
+    height: 1px;
+    border: 0;
+  }
 }
