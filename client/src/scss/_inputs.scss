@@ -1,13 +1,7 @@
 @import "./colors";
 
 .input-primary {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   height: 44px;
-  gap: 8px;
-  margin-top: 32px;
-  margin-left: 32px;
   padding: 12px 8px 12px 12px;
   border: 1px solid $tertiaryGrey;
   border-radius: 8px;
@@ -29,12 +23,8 @@
 }
 
 .input-secondary {
-  display: flex;
-  flex-direction: row;
   align-items: center;
   height: 44px;
-  margin-top: 22px;
-  gap: 8px;
   padding: 12px 8px 12px 12px;
   border: 1px solid $tertiaryGrey;
   border-radius: 8px;
