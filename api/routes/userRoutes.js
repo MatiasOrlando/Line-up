@@ -14,9 +14,7 @@ router.post("/register", async (req, res) => {
   };
   try {
     const userCreated = await User.create(newUser);
-    // const userRegistered = mapUser([userCreated]);
-    const test = await userCreated.save();
-    return res.send(test);
+    return res.status(200).send(`User registered successfully`);
   } catch (error) {
     console.error(error);
   }
@@ -34,26 +32,13 @@ router.get("/all-users", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  // console.log(user);
-  // const isValidPassword = await user.validatePassword(password);
-  // if (isValidPassword) {
-  //   console.log("user valido");
-  // } else {
-  //   console.log("user invalido");
-  // }
-  // res.send(user);
   try {
     const user = await User.findOne({ email: email });
-    console.log(user);
+    if (!user) return res.status(401).send(`User not found`);
     const validatedUser = await user.validatePassword(password);
-    if (!validatedUser) {
-      console.log("USUARIO INVALIDOO");
-    }
-    res.send(user);
-
-    // console.log(user[0], "USUARIOOOOO");
-    // !validatedUser && res.status(401).send(`No authorization`);
-    // validatedUser && res.status(200).send(user[0]);
+    if (!validatedUser)
+      return res.status(401).send(`No authorization, Invalid credentials`);
+    return res.status(200).send(user);
   } catch {
     return res.status(404).send("User not found");
   }

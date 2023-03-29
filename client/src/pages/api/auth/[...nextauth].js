@@ -16,10 +16,9 @@ export default NextAuth({
             "http://localhost:3001/api/user/login",
             payload
           );
-          const userData = res.data;
-          return userData;
+          return res.data;
         } catch (error) {
-          console.error(error);
+          return;
         }
       },
     }),
@@ -31,8 +30,6 @@ export default NextAuth({
   },
   callbacks: {
     async jwt({ token, user, account }) {
-      // console.log(token, "TOKEN");
-      // console.log(user, "USER");
       if (account && user) {
         return {
           ...token,
@@ -42,7 +39,6 @@ export default NextAuth({
       }
       return token;
     },
-
     async session({ session, token }) {
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;

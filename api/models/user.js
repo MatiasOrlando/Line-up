@@ -19,32 +19,6 @@ const userSchema = new mongoose.Schema({
   operator: { type: Boolean, default: false },
 });
 
-// userSchema.pre("save", async function () {
-//   try {
-//     const user = this;
-//     const salt = bcrypt.genSaltSync();
-//     user.salt = salt;
-//     const hashedPassword = await bcrypt.hash(user.password, salt);
-//     user.password = hashedPassword;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
-
-// userSchema.methods.validatePassword = async function (password) {
-//   try {
-//     console.log(this.password, "PASSWORD DB HASHEADA");
-//     console.log(this.salt, "SALT DB");
-//     console.log(password, "PASSWORD INPUT USER");
-
-//     const hashedPasswordInput = await bcrypt.hash(password, this.salt);
-//     console.log(hashedPasswordInput, "PASSWORD HASH ULTIMA");
-//     return hashedPasswordInput === this.password;
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
-
 userSchema.pre("save", async function () {
   try {
     const user = this;
@@ -59,22 +33,12 @@ userSchema.pre("save", async function () {
 
 userSchema.methods.validatePassword = async function (password) {
   try {
-    console.log(this.salt, "SALT DB");
-    console.log(password, "PASSWORD INPUT USER");
-    console.log(this.password, "PASSWORD HASHEADA EN DB");
     const hashedPasswordInput = await bcrypt.hash(password, this.salt);
-    console.log(hashedPasswordInput, "PASSWORD VERIFICATION");
     return hashedPasswordInput === this.password;
   } catch (error) {
     throw new Error(error);
   }
 };
-
-// userSchema.methods.validatePassword = async function (password) {
-//   const user = this;
-//   const isValidPassword = await bcrypt.compare(password, user.password);
-//   return isValidPassword;
-// };
 
 const User = mongoose.model("user", userSchema);
 

@@ -341,8 +341,7 @@ const CreateUsers = async () => {
     const userAdmin = await User.findOne({ email: "admin@example.com" });
     if (!userAdmin) {
       for (let user of users) {
-        const newUser = await User.create(user);
-        newUser.save();
+        await User.create(user);
       }
       console.log("Multiple users were saved to the database!");
     }
