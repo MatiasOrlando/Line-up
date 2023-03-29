@@ -4,7 +4,7 @@ const validationRegister = {
   validationSchema: Yup.object({
     name: Yup.string().required(),
     dni: Yup.number().required(),
-    mail: Yup.string().email().required(),
+    email: Yup.string().email().required(),
     password: Yup.string()
       .required()
       .test("has-lowercase", (value) => {

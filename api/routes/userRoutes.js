@@ -5,6 +5,7 @@ const emailConfirmation = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
 
 router.post("/register", async (req, res) => {
+  console.log(req.body);
   const newUser = {
     dni: 37932408,
     name: "matias",
@@ -13,9 +14,10 @@ router.post("/register", async (req, res) => {
     password: "test",
   };
   try {
-    const userCreated = await User.create(newUser);
+    const userCreated = await User.create(req.body);
     // const userRegistered = mapUser([userCreated]);
     const test = await userCreated.save();
+    console.log(userCreated);
     return res.send(test);
   } catch (error) {
     console.error(error);
