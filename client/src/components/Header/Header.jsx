@@ -5,7 +5,10 @@ import iconUser from "../../assets/perfil.svg";
 
 //<Image src={desplegableAbajo} alt="Flecha" />
 
-export default function Header() {
+export default function Header({ hide }) {
+  if (hide) {
+    return null;
+  }
   return (
     <header className="header-box">
       <nav className="nav-box">

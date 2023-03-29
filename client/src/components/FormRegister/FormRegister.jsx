@@ -14,33 +14,39 @@ export default function FormRegister() {
   const router = useRouter();
   const [mayuscula, setMayuscula] = useState({
     oracion: "ABC tiene una mayuscula",
-    color: "black",
+    color: "$septenaryGrey",
   });
   const [minuscula, setMinuscula] = useState({
     oracion: "ABC tiene una minuscula",
-    color: "black",
+    color: "$septenaryGrey",
   });
   const [numero, setNumero] = useState({
     oracion: "123 tiene un Numero",
-    color: "black",
+    color: "$septenaryGrey",
   });
   const [caracteres, setCaracteres] = useState({
     oracion: "*** Minimo 8 caracteres",
-    color: "black",
+    color: "$septenaryGrey",
   });
 
   const formik = useFormik({
     initialValues: {
       name: "",
       dni: "",
-      mail: "",
+      email: "",
       password: "",
       repeatPassword: "",
     },
     onSubmit: async (data) => {
+      const { name, dni, email, password } = data;
       router.push("/");
       try {
-        await axios.post("http://localhost:3000/api/users/register", { data });
+        await axios.post("http://localhost:3001/api/user/register", {
+          dni,
+          name,
+          email,
+          password,
+        });
       } catch (err) {
         console.log(err);
       }
@@ -74,11 +80,8 @@ export default function FormRegister() {
     }
   };
   return (
-    <>
+    <div className="container-form-register">
       <div className="register">
-        <Link href="/" className="a">
-          <AiOutlineArrowLeft /> Atras
-        </Link>
         <form
           className="register-form"
           onSubmit={(e) => {
@@ -87,7 +90,9 @@ export default function FormRegister() {
             handlePassword(input.current.value);
           }}
         >
-          {console.log("ERROR", formik.errors)}
+          <Link href="/" className="a">
+            <AiOutlineArrowLeft /> Atras
+          </Link>
           <div>
             <h1>Crear cuenta</h1>
           </div>
@@ -121,12 +126,12 @@ export default function FormRegister() {
             <label htmlFor="email">Mail</label>
             <input
               className={`input-primary ten ${
-                formik.touched.mail && formik.errors.mail ? "error-input" : ""
+                formik.touched.email && formik.errors.email ? "error-input" : ""
               }`}
-              type="mail"
-              id="mail"
+              type="email"
+              id="email"
               onChange={formik.handleChange}
-              value={formik.values.mail}
+              value={formik.values.email}
             />
           </div>
           <div className="flex margin">
@@ -160,15 +165,15 @@ export default function FormRegister() {
               />
             </div>
           </div>
-          <div className="fondo">
+          <div className="validations">
             <h5>La contraseña debe tener</h5>
-            <hr className="err"></hr>
+            <hr></hr>
             <div className="flex">
               <span
                 className="box-span marginRight"
                 style={{ color: mayuscula.color }}
               >
-                {mayuscula.color === "black" ? (
+                {mayuscula.color === "$septenaryGrey" ? (
                   mayuscula.oracion
                 ) : (
                   <>
@@ -182,7 +187,7 @@ export default function FormRegister() {
                 )}
               </span>
               <span className="box-span" style={{ color: minuscula.color }}>
-                {minuscula.color === "black" ? (
+                {minuscula.color === "$septenaryGrey" ? (
                   minuscula.oracion
                 ) : (
                   <>
@@ -201,7 +206,7 @@ export default function FormRegister() {
                 className="box-span marginRight"
                 style={{ color: numero.color }}
               >
-                {numero.color === "black" ? (
+                {numero.color === "$septenaryGrey" ? (
                   numero.oracion
                 ) : (
                   <>
@@ -216,7 +221,7 @@ export default function FormRegister() {
               </span>
 
               <span className="box-span" style={{ color: caracteres.color }}>
-                {caracteres.color === "black" ? (
+                {caracteres.color === "$septenaryGrey" ? (
                   caracteres.oracion
                 ) : (
                   <>
@@ -246,6 +251,6 @@ export default function FormRegister() {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }
