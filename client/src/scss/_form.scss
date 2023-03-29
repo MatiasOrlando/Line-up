@@ -1,5 +1,10 @@
 @import "./colors";
 
+
+.login-form {
+  input {
+    background-color: gray;
+
 .container-form-login {
   height: calc(100vh - 76px);
   display: flex;
