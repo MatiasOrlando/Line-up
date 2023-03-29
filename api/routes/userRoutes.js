@@ -6,17 +6,17 @@ const mapUser = require("../config/userMapped");
 
 router.post("/register", async (req, res) => {
   const newUser = {
-    dni: 793242228,
-    name: "Tomi",
-    email: "tomi@gmail.com",
+    dni: 37932408,
+    name: "matias",
+    email: "mat@gmail.com",
     phone: Number("06477042982"),
-    password: "tomitest",
+    password: "test",
   };
   try {
     const userCreated = await User.create(newUser);
-    const userRegistered = mapUser([userCreated]);
-    userCreated.save();
-    return res.send(userRegistered);
+    // const userRegistered = mapUser([userCreated]);
+    const test = await userCreated.save();
+    return res.send(test);
   } catch (error) {
     console.error(error);
   }
@@ -36,10 +36,11 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.find({ email: email });
-    console.log(user[0]);
-    !user[0] && res.status(401).send(`No user found`);
+    // !user[0] && res.status(401).send(`No user found`);
     const validatedUser = await user[0].validatePassword(password);
-    console.log(validatedUser, "validateeeeee");
+    if (!validatedUser) {
+      res.send(user[0]);
+    }
     // console.log(user[0], "USUARIOOOOO");
     // !validatedUser && res.status(401).send(`No authorization`);
     // validatedUser && res.status(200).send(user[0]);

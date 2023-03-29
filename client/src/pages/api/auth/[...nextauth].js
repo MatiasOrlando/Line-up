@@ -38,7 +38,6 @@ export default NextAuth({
         }
 
         // Return null if user data could not be retrieved
-        return null;
       },
     }),
     // ...add more providers here
