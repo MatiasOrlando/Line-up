@@ -6,17 +6,17 @@ const mapUser = require("../config/userMapped");
 
 router.post("/register", async (req, res) => {
   const newUser = {
-    dni: 793242228,
-    name: "Tomi",
-    email: "tomi@gmail.com",
+    dni: 37932408,
+    name: "matias",
+    email: "mat@gmail.com",
     phone: Number("06477042982"),
-    password: "tomitest",
+    password: "test",
   };
   try {
     const userCreated = await User.create(newUser);
-    const userRegistered = mapUser([userCreated]);
-    userCreated.save();
-    return res.send(userRegistered[0]);
+    // const userRegistered = mapUser([userCreated]);
+    const test = await userCreated.save();
+    return res.send(test);
   } catch (error) {
     console.error(error);
   }
@@ -32,8 +32,21 @@ router.get("/all-users", async (req, res) => {
   }
 });
 
-router.post("/login", (req, res) => {
-  return res.send("ruta para loguar tu cuenta");
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.find({ email: email });
+    // !user[0] && res.status(401).send(`No user found`);
+    const validatedUser = await user[0].validatePassword(password);
+    if (!validatedUser) {
+      res.send(user[0]);
+    }
+    // console.log(user[0], "USUARIOOOOO");
+    // !validatedUser && res.status(401).send(`No authorization`);
+    // validatedUser && res.status(200).send(user[0]);
+  } catch {
+    return res.status(404).send("User not found");
+  }
 });
 
 // LOGOUT ???.
@@ -43,7 +56,7 @@ router.post("/logout", (req, res) => {
 
 router.get("/:id", async (req, res) => {
   // Recibo por params id Usuario const {id} = req.params
-  const idUser = "6422f981301b66c115c337e9";
+  const idUser = "642365b81a45cf8b5f01c8dc";
   try {
     const userFound = await User.findById(idUser).exec();
     const selectedUser = mapUser([userFound]);

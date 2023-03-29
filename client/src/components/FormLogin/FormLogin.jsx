@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
-
+import { signIn, signOut } from "next-auth/react";
 
 export default function FormLogin() {
   const formik = useFormik({
@@ -54,9 +54,14 @@ export default function FormLogin() {
             <button
               className="btn-primary width-100"
               type="submit"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
                 formik.handleSubmit();
+                await signIn("credentials", {
+                  redirect: false,
+                  email: formik.values.user,
+                  password: formik.values.pass,
+                });
               }}
             >
               Ingresar
