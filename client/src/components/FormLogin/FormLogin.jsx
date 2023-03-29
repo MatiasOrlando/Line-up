@@ -42,7 +42,7 @@ export default function FormLogin() {
               className={`input-primary width-100 ${
                 formik.touched.pass && formik.errors.pass ? "error-input" : ""
               }`}
-              type="text"
+              type="password"
               id="pass"
               onChange={formik.handleChange}
               value={formik.values.pass}

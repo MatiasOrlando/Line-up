@@ -6,9 +6,6 @@ import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 //<Image src={desplegableAbajo} alt="Flecha" />
 
-
-  
-
 export default function Header({ hide }) {
   if (hide) {
     return null;
@@ -16,7 +13,6 @@ export default function Header({ hide }) {
   const { data } = useSession();
   return (
     <header className="header-box">
-      {data?.user?.name ? <p>hola {data.user.name} </p> : <p>Deslogueado</p>}
       <nav className="nav-box">
         <button className="btn-quaternary padding-one">Reservar</button>
         <div className="options">
@@ -28,8 +24,14 @@ export default function Header({ hide }) {
             <Link href="/mi-cuenta">Mi cuenta</Link>
             <Image src={iconUser} alt="user" />
           </div>
-
-          <button onClick={async () => await signOut()}>Log out</button>
+          {data?.user ? (
+            <button
+              className="btn-quaternary padding-one" style={{marginLeft: '10px'}}
+              onClick={async () => await signOut()}
+            >
+              Log out
+            </button>
+          ) : null}
         </div>
       </nav>
     </header>
