@@ -7,7 +7,7 @@ import Message from "@/components/PromotionalMessage/Message";
 export default function App({ Component, pageProps, router }) {
   const hideHeader = router.pathname === "/register";
   return (
-    <SessionProvider>
+    <SessionProvider session={pageProps.session}>
       <div>
         <Message />
         {!hideHeader && <Header />}

@@ -1,7 +1,8 @@
 import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+
 
 export default function FormLogin() {
   const formik = useFormik({
