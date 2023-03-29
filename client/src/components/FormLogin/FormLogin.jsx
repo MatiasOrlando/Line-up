@@ -3,7 +3,6 @@ import validationLogin from "./validation/validationLogin";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 
-
 export default function FormLogin() {
   const formik = useFormik({
     initialValues: {
@@ -71,7 +70,7 @@ export default function FormLogin() {
           </div>
           <hr />
           <div>
-            <Link href={"/register"}>
+            <Link href={"/registro"}>
               <button className="btn-secondary width-100" type="button">
                 ¿No tenes cuenta? Registrate
               </button>
