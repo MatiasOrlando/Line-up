@@ -5,16 +5,10 @@ const emailConfirmation = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
 
 router.post("/register", async (req, res) => {
-  const newUser = {
-    dni: 37932408,
-    name: "matias",
-    email: "mat@gmail.com",
-    phone: Number("06477042982"),
-    password: "test",
-  };
   try {
-    const userCreated = await User.create(newUser);
+    const userCreated = await User.create(req.body);
     return res.status(200).send(`User registered successfully`);
+
   } catch (error) {
     console.error(error);
   }

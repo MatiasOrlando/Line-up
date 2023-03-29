@@ -6,7 +6,13 @@ import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 //<Image src={desplegableAbajo} alt="Flecha" />
 
-export default function Header() {
+
+  
+
+export default function Header({ hide }) {
+  if (hide) {
+    return null;
+  }
   const { data } = useSession();
   return (
     <header className="header-box">
