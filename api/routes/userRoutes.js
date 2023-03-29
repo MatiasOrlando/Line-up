@@ -34,24 +34,29 @@ router.get("/all-users", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  // console.log(user);
+  // const isValidPassword = await user.validatePassword(password);
+  // if (isValidPassword) {
+  //   console.log("user valido");
+  // } else {
+  //   console.log("user invalido");
+  // }
+  // res.send(user);
   try {
-    const user = await User.find({ email: email });
-    // !user[0] && res.status(401).send(`No user found`);
-    const validatedUser = await user[0].validatePassword(password);
+    const user = await User.findOne({ email: email });
+    console.log(user);
+    const validatedUser = await user.validatePassword(password);
     if (!validatedUser) {
-      res.send(user[0]);
+      console.log("USUARIO INVALIDOO");
     }
+    res.send(user);
+
     // console.log(user[0], "USUARIOOOOO");
     // !validatedUser && res.status(401).send(`No authorization`);
     // validatedUser && res.status(200).send(user[0]);
   } catch {
     return res.status(404).send("User not found");
   }
-});
-
-// LOGOUT ???.
-router.post("/logout", (req, res) => {
-  return res.send("ruta para desloguear tu cuenta");
 });
 
 router.get("/:id", async (req, res) => {
