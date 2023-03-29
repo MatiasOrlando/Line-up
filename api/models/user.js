@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     min: [9, "too few numbers"],
     maxLength: [15, "too many numbers"],
-    required: true,
   },
   password: { type: String },
   salt: { type: String },
@@ -19,39 +18,13 @@ const userSchema = new mongoose.Schema({
   operator: { type: Boolean, default: false },
 });
 
-// userSchema.pre("save", async function () {
-//   try {
-//     const user = this;
-//     const salt = bcrypt.genSaltSync();
-//     user.salt = salt;
-//     const hashedPassword = await bcrypt.hash(user.password, salt);
-//     user.password = hashedPassword;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
-
-// userSchema.methods.validatePassword = async function (password) {
-//   try {
-//     console.log(this.password, "PASSWORD DB HASHEADA");
-//     console.log(this.salt, "SALT DB");
-//     console.log(password, "PASSWORD INPUT USER");
-
-//     const hashedPasswordInput = await bcrypt.hash(password, this.salt);
-//     console.log(hashedPasswordInput, "PASSWORD HASH ULTIMA");
-//     return hashedPasswordInput === this.password;
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
-
 userSchema.pre("save", async function () {
   try {
     const user = this;
     const salt = bcrypt.genSaltSync(9);
     user.salt = salt;
     const hashedPassword = await bcrypt.hash(user.password, salt);
-    user.password = hashedPassword;
+    return (user.password = hashedPassword);
   } catch (error) {
     console.error(error);
   }
@@ -59,7 +32,8 @@ userSchema.pre("save", async function () {
 
 userSchema.methods.validatePassword = async function (password) {
   try {
-    return await bcrypt.compare(password, this.password);
+    const hashedPasswordInput = await bcrypt.hash(password, this.salt);
+    return hashedPasswordInput === this.password;
   } catch (error) {
     throw new Error(error);
   }
