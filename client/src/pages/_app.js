@@ -5,7 +5,7 @@ import Header from "@/components/Header/Header";
 import Message from "@/components/PromotionalMessage/Message";
 
 export default function App({ Component, pageProps, router }) {
-  const hideHeader = router.pathname === "/register";
+  const hideHeader = router.pathname === "/registro";
   return (
     <SessionProvider session={pageProps.session}>
       <div>
