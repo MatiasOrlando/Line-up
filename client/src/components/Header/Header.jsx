@@ -4,16 +4,15 @@ import calendar from "../../assets/calendar.svg";
 import iconUser from "../../assets/perfil.svg";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 //<Image src={desplegableAbajo} alt="Flecha" />
-
-
-  
 
 export default function Header({ hide }) {
   if (hide) {
     return null;
   }
   const { data } = useSession();
+
   return (
     <header className="header-box">
       {data?.user?.name ? <p>hola {data.user.name} </p> : <p>Deslogueado</p>}
