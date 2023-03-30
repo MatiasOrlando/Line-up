@@ -3,9 +3,6 @@ const Branch = require("../models/branch");
 const router = require("express").Router();
 const emailConfirmation = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
-const {
-  logIn,
-} = require("../../../bootcamp/TMDB/26-checkpoint-TMDB/api/controllers/auth.controller");
 
 router.post("/register", async (req, res) => {
   try {
