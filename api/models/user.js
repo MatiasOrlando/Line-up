@@ -6,13 +6,13 @@ const { isEmail } = require("validator");
 const userSchema = new mongoose.Schema({
   dni: { type: Number },
   name: { type: String, required: true },
-  email: { type: String },
+  email: { type: String, required: true, validate: [isEmail, "invalid email"] },
   phone: {
     type: Number,
     min: [9, "too few numbers"],
     maxLength: [15, "too many numbers"],
   },
-  password: { type: String },
+  password: { type: String, required: true },
   salt: { type: String },
   admin: { type: Boolean, default: false },
   operator: { type: Boolean, default: false },
