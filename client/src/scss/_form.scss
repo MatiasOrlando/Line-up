@@ -9,7 +9,7 @@
 
 .container-form-login__first-div {
   width: 580px;
-  height: 444px;
+  min-height: 444px;
   padding: 32px;
   border-radius: 12px;
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.12);
@@ -38,6 +38,11 @@
     background-color: $tertiaryGrey;
     height: 1px;
     border: 0;
+  }
+  .credentials-box{
+    color: red;
+    text-align: center;
+    font-style: 14px;
   }
 }
 
