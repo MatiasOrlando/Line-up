@@ -19,11 +19,11 @@ export default function Header({ hide }) {
         <button className="btn-quaternary padding-one">Reservar</button>
         <div className="options">
           <div className="options-item">
-            <Link href="/mis-reservas">Mis reservas </Link>
+            <Link href="/reservas">Mis reservas </Link>
             <Image src={calendar} alt="calendar" />
           </div>
           <div className="options-item">
-            <Link href="/mi-cuenta">Mi cuenta</Link>
+            <Link href="/user">Mi cuenta</Link>
             <Image src={iconUser} alt="user" />
           </div>
           {data?.user ? (

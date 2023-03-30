@@ -3,9 +3,6 @@ const Branch = require("../models/branch");
 const router = require("express").Router();
 const emailConfirmation = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
-const {
-  logIn,
-} = require("../../../bootcamp/TMDB/26-checkpoint-TMDB/api/controllers/auth.controller");
 
 router.post("/register", async (req, res) => {
   try {
@@ -99,13 +96,13 @@ router.get("/email/:email", async (req, res) => {
   // Recibo por params id Usuario const {id} = req.params
   const email = req.params.email
   try {
-    if(!email){
-      return res.status(400).send({message: "email cannot be undefined"})
+    if (!email) {
+      return res.status(400).send({ message: "email cannot be undefined" })
     }
-    const userFound = await User.findOne({email: email}).exec();
+    const userFound = await User.findOne({ email: email }).exec();
     console.log(userFound)
-    if(!userFound){
-      return res.status(400).send({message: "the email passed is not from any saved user"})
+    if (!userFound) {
+      return res.status(400).send({ message: "the email passed is not from any saved user" })
     }
     return res.status(200).send(userFound);
   } catch (error) {
