@@ -2,8 +2,11 @@ import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
 
 export default function FormLogin() {
+  const router = useRouter()
   const formik = useFormik({
     initialValues: {
       user: "",
@@ -14,6 +17,7 @@ export default function FormLogin() {
     },
     validationSchema: validationLogin.validationSchema,
   });
+
 
   return (
     <div className="container-form-login">
@@ -58,10 +62,18 @@ export default function FormLogin() {
                 e.preventDefault();
                 formik.handleSubmit();
                 await signIn("credentials", {
-                  redirect: true,
-                  email: formik.values.user,
+                  // redirect: true,
+                   email: formik.values.user,
                   password: formik.values.pass,
-                  callbackUrl: "/reserva",
+                  // callbackUrl: "/reserva",
+                  redirect: false
+                }).then(({ok, error}) => {
+                  if(ok){
+                    router.push('/reserva')
+                  } else {
+                    console.log(error)
+                  }
+          
                 });
               }}
             >
