@@ -3,12 +3,14 @@ const Branch = require("../models/branch");
 const router = require("express").Router();
 const emailConfirmation = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
+const {
+  logIn,
+} = require("../../../bootcamp/TMDB/26-checkpoint-TMDB/api/controllers/auth.controller");
 
 router.post("/register", async (req, res) => {
   try {
     const userCreated = await User.create(req.body);
     return res.status(200).send(`User registered successfully`);
-
   } catch (error) {
     console.error(error);
   }
@@ -40,11 +42,30 @@ router.post("/login", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   // Recibo por params id Usuario const {id} = req.params
-  const idUser = "642365b81a45cf8b5f01c8dc";
+  const id = "64249f1465fdb6b8327d0465";
   try {
-    const userFound = await User.findById(idUser).exec();
+    const userFound = await User.findById(id);
     const selectedUser = mapUser([userFound]);
     return res.send(selectedUser);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+router.get("/email/:email", async (req, res) => {
+  // Recibo por params id Usuario const {id} = req.params
+  const email = req.params.email;
+  try {
+    if (!email) {
+      return res.status(400).send({ message: "email cannot be undefined" });
+    }
+    const userFound = await User.find({ email: email }).exec();
+    if (!userFound) {
+      return res
+        .status(400)
+        .send({ message: "the email passed is not from any saved user" });
+    }
+    return res.status(200).send(mapUser(userFound)[0]);
   } catch (error) {
     console.error(error);
   }
