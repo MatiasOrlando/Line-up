@@ -2,19 +2,36 @@ import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { useState } from "react";
 import ForgetPassword from "./ForgetPassword";
-
+  
 export default function FormLogin() {
   const [forgetPassword, setForgetPassword] = useState(false);
-
+  const [credentials, setCredentials] = useState("");
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       user: "",
       pass: "",
     },
-    onSubmit: (data) => {
+    onSubmit: async () => {
       formik.handleReset();
+      await signIn("credentials", {
+        email: formik.values.user,
+        password: formik.values.pass,
+        redirect: false,
+      }).then(({ ok, error }) => {
+        if (ok) {
+          router.push("/reserva");
+        } else {
+          setCredentials("Credenciales invalidas");
+          setTimeout(() => {
+            setCredentials("");
+          }, 2000);
+        }
+      });
     },
     validationSchema: validationLogin.validationSchema,
   });
@@ -59,6 +76,9 @@ export default function FormLogin() {
               value={formik.values.pass}
             />
           </div>
+          <div className="credentials-box">
+            <span>{credentials}</span>
+          </div>
           <div className="login-form_box-pass">
             <button
               className="btn-tertiary"
@@ -75,12 +95,6 @@ export default function FormLogin() {
               onClick={async (e) => {
                 e.preventDefault();
                 formik.handleSubmit();
-                await signIn("credentials", {
-                  redirect: true,
-                  email: formik.values.user,
-                  password: formik.values.pass,
-                  callbackUrl: "/reserva",
-                });
               }}
             >
               Ingresar

@@ -3,9 +3,6 @@ const Branch = require("../models/branch");
 const router = require("express").Router();
 const emailConfirmation = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
-const {
-  logIn,
-} = require("../../../bootcamp/TMDB/26-checkpoint-TMDB/api/controllers/auth.controller");
 
 router.post("/register", async (req, res) => {
   try {
@@ -73,21 +70,39 @@ router.get("/email/:email", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   // Recibimos por req.body newPassword, idUser
-  const idUser = "6422f981301b66c115c337e9";
-  const { password } = req.body;
-  try {
-    const userPasswordUpdate = await User.findByIdAndUpdate(
-      { _id: idUser },
-      {
-        password,
-      },
-      { new: true }
-    );
-    await userPasswordUpdate.save();
-    return res.send(`Password was successfully updated`);
-  } catch (error) {
-    console.error(error);
+  if(!req.body.phone){
+    const { password } = req.body
+    try {
+      const userPasswordUpdate = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        {
+          password
+        },
+        { new: true }
+      );
+      await userPasswordUpdate.save();
+      return res.send(`Password was successfully updated`);
+    } catch (error) {
+      console.error(error);
+    }
+  }else if(req.body.phone && req.body.password){
+    const {phone, password} = req.body
+    try {
+      const userPasswordUpdate = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        {
+          password, phone
+        },
+        { new: true }
+      );
+      await userPasswordUpdate.save();
+      return res.send(`Password was successfully updated`);
+    } catch (error) {
+      console.error(error);
+    }
   }
+
+  
 });
 
 router.post("/appointmentBooked", async (req, res) => {
@@ -95,17 +110,20 @@ router.post("/appointmentBooked", async (req, res) => {
 });
 
 
+
+
+
 router.get("/email/:email", async (req, res) => {
   // Recibo por params id Usuario const {id} = req.params
   const email = req.params.email
   try {
-    if(!email){
-      return res.status(400).send({message: "email cannot be undefined"})
+    if (!email) {
+      return res.status(400).send({ message: "email cannot be undefined" })
     }
-    const userFound = await User.findOne({email: email}).exec();
+    const userFound = await User.findOne({ email: email }).exec();
     console.log(userFound)
-    if(!userFound){
-      return res.status(400).send({message: "the email passed is not from any saved user"})
+    if (!userFound) {
+      return res.status(400).send({ message: "the email passed is not from any saved user" })
     }
     return res.status(200).send(userFound);
   } catch (error) {
