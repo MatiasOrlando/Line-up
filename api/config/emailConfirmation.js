@@ -29,7 +29,7 @@ async function emailConfirmation() {
   console.log(info.messageId); // Random ID generated after successful send (optional)
 }
 
-async function passwordUpdate(email) {
+async function passwordUpdate(email, id) {
   let transporter = nodemailer.createTransport({
     service: "hotmail",
     auth: {
@@ -42,7 +42,7 @@ async function passwordUpdate(email) {
     from: `lineupapp@hotmail.com`,
     to: `${email}`,
     subject: `Actualiza tu contraseña`,
-    html: `<p><b></b>Porfavor ingresa tu nueva contraseña</p>
+    html: `<p><b></b><a href="http://localhost:3000/password/${id}">Haz click aqui para cambiar tu contraseña</a></p>
                 <p>Muchas gracias por confiar en nosotros.</p>
                 <img src=""/>`,
   });

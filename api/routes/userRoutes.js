@@ -42,7 +42,7 @@ router.post("/login", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   // Recibo por params id Usuario const {id} = req.params
-  const id = "64249f1465fdb6b8327d0465";
+  const { id } = req.params;
   try {
     const userFound = await User.findById(id);
     const selectedUser = mapUser([userFound]);
@@ -73,38 +73,37 @@ router.get("/email/:email", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   // Recibimos por req.body newPassword, idUser
-  if (!req.body.phone) {
-    const { password } = req.body;
-    try {
-      const userPasswordUpdate = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        {
-          password,
-        },
-        { new: true }
-      );
-      await userPasswordUpdate.save();
-      return res.send(`Password was successfully updated`);
-    } catch (error) {
-      console.error(error);
-    }
-  } else if (req.body.phone && req.body.password) {
-    const { phone, password } = req.body;
-    try {
-      const userPasswordUpdate = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        {
-          password,
-          phone,
-        },
-        { new: true }
-      );
-      await userPasswordUpdate.save();
-      return res.send(`Password was successfully updated`);
-    } catch (error) {
-      console.error(error);
-    }
+  const { password } = req.body;
+  try {
+    const userPasswordUpdate = await User.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        password,
+      },
+      { new: true }
+    );
+    await userPasswordUpdate.save();
+    return res.send(`Password was successfully updated`);
+  } catch (error) {
+    console.error(error);
   }
+  // } else if (req.body.phone && req.body.password) {
+  //   const { phone, password } = req.body;
+  //   try {
+  //     const userPasswordUpdate = await User.findByIdAndUpdate(
+  //       { _id: req.params.id },
+  //       {
+  //         password,
+  //         phone,
+  //       },
+  //       { new: true }
+  //     );
+  //     await userPasswordUpdate.save();
+  //     return res.send(`Password was successfully updated`);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 });
 
 router.post("/appointmentBooked", async (req, res) => {
@@ -113,7 +112,9 @@ router.post("/appointmentBooked", async (req, res) => {
 
 router.post("/password-update", async (req, res) => {
   const { email } = req.body;
-  passwordUpdate(email);
+
+  const selectedUser = await User.findOne({ email });
+  passwordUpdate(email, selectedUser._id);
 });
 
 router.get("/email/:email", async (req, res) => {
