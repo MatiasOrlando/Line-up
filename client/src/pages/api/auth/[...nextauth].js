@@ -1,47 +1,49 @@
+import axios from "axios";
 import NextAuth from "next-auth";
-import Providers from "next-auth/providers";
-import { MongoClient } from "mongodb";
-
-const client = new MongoClient(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export default NextAuth({
-  // Configure one or more authentication providers
   providers: [
-    Providers.Google({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
+    CredentialsProvider({
+      name: "line-up",
+      async authorize(credentials, req) {
+        const payload = {
+          email: credentials.email,
+          password: credentials.password,
+        };
+        try {
+          const res = await axios.post(
+            "http://localhost:3001/api/user/login",
+            payload
+          );
+          return res.data;
+        } catch (error) {
+          return;
+        }
+      },
     }),
-    // ...add more providers here
   ],
-
-  // A database is optional, but required to persist accounts in a database
-  database: process.env.MONGODB_URI,
-
-  // Use MongoDB for database
-  adapter: {
-    async getAdapter() {
-      await client.connect();
-      const db = client.db(process.env.MONGODB_DB);
-      return {
-        async getUser(id) {
-          return await db.collection("users").findOne({ _id: id });
-        },
-        async getUserByEmail(email) {
-          return await db.collection("users").findOne({ email });
-        },
-        async updateUser(user) {
-          await db
-            .collection("users")
-            .updateOne({ _id: user.id }, { $set: user }, { upsert: true });
-        },
-        async createUser(user) {
-          await db.collection("users").insertOne(user);
-          return user;
-        },
-      };
+  secret: process.env.SECRET,
+  basePath: process.env.NEXTAUTH_URL,
+  pages: {
+    signIn: "/",
+  },
+  callbacks: {
+    async jwt({ token, user, account }) {
+      if (account && user) {
+        return {
+          ...token,
+          accessToken: user.token,
+          refreshToken: user.refreshToken,
+        };
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.accessToken = token.accessToken;
+      session.user.refreshToken = token.refreshToken;
+      session.user.accessTokenExpires = token.accessTokenExpires;
+      return session;
     },
   },
 });

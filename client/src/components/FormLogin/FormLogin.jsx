@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
-
+import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 export default function FormLogin() {
   const formik = useFormik({
@@ -25,7 +26,7 @@ export default function FormLogin() {
           <div className="login-form_box-input">
             <label htmlFor="user">Usuario</label>
             <input
-              className={`input-primary ten ${
+              className={`input-primary width-100 ${
                 formik.touched.user && formik.errors.user ? "error-input" : ""
               }`}
               type="text"
@@ -38,7 +39,7 @@ export default function FormLogin() {
           <div className="login-form_box-input">
             <label htmlFor="pass">Contraseña</label>
             <input
-              className={`input-primary ten ${
+              className={`input-primary width-100 ${
                 formik.touched.pass && formik.errors.pass ? "error-input" : ""
               }`}
               type="text"
@@ -52,11 +53,16 @@ export default function FormLogin() {
           </div>
           <div>
             <button
-              className="btn-primary ten"
+              className="btn-primary width-100"
               type="submit"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
                 formik.handleSubmit();
+                await signIn("credentials", {
+                  redirect: false,
+                  email: formik.values.user,
+                  password: formik.values.pass,
+                });
               }}
             >
               Ingresar
@@ -64,9 +70,11 @@ export default function FormLogin() {
           </div>
           <hr />
           <div>
-            <button className="btn-secondary ten" type="button">
-              ¿No tenes cuenta? Registrate
-            </button>
+            <Link href={"/registro"}>
+              <button className="btn-secondary width-100" type="button">
+                ¿No tenes cuenta? Registrate
+              </button>
+            </Link>
           </div>
         </form>
       </div>
