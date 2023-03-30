@@ -1,9 +1,11 @@
 import Modal from "@/commons/Modal";
 import React, { useState } from "react";
 import { BsCheckSquare } from "react-icons/bs";
+import axios from "axios";
 
 const ForgetPassword = ({ setForgetPassword }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
 
   const handlePassword = () => {
     setForgetPassword(false);
@@ -12,6 +14,12 @@ const ForgetPassword = ({ setForgetPassword }) => {
   const handleCloseModal = () => {
     setIsOpen(false);
     setForgetPassword(false);
+  };
+
+  const handleEmailPasswordUpdate = async () => {
+    return await axios.post("http://localhost:3001/api/user/password-update", {
+      email,
+    });
   };
 
   return (
@@ -35,6 +43,7 @@ const ForgetPassword = ({ setForgetPassword }) => {
                 className={`input-primary width-100`}
                 type="text"
                 id="user"
+                onChange={(e) => setEmail(e.target.value)}
               />
               <div className="box-span"></div>
             </div>
@@ -45,6 +54,7 @@ const ForgetPassword = ({ setForgetPassword }) => {
                 onClick={async (e) => {
                   e.preventDefault();
                   setIsOpen(true);
+                  handleEmailPasswordUpdate();
                 }}
               >
                 Enviar correo electronico
