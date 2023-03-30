@@ -2,8 +2,12 @@ import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
+import ForgetPassword from "./ForgetPassword";
 
 export default function FormLogin() {
+  const [forgetPassword, setForgetPassword] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       user: "",
@@ -14,6 +18,14 @@ export default function FormLogin() {
     },
     validationSchema: validationLogin.validationSchema,
   });
+
+  const handleEditPassword = () => {
+    setForgetPassword(true);
+  };
+
+  if (forgetPassword) {
+    return <ForgetPassword setForgetPassword={setForgetPassword} />;
+  }
 
   return (
     <div className="container-form-login">
@@ -48,7 +60,13 @@ export default function FormLogin() {
             />
           </div>
           <div className="login-form_box-pass">
-            <button className="btn-tertiary">¿Olvidaste tu contraseña?</button>
+            <button
+              className="btn-tertiary"
+              type="button"
+              onClick={handleEditPassword}
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
           </div>
           <div>
             <button
