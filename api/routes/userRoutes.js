@@ -52,26 +52,47 @@ router.get("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   // Recibimos por req.body newPassword, idUser
-  const idUser = "6422f981301b66c115c337e9";
-  const { password } = req.body;
-  try {
-    const userPasswordUpdate = await User.findByIdAndUpdate(
-      { _id: idUser },
-      {
-        password,
-      },
-      { new: true }
-    );
-    await userPasswordUpdate.save();
-    return res.send(`Password was successfully updated`);
-  } catch (error) {
-    console.error(error);
+  if(!req.body.phone){
+    const { password } = req.body
+    try {
+      const userPasswordUpdate = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        {
+          password
+        },
+        { new: true }
+      );
+      await userPasswordUpdate.save();
+      return res.send(`Password was successfully updated`);
+    } catch (error) {
+      console.error(error);
+    }
+  }else if(req.body.phone && req.body.password){
+    const {phone, password} = req.body
+    try {
+      const userPasswordUpdate = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        {
+          password, phone
+        },
+        { new: true }
+      );
+      await userPasswordUpdate.save();
+      return res.send(`Password was successfully updated`);
+    } catch (error) {
+      console.error(error);
+    }
   }
+
+  
 });
 
 router.post("/appointmentBooked", async (req, res) => {
   emailConfirmation();
 });
+
+
+
 
 
 router.get("/email/:email", async (req, res) => {
