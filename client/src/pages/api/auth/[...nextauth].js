@@ -16,10 +16,8 @@ export default NextAuth({
             "http://localhost:3001/api/user/login",
             payload
           );
-          console.log(res)
           return res.data;
         } catch (error) {
-        
           return;
         }
       },

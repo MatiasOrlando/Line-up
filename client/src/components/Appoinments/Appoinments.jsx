@@ -6,21 +6,19 @@ export default function Appoinments() {
 
   useEffect(() => {
     async function fetchData() {
-      console.log("fetch");
       try {
         const result = await axios.get(
           "http://localhost:3001/api/appointments/123"
         );
-        console.log(result);
+
         setAppoinments(result.data);
       } catch (error) {
         console.error(error);
       }
     }
-    console.log("?");
+
     fetchData();
   }, []);
-
   console.log(appoinments);
   return (
     <main className="container-appointments">
@@ -31,18 +29,22 @@ export default function Appoinments() {
         <div className="container-list">
           {appoinments.map((app) => {
             return (
-              <div className="item-list">
+              <div className="item-list" key={app._id}>
                 <div className="item-section">
                   <div className="item-title">Nombre y Apellido</div>
                   <div className="item-description">{app.user.name}</div>
                 </div>
                 <div className="item-section">
                   <div className="item-title">Reserva</div>
-                  <div className="item-description">{app.date}-{app.timeOfAppontment}</div>
+                  <div className="item-description">
+                    {app.date}-{app.timeOfAppontment}
+                  </div>
                 </div>
                 <div className="item-section">
                   <div className="item-title">Sucursal</div>
-                  <div className="item-description">{app.sucursal.location}</div>
+                  <div className="item-description">
+                    {app.sucursal.location}
+                  </div>
                 </div>
                 <div className="item-section">
                   <div className="item-title">N° de la reserva</div>

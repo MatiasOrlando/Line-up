@@ -264,11 +264,11 @@ function generateAppointmentTime() {
   return phoneNumber;
 }
 
-//  const CreateUsers = async () => {
-//    try {
-//      const user = await User.find().exec();
-//      if (user[0] === undefined) {
-//        for (let i = 0; i < 20; i++) {
+// const CreateUsers = async () => {
+//   try {
+//     const user = await User.find().exec();
+//     if (user[0] === undefined) {
+//       for (let i = 0; i < 20; i++) {
 //         const newUser = new User({
 //           name: nameList[Math.floor(Math.random() * nameList.length)],
 //           email:
@@ -350,79 +350,79 @@ const CreateUsers = async () => {
   }
 };
 
-// const CreateBranches = async () => {
-//   try {
-//     const branches = await Branch.find().exec();
-//     if (branches[0] === undefined) {
-//       for (let i = 0; i < 20; i++) {
-//         const newUser = new User({
-//           name: nameList[Math.floor(Math.random() * nameList.length)],
-//           email:
-//             nameList[Math.floor(Math.random() * nameList.length)] +
-//             "@gmail.com",
-//           phone: generateRandomPhoneNumber(),
-//           dni: generateRandomDni(),
-//           password: generatePassword(),
-//           operator: true,
-//         });
+const CreateBranches = async () => {
+  try {
+    const branches = await Branch.find().exec();
+    if (branches[0] === undefined) {
+      for (let i = 0; i < 20; i++) {
+        const newUser = new User({
+          name: nameList[Math.floor(Math.random() * nameList.length)],
+          email:
+            nameList[Math.floor(Math.random() * nameList.length)] +
+            "@gmail.com",
+          phone: generateRandomPhoneNumber(),
+          dni: generateRandomDni(),
+          password: generatePassword(),
+          operator: true,
+        });
 
-//         const newOperator = await newUser.save();
-//         const { operator, email, phone, id } = newOperator;
-//         const newBranch = new Branch({
-//           name:
-//             location[Math.floor(Math.random() * location.length)] + " SUCURSAL",
-//           location: location[Math.floor(Math.random() * location.length)],
-//           hourRange: generateHourRange(),
-//           allowedClients: ramdomAllowedClients(),
-//           user: { id, email, phone, operator },
-//         });
+        const newOperator = await newUser.save();
+        const { operator, email, phone, id } = newOperator;
+        const newBranch = new Branch({
+          name:
+            location[Math.floor(Math.random() * location.length)] + " SUCURSAL",
+          location: location[Math.floor(Math.random() * location.length)],
+          hourRange: generateHourRange(),
+          allowedClients: ramdomAllowedClients(),
+          user: { id, email, phone, operator },
+        });
 
-//         const savedBranch = await newBranch.save();
-//         console.log(savedBranch);
-//       }
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+        const savedBranch = await newBranch.save();
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-// const CreateAppoitments = async () => {
-//   try {
-//     const user = await User.find().exec();
-//     const appoint = await Appointment.find().exec();
-//     const branches = await Branch.find().exec();
-//     if (!appoint[0]) {
-//       for (let e = 0; e < 10; e++) {
-//         for (let i = 0; i < branches.length; i++) {
-//           const { id, name, email, phone } = user[i];
-//           const {
-//             location,
-//             allowedClients,
-//             hourRange,
-//             name: nombre,
-//           } = branches[i];
-//           const ID = branches[i].id;
-//           const newAppoinment = await Appointment.create({
-//             date: generateRandomDate(),
-//             timeOfAppontment: generateAppointmentTime(),
-//             status: "pending",
-//             cancelReason: null,
-//             user: { id, name, email, phone },
-//             sucursal: { id: ID, location, allowedClients, hourRange },
-//           });
-//           const savedAppointment = await newAppoinment.save();
-//         }
-//       }
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+const CreateAppoitments = async () => {
+  try {
+    const user = await User.find().exec();
+    const appoint = await Appointment.find().exec();
+    const branches = await Branch.find().exec();
+    if (!appoint[0]) {
+      for (let e = 0; e < 10; e++) {
+        for (let i = 0; i < branches.length; i++) {
+          const { id, name, email, phone } = user[i];
+          const {
+            location,
+            allowedClients,
+            hourRange,
+            name: nombre,
+          } = branches[i];
+          const ID = branches[i].id;
+          const newAppoinment = await Appointment.create({
+            date: generateRandomDate(),
+            timeOfAppontment: generateAppointmentTime(),
+            status: "pending",
+            cancelReason: null,
+            user: { id, name, email, phone },
+            sucursal: { id: ID, location, allowedClients, hourRange },
+          });
+          const savedAppointment = await newAppoinment.save();
+        }
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const executor = async () => {
   await CreateUsers();
-  // await CreateBranches();
-  // await CreateAppoitments();
+  await CreateBranches();
+  await CreateAppoitments();
+  // await CreateUsers2();
 };
 
 executor();

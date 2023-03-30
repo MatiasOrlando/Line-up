@@ -4,9 +4,8 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useState } from "react";
 import ForgetPassword from "./ForgetPassword";
-  
+
 export default function FormLogin() {
   const [forgetPassword, setForgetPassword] = useState(false);
   const [credentials, setCredentials] = useState("");
