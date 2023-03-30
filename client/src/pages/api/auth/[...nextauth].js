@@ -16,8 +16,10 @@ export default NextAuth({
             "http://localhost:3001/api/user/login",
             payload
           );
+          console.log(res)
           return res.data;
         } catch (error) {
+        
           return;
         }
       },
@@ -40,10 +42,22 @@ export default NextAuth({
       return token;
     },
     async session({ session, token }) {
-      session.user.accessToken = token.accessToken;
-      session.user.refreshToken = token.refreshToken;
-      session.user.accessTokenExpires = token.accessTokenExpires;
-      return session;
+      try {
+        const userData = await this.getData(session.user.email);
+        session.user.data = userData;
+        session.user.accessToken = token.accessToken;
+        session.user.refreshToken = token.refreshToken;
+        session.user.accessTokenExpires = token.accessTokenExpires;
+        return session;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getData(email) {
+      const res = await axios.get(
+        `http://localhost:3001/api/user/email/${email}`
+      );
+      return res.data;
     },
   },
 });

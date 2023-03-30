@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function FormUserData() {
- const [user, setUser] = useState() 
+  const [user, setUser] = useState() 
 
 const { data } = useSession()
 
@@ -17,30 +17,19 @@ const { data } = useSession()
   }
 
 
+
   const [status, setStatus] = useState(true)
 
 
-
-
-
- 
-
-
-
-
-  const formik = useFormik({
+const formik = useFormik({
     initialValues: {
        password: "",
        phone: user?.phone || null,
     },
     onSubmit: async (data) => {
-      
-      const {password, phone} = data
+const {password, phone} = data
       const id = user._id
     const response = await axios.put(`http://localhost:3001/api/user/${id}`, {password, phone})
-    console.log(response.data)
- 
-   
     },
       validationSchema: validationUserData.validationSchema,  
   });
@@ -49,7 +38,6 @@ const { data } = useSession()
   return (
 
     <div className="container-form-userdata">
-      
        <div className="container-form-userdata__first-div">
         <form onSubmit={(e) => {
              e.preventDefault()
