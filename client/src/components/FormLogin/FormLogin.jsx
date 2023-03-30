@@ -10,7 +10,6 @@ export default function FormLogin() {
       pass: "",
     },
     onSubmit: (data) => {
-      console.log(data);
       formik.handleReset();
     },
     validationSchema: validationLogin.validationSchema,
@@ -59,9 +58,10 @@ export default function FormLogin() {
                 e.preventDefault();
                 formik.handleSubmit();
                 await signIn("credentials", {
-                  redirect: false,
+                  redirect: true,
                   email: formik.values.user,
                   password: formik.values.pass,
+                  callbackUrl: "/reserva",
                 });
               }}
             >
