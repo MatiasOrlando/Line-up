@@ -4,8 +4,11 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
+import { useState } from "react";
+import ForgetPassword from "./ForgetPassword";
+  
 export default function FormLogin() {
+  const [forgetPassword, setForgetPassword] = useState(false);
   const [credentials, setCredentials] = useState("");
   const router = useRouter();
   const formik = useFormik({
@@ -32,6 +35,14 @@ export default function FormLogin() {
     },
     validationSchema: validationLogin.validationSchema,
   });
+
+  const handleEditPassword = () => {
+    setForgetPassword(true);
+  };
+
+  if (forgetPassword) {
+    return <ForgetPassword setForgetPassword={setForgetPassword} />;
+  }
 
   return (
     <div className="container-form-login">
@@ -69,7 +80,13 @@ export default function FormLogin() {
             <span>{credentials}</span>
           </div>
           <div className="login-form_box-pass">
-            <button className="btn-tertiary">¿Olvidaste tu contraseña?</button>
+            <button
+              className="btn-tertiary"
+              type="button"
+              onClick={handleEditPassword}
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
           </div>
           <div>
             <button
