@@ -2,9 +2,8 @@ import * as Yup from "yup";
 
 const validationUserData = {
     validationSchema: Yup.object({
-        phone: Yup.number(),
-        password: Yup.string()
-      .required()
+    /*     phone: Yup.number(),  */
+        password: Yup.string().required()
       .test("has-lowercase", (value) => {
         return /[a-z]/.test(value);
       })
