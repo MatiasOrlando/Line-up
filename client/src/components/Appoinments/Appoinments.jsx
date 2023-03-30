@@ -19,7 +19,6 @@ export default function Appoinments() {
 
     fetchData();
   }, []);
-  console.log(appoinments);
   return (
     <main className="container-appointments">
       <div className="container-appointments_box">
