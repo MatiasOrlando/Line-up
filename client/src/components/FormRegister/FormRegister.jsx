@@ -12,6 +12,7 @@ import { MdCancelPresentation } from "react-icons/md";
 export default function FormRegister() {
   const input = useRef(null);
   const router = useRouter();
+  
   const [mayuscula, setMayuscula] = useState({
     oracion: "ABC tiene una mayuscula",
     color: "$septenaryGrey",
