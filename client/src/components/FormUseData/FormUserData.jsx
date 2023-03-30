@@ -1,27 +1,67 @@
 import { useFormik } from "formik";
 import validationUserData from "./validation/validationUserData";
 import { signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function FormUserData() {
+ const [user, setUser] = useState() 
+
+const { data } = useSession()
+
+
+
+ if(data){
+  if(data.user){
+    if(data.user.email){
+    
+        axios.get(`http://localhost:3001/api/user/email/${data.user.email}`).then((res) => setUser(res.data))
+      
+      }
+  }
+} 
+console.log(user)
+
+
+
+
+ 
+
+
+
+
   const formik = useFormik({
     initialValues: {
-      name: "pepito",
-      email: "pepito@gmail.com",
-      dni: 43422342,
-      phone: 4242242424,
-      password: "",
+       password: "",
     },
-    onSubmit: (data) => {
-      console.log(data);
-      formik.handleReset();
+    onSubmit: async (data) => {
+      console.log(data)
+      const { password } = data;
+      try {
+        if(user.id){
+         const result = await axios.put(`http://localhost:3001/api/user/${user.id}`, {
+          password
+        });
+        console.log(result)
+        }
+      } catch (err) {
+        console.log(err);
+      }
     },
     validationSchema: validationUserData.validationSchema,
   });
 
   return (
+
     <div className="container-form-userdata">
+      
        <div className="container-form-userdata__first-div">
-        <form className="login-form">
+        <form onSubmit={(e) => {
+          e.preventDefault()
+          formik.handleSubmit()
+
+        }} className="login-form">
           <div className="login-form_box-title">
             <h2>Mis datos</h2>
           </div>
@@ -35,7 +75,7 @@ export default function FormUserData() {
               type="text"
               id="user"
               onChange={formik.handleChange}
-              value={formik.initialValues.name}
+              value={user?.name}
             />
             <div className="box-span"></div>
           </div>
@@ -49,7 +89,7 @@ export default function FormUserData() {
               type="text"
               id="pass"
               onChange={formik.handleChange}
-              value={formik.initialValues.email}
+              value={user?.email}
             />
           </div>
 
@@ -65,7 +105,7 @@ export default function FormUserData() {
               type="text"
               id="pass"
               onChange={formik.handleChange}
-              value={formik.initialValues.dni}
+              value={user?.dni}
             />
           </div>
           <div className="div-inter-50-right">
@@ -78,7 +118,7 @@ export default function FormUserData() {
               type="text"
               id="pass"
               onChange={formik.handleChange}
-              value={formik.initialValues.phone}
+              value={user?.phone}
             />
           </div></div>
           
@@ -89,10 +129,10 @@ export default function FormUserData() {
               className={`input-primary width-100 ${
                 formik.touched.pass && formik.errors.pass ? "error-input" : ""
               }`}
-              type="text"
+              type="password"
               id="pass"
               onChange={formik.handleChange}
-              value={formik.initialValues.password}
+              value={formik.values.password}
             />
           </div>
           <div className="login-form_box-pass">
@@ -102,15 +142,10 @@ export default function FormUserData() {
             <button
               className="btn-primary width-100"
               type="submit"
-              onClick={async (e) => {
+              onClick={(e) => {
                 e.preventDefault();
                 formik.handleSubmit();
-                await signIn("credentials", {
-                  redirect: false,
-                  email: formik.values.user,
-                  password: formik.values.pass,
-                });
-              }}
+                }}
             >
               Aceptar
             </button>
