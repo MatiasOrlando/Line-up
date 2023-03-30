@@ -1,8 +1,7 @@
 import { useFormik } from "formik";
 import validationUserData from "./validation/validationUserData";
-import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { BsCheckSquare } from "react-icons/bs";
 import Modal from "@/commons/Modal";
@@ -62,7 +61,7 @@ export default function FormUserData() {
                 type="text"
                 id="user"
                 onChange={formik.handleChange}
-                value={user?.name}
+                value={user?.name || ""}
               />
               <div className="box-span"></div>
             </div>
@@ -74,7 +73,7 @@ export default function FormUserData() {
                 type="text"
                 id="pass"
                 onChange={formik.handleChange}
-                value={user?.email}
+                value={user?.email || ""}
               />
             </div>
 
@@ -87,7 +86,7 @@ export default function FormUserData() {
                   type="text"
                   id="pass"
                   onChange={formik.handleChange}
-                  value={user?.dni}
+                  value={user?.dni || ""}
                 />
               </div>
               <div className="div-inter-50-right">
@@ -102,7 +101,7 @@ export default function FormUserData() {
                   type="number"
                   id="phone"
                   onChange={formik.handleChange}
-                  value={user?.phone}
+                  value={user?.phone || ""}
                 />
               </div>
             </div>
@@ -120,7 +119,7 @@ export default function FormUserData() {
                 onChange={formik.handleChange}
                 placeholder={"Ingrese su nueva contraseña"}
                 disabled={status}
-                value={formik.values.password}
+                value={formik.values.password || ""}
               />
               <span>{formik.errors.password}</span>
             </div>
