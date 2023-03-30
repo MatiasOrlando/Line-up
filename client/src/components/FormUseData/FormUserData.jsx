@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function FormUserData() {
- const [user, setUser] = useState() 
+/*  const [user, setUser] = useState() 
 
 const { data } = useSession()
 
@@ -21,7 +21,7 @@ const { data } = useSession()
       }
   }
 } 
-console.log(user)
+console.log(user) */
 
 
 
@@ -36,7 +36,7 @@ console.log(user)
        password: "",
     },
     onSubmit: async (data) => {
-      console.log(data)
+      console.log("log")
       const { password } = data;
       try {
         if(user.id){
@@ -49,7 +49,7 @@ console.log(user)
         console.log(err);
       }
     },
-    validationSchema: validationUserData.validationSchema,
+    //validationSchema: validationUserData.validationSchema,
   });
 
   return (
