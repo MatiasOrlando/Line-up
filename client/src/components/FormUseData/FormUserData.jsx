@@ -6,12 +6,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function FormUserData() {
-  const [user, setUser] = useState() 
-
+const [user, setUser] = useState() 
 const { data } = useSession()
-
-
-
  if(data && data.user && data.user.email && !user){
       axios.get(`http://localhost:3001/api/user/email/${data.user.email}`).then((res) => setUser(res.data))   
   }
@@ -36,14 +32,15 @@ const {password, phone} = data
 
 
   return (
-
     <div className="container-form-userdata">
-       <div className="container-form-userdata__first-div">
-        <form onSubmit={(e) => {
-             e.preventDefault()
-             formik.handleSubmit()
-        }
-        } className="login-form">
+      <div className="container-form-userdata__first-div">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            formik.handleSubmit();
+          }}
+          className="login-form"
+        >
           <div className="login-form_box-title">
             <h2>Mis datos</h2>
           </div>
@@ -62,7 +59,7 @@ const {password, phone} = data
           <div className="login-form_box-input">
             <label htmlFor="pass">Mail</label>
             <input
-            disabled={true}
+              disabled={true}
               className={`input-primary width-100 `}
               type="text"
               id="pass"
@@ -71,9 +68,9 @@ const {password, phone} = data
             />
           </div>
 
-          
           <div className="div-split-two">
             <div className="div-inter-50-left">
+
             <label htmlFor="pass">DNI</label>
             <input
             disabled={true}
@@ -94,8 +91,10 @@ const {password, phone} = data
               onChange={formik.handleChange}
               value={user?.phone}
             />
-          </div></div>
+          </div>
+          </div>
           
+
           <div className="login-form_box-input">
             <label htmlFor="pass">Contraseña</label>
             <input
@@ -123,7 +122,7 @@ const {password, phone} = data
             </button>
           </div>
         </form>
-      </div> 
+      </div>
     </div>
   );
 }
