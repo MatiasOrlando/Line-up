@@ -9,8 +9,9 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, validate: [isEmail, "invalid email"] },
   phone: {
     type: Number,
-    min: [9, "too few numbers"],
+    min: [7, "too few numbers"],
     maxLength: [15, "too many numbers"],
+    default: 11000000
   },
   password: { type: String, required: true },
   salt: { type: String },

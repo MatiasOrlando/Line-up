@@ -6,44 +6,30 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function FormUserData() {
-  const [user, setUser] = useState();
+const [user, setUser] = useState() 
+const { data } = useSession()
+ if(data && data.user && data.user.email && !user){
+      axios.get(`http://localhost:3001/api/user/email/${data.user.email}`).then((res) => setUser(res.data))   
+  }
 
-  const { data } = useSession();
 
-  //  if(data){
-  //   if(data.user){
-  //     if(data.user.email){
 
-  //         axios.get(`http://localhost:3001/api/user/email/${data.user.email}`).then((res) => setUser(res.data))
+  const [status, setStatus] = useState(true)
 
-  //       }
-  //   }
-  // }
-  // console.log(user)
 
-  const formik = useFormik({
+const formik = useFormik({
     initialValues: {
-      password: "",
+       password: "",
+       phone: user?.phone || null,
     },
     onSubmit: async (data) => {
-      console.log(data);
-      const { password } = data;
-      try {
-        if (user.id) {
-          const result = await axios.put(
-            `http://localhost:3001/api/user/${user.id}`,
-            {
-              password,
-            }
-          );
-          console.log(result);
-        }
-      } catch (err) {
-        console.log(err);
-      }
+const {password, phone} = data
+      const id = user._id
+    const response = await axios.put(`http://localhost:3001/api/user/${id}`, {password, phone})
     },
-    validationSchema: validationUserData.validationSchema,
+      validationSchema: validationUserData.validationSchema,  
   });
+
 
   return (
     <div className="container-form-userdata">
@@ -62,9 +48,7 @@ export default function FormUserData() {
             <label htmlFor="user">Nombre</label>
             <input
               disabled={true}
-              className={`input-primary width-100 ${
-                formik.touched.user && formik.errors.user ? "error-input" : ""
-              }`}
+              className={`input-primary width-100 `}
               type="text"
               id="user"
               onChange={formik.handleChange}
@@ -76,9 +60,7 @@ export default function FormUserData() {
             <label htmlFor="pass">Mail</label>
             <input
               disabled={true}
-              className={`input-primary width-100 ${
-                formik.touched.pass && formik.errors.pass ? "error-input" : ""
-              }`}
+              className={`input-primary width-100 `}
               type="text"
               id="pass"
               onChange={formik.handleChange}
@@ -88,56 +70,53 @@ export default function FormUserData() {
 
           <div className="div-split-two">
             <div className="div-inter-50-left">
-              <label htmlFor="pass">DNI</label>
-              <input
-                disabled={true}
-                className={`input-primary width-100 ${
-                  formik.touched.pass && formik.errors.pass ? "error-input" : ""
-                }`}
-                type="text"
-                id="pass"
-                onChange={formik.handleChange}
-                value={user?.dni}
-              />
-            </div>
-            <div className="div-inter-50-right">
-              <label htmlFor="pass">Telefono</label>
-              <input
-                disabled={true}
-                className={`input-primary width-100 ${
-                  formik.touched.pass && formik.errors.pass ? "error-input" : ""
-                }`}
-                type="text"
-                id="pass"
-                onChange={formik.handleChange}
-                value={user?.phone}
-              />
-            </div>
-          </div>
 
-          <div className="login-form_box-input">
-            <label htmlFor="pass">Contrasenia</label>
+            <label htmlFor="pass">DNI</label>
             <input
-              className={`input-primary width-100 ${
-                formik.touched.pass && formik.errors.pass ? "error-input" : ""
-              }`}
-              type="password"
+            disabled={true}
+              className={`input-primary width-100`}
+              type="text"
               id="pass"
               onChange={formik.handleChange}
-              value={formik.values.password}
+              value={user?.dni}
             />
           </div>
+          <div className="div-inter-50-right">
+            <label htmlFor="pass">Telefono</label>
+            <input
+              disabled={user?.phone? (true) : (false)}
+              className={`input-primary width-100  ${formik.touched.phone && formik.errors.phone ? "error-input" : ""}`}
+              type="number"
+              id="phone"
+              onChange={formik.handleChange}
+              value={user?.phone}
+            />
+          </div>
+          </div>
+          
+
+          <div className="login-form_box-input">
+            <label htmlFor="pass">Contraseña</label>
+            <input
+              className={`input-primary width-100 ${
+                formik.touched.password && formik.errors.password ? "error-input" : ""
+              }`}
+              type="password"
+              id="password"
+              onChange={formik.handleChange}
+               placeholder={"Ingrese su nueva contraseña"} 
+              disabled={status}
+               value={formik.values.password} 
+              />
+              <span>{formik.errors.password}</span>
+          </div>
           <div className="login-form_box-pass">
-            <button className="btn-tertiary">Editar Contrasenia</button>
+            <button type="button" onClick={() => {setStatus(!status)}} className="btn-tertiary">Editar contraseña</button>
           </div>
           <div>
             <button
               className="btn-primary width-100"
               type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                formik.handleSubmit();
-              }}
             >
               Aceptar
             </button>

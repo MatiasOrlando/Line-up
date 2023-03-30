@@ -48,9 +48,10 @@ router.get("/:id", async (req, res) => {
   // Recibo por params idUsuario y busco en coleccion apppointments todas las que coincidan con el userId recibido
   try {
     const idUser = "6422b1e34da6f9b3f79ba531";
-    const userAppointments = await Appointment.find({
+    /* const userAppointments = await Appointment.find({
       "user.id": idUser,
-    });
+    }); */
+    const userAppointments = await Appointment.find({});
     return res.status(200).send(userAppointments);
   } catch (error) {
     console.error(error);
