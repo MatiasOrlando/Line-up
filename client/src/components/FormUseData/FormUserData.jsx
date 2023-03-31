@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import validationUserData from "./validation/validationUserData";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { BsCheckSquare } from "react-icons/bs";
 import Modal from "@/commons/Modal";
@@ -12,11 +12,19 @@ export default function FormUserData() {
   const [status, setStatus] = useState(true);
   const { data } = useSession();
 
-  if (data && data.user && data.user.email && !user) {
-    axios
-      .get(`http://localhost:3001/api/user/email/${data.user.email}`)
-      .then((res) => setUser(res.data));
-  }
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (data && data?.user) {
+        const tokenUser = await axios.get(
+          `http://localhost:3001/api/user/email/token?token=${data.user}`
+        );
+        if (tokenUser) {
+          setUser(tokenUser.data);
+        }
+      }
+    };
+    fetchUserData();
+  }, [data]);
 
   const handleCloseModal = () => {
     setIsOpen(false);
