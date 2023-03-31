@@ -21,7 +21,9 @@ const createPassword = () => {
         password: newPassword,
       });
       setIsOpen(true);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

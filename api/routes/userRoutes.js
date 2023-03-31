@@ -112,9 +112,12 @@ router.post("/appointmentBooked", async (req, res) => {
 
 router.post("/password-update", async (req, res) => {
   const { email } = req.body;
-
-  const selectedUser = await User.findOne({ email });
-  passwordUpdate(email, selectedUser._id);
+  try {
+    const selectedUser = await User.findOne({ email });
+    passwordUpdate(email, selectedUser._id);
+  } catch {
+    return res.status(400).send({ message: "Invalid email" });
+  }
 });
 
 router.get("/email/:email", async (req, res) => {
