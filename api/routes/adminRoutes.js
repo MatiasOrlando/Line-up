@@ -16,9 +16,11 @@ router.delete("/:id/deleteBranch/:branchId", validateMiddleware , adminControlle
 
 router.delete("/:id/deleteUser/:userId", validateMiddleware, adminController.delete_user_delete);
 
-router.get("/:id/user", validateMiddleware, adminController.get_all_users_get);
+router.get("/:id/user/:number", validateMiddleware, adminController.get_all_users_get);
 
-router.get("/:id/branch", validateMiddleware, adminController.get_all_branches_get);
+router.get("/:id/operator/:number", validateMiddleware, adminController.get_all_operators_get);
+
+router.get("/:id/branch/:number", validateMiddleware, adminController.get_all_branches_get);
  
 
 module.exports = router;

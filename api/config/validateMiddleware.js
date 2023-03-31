@@ -1,3 +1,4 @@
+const Appointment = require("../models/appointment")
 const User = require("../models/user")
 
 exports.isAdmin = async (req, res, next) => {
@@ -29,3 +30,6 @@ exports.isOperator = async (req, res, next) => {
         return res.status(404).json({message: "Unknown Error"})
     }
     }
+
+
+ 

@@ -1,8 +1,10 @@
 const User = require("../models/user");
 const Branch = require("../models/branch");
+const Appointment = require("../models/appointment")
 const router = require("express").Router();
 const emailConfirmation = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
+
 
 router.post("/register", async (req, res) => {
   try {
@@ -92,7 +94,33 @@ router.post("/appointmentBooked", async (req, res) => {
 });
 
 
-
+router.get("/:id/:number", async(req, res) => {
+  try {
+    if(!req.params.id || !req.params.number){
+      return res.status(400).send("missing key values")
+    }
+     const id = req.params.id;
+     const number = req.params.number
+     const limit = number * 12
+     const appointments = await Appointment.find({
+       "user.id": id,
+     });
+     if (!appointments[0]) {
+       return res
+         .status(404)
+         .send({ message: "appointments of operator branch does not exist" });
+     }
+ const dataForUser = appointments.map((item) => {return {date: item.date, timeOfAppontment: item.timeOfAppontment, status: item.status,sucursal: item.sucursal.location, user: item.user.name }}) 
+ if(dataForUser[0]){
+  const pageInfo = dataForUser.splice(limit - 12, limit)
+   return res.status(200).send(pageInfo);
+ }else{
+   return res.status(404).send({message: "Not appointments to be sent"})
+ } 
+   } catch (err) {
+     console.log(err);
+   }
+})
 
 
 router.get("/email/:email", async (req, res) => {
