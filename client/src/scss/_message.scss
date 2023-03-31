@@ -1,0 +1,16 @@
+.message-container {
+  background-color: $secondaryGrey;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  span {
+    color: $primaryColor;
+    font-weight: 600;
+  }
+  .close {
+    position: absolute;
+    right: 8%;
+  }
+}

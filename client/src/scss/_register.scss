@@ -1,0 +1,90 @@
+@import "./colors";
+
+.container-form-register {
+  margin-top: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 580px;
+  padding: 32px;
+  gap: 20px;
+  background: #ffffff;
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  font-size: 14px;
+  h1 {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 2px;
+  }
+  hr {
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: $tertiaryGrey;
+    border: 0;
+    height: 1px;
+  }
+  .a {
+    width: 492px;
+    height: 16px;
+    font-weight: 600;
+    font-size: 16px;
+    color: $primaryColor;
+    text-decoration: none;
+    margin-top: 34px;
+    .icon {
+      margin-right: 2px;
+      padding-top: 2px;
+    }
+  }
+  .flex {
+    display: flex;
+    width: 100%;
+  }
+  .err {
+    margin-top: 4px;
+    margin-bottom: 12px;
+  }
+  .validations {
+    background-color: $primaryGrey;
+    color: $septenaryGrey;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 8px;
+    padding: 16px 20px;
+    h5 {
+      margin-bottom: 4px;
+    }
+    .box-span {
+      width: 50%;
+      margin-bottom: 8px;
+      color: $septenaryGrey;
+      font-size: 12px;
+    }
+  }
+  .input-margin {
+    margin-right: 16px;
+  }
+  .margin-input {
+    margin-top: 2px;
+    margin-bottom: 12px;
+  }
+  .margin {
+    margin-bottom: 20px;
+  }
+  .marginRight {
+    margin-right: 17.33px;
+  }
+  .iconMargin {
+    margin-right: 8px;
+  }
+}

@@ -1,0 +1,24 @@
+@import "./colors";
+
+.checkbox-primary {
+  display: flex;
+  align-items: center;
+  color: $octonaryGrey;
+  font-size: 14px;
+  &:hover {
+    color: black;
+  }
+  input {
+    width: 16.67px;
+    height: 16.67px;
+    border: 1px solid $senaryGrey;
+    border-radius: 3px;
+    &:hover {
+      border-color: $primaryColor;
+      color: black;
+    }
+    &:checked {
+      background-color: $primaryColor;
+    }
+  }
+}

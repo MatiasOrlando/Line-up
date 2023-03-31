@@ -1,0 +1,26 @@
+@import "./colors.scss";
+@import "./form";
+@import "./header";
+@import "./button";
+@import "./checkbox";
+@import "./days";
+@import "./inputs";
+@import "./register";
+@import "./extents";
+@import "./reserva";
+@import "./message";
+@import "./modal";
+@import "./appointments";
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+html {
+  font-size: 62.5%;
+  font-family: "Roboto", sans-serif;
+}
+body {
+  font-size: 1.6rem;
+}

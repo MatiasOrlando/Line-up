@@ -1,0 +1,73 @@
+@import "./colors";
+
+.input-primary {
+  height: 44px;
+  padding: 12px 8px 12px 12px;
+  border: 1px solid $tertiaryGrey;
+  border-radius: 8px;
+  color: $quinaryGrey;
+  background: white;
+  font-size: 14px;
+  font-weight: 400;
+  &:hover {
+    border: 1px solid $quinaryGrey;
+    color: $septenaryGrey;
+  }
+  &:active {
+    border: 1px solid $primaryColor;
+    color: black;
+  }
+  &:focus {
+    color: black;
+  }
+}
+
+.input-secondary {
+  align-items: center;
+  height: 44px;
+  padding: 12px 8px 12px 12px;
+  border: 1px solid $tertiaryGrey;
+  border-radius: 8px;
+  color: $quinaryGrey;
+  background: white;
+  font-size: 14px;
+  font-weight: 400;
+  &:focus {
+    color: black;
+  }
+}
+
+.input-phone-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 246px;
+  padding: 32px;
+  margin-top: 22px;
+  gap: 32px;
+  background: white;
+  border-radius: 16px;
+}
+
+.input-code-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 44px;
+  gap: 8px;
+  padding: 12px 8px 12px 12px;
+  border: 1px solid $tertiaryGrey;
+  border-radius: 8px;
+  color: $tertiaryGrey;
+  background: white;
+  font-size: 14px;
+  font-weight: 400;
+  &:hover {
+    color: $quinaryGrey;
+    border: 1px solid $quinaryGrey;
+  }
+}
+
+.error-input {
+  border: 1px solid red;
+}
