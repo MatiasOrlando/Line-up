@@ -41,7 +41,6 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  // Recibo por params id Usuario const {id} = req.params
   const { id } = req.params;
   try {
     const userFound = await User.findById(id);
@@ -115,6 +114,7 @@ router.post("/password-update", async (req, res) => {
   try {
     const selectedUser = await User.findOne({ email });
     passwordUpdate(email, selectedUser._id);
+    res.send(`Email de actualizacion de contraseña enviado`);
   } catch {
     return res.status(400).send({ message: "Invalid email" });
   }
