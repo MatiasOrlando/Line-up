@@ -2,19 +2,46 @@ import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import ForgetPassword from "./ForgetPassword";
 
 export default function FormLogin() {
+  const [forgetPassword, setForgetPassword] = useState(false);
+  const [credentials, setCredentials] = useState("");
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       user: "",
       pass: "",
     },
-    onSubmit: (data) => {
-      console.log(data);
+    onSubmit: async () => {
       formik.handleReset();
+      await signIn("credentials", {
+        email: formik.values.user,
+        password: formik.values.pass,
+        redirect: false,
+      }).then(({ ok, error }) => {
+        if (ok) {
+          router.push("/reserva");
+        } else {
+          setCredentials("Credenciales invalidas");
+          setTimeout(() => {
+            setCredentials("");
+          }, 2000);
+        }
+      });
     },
     validationSchema: validationLogin.validationSchema,
   });
+
+  const handleEditPassword = () => {
+    setForgetPassword(true);
+  };
+
+  if (forgetPassword) {
+    return <ForgetPassword setForgetPassword={setForgetPassword} />;
+  }
 
   return (
     <div className="container-form-login">
@@ -42,14 +69,23 @@ export default function FormLogin() {
               className={`input-primary width-100 ${
                 formik.touched.pass && formik.errors.pass ? "error-input" : ""
               }`}
-              type="text"
+              type="password"
               id="pass"
               onChange={formik.handleChange}
               value={formik.values.pass}
             />
           </div>
+          <div className="credentials-box">
+            <span>{credentials}</span>
+          </div>
           <div className="login-form_box-pass">
-            <button className="btn-tertiary">¿Olvidaste tu contraseña?</button>
+            <button
+              className="btn-tertiary"
+              type="button"
+              onClick={handleEditPassword}
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
           </div>
           <div>
             <button
@@ -58,11 +94,6 @@ export default function FormLogin() {
               onClick={async (e) => {
                 e.preventDefault();
                 formik.handleSubmit();
-                await signIn("credentials", {
-                  redirect: false,
-                  email: formik.values.user,
-                  password: formik.values.pass,
-                });
               }}
             >
               Ingresar

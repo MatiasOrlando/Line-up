@@ -1,5 +1,3 @@
-const User = require("../models/user");
-const Branch = require("../models/branch");
 const router = require("express").Router();
 const validateMiddleware = require("../config/validateMiddleware").isAdmin
 const adminController = require("../controllers/admin_controller")
@@ -24,3 +22,4 @@ router.get("/:id/branch/:number", validateMiddleware, adminController.get_all_br
  
 
 module.exports = router;
+

@@ -6,30 +6,39 @@ import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 //<Image src={desplegableAbajo} alt="Flecha" />
 
-
-  
-
 export default function Header({ hide }) {
   if (hide) {
     return null;
   }
   const { data } = useSession();
+
   return (
     <header className="header-box">
-      {data?.user?.name ? <p>hola {data.user.name} </p> : <p>Deslogueado</p>}
       <nav className="nav-box">
-        <button className="btn-quaternary padding-one">Reservar</button>
+        <Link href="/reserva">
+          <button className="btn-quaternary padding-one ">Reservar</button>
+        </Link>
+
         <div className="options">
           <div className="options-item">
-            <Link href="/mis-reservas">Mis reservas </Link>
+            <Link href="/reservas">Mis reservas </Link>
             <Image src={calendar} alt="calendar" />
           </div>
           <div className="options-item">
-            <Link href="/mi-cuenta">Mi cuenta</Link>
+            <Link href="/user">Mi cuenta</Link>
             <Image src={iconUser} alt="user" />
           </div>
-
-          <button onClick={async () => await signOut()}>Log out</button>
+          {data?.user ? (
+            <button
+              className="btn-quaternary padding-one"
+              style={{ marginLeft: "10px" }}
+              onClick={async () =>
+                await signOut({ redirect: true, callbackUrl: "/" })
+              }
+            >
+              Log out
+            </button>
+          ) : null}
         </div>
       </nav>
     </header>

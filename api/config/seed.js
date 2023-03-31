@@ -144,75 +144,80 @@ var location = ["Rosario", "Berlin", "Salta", "Washington", "Tierra del Fuego",
   }
 
 
-const CreateBranches = async () => {
-try {
-   const branches = await Branch.find().exec()
-   if(branches[0] === undefined){
-    for(let i = 0; i < 20; i++){
-        const newUser = new User({
-            name: nameList[Math.floor( Math.random() * nameList.length )],
-            email: nameList[Math.floor( Math.random() * nameList.length )] + '@gmail.com',
-            phone:  generateRandomPhoneNumber(),
-            dni:  generateRandomDni(),
-            password:  generatePassword(),
-            operator: true,}) 
-
-          const newOperator = await newUser.save()
-          const { operator, email, phone, id } = newOperator
-
-          const newBranch = new Branch({
-            name: location[Math.floor( Math.random() * location.length )] + " SUCURSAL" ,
-          location:location[Math.floor( Math.random() * location.length )] ,
-          hourRange:  generateHourRange(),
-           allowedClients:  ramdomAllowedClients() , 
-          user: {id, email, phone, operator },
-        }) 
-
-        const savedBranch = await newBranch.save()
-    }
-   }
-}catch(err){
-    console.log(err)
-}
-}
 
 
+// const CreateUsers = async () => {
+//   try {
+//     const user = await User.find().exec();
+//     if (user[0] === undefined) {
+//       for (let i = 0; i < 20; i++) {
+//         const newUser = new User({
+//           name: nameList[Math.floor(Math.random() * nameList.length)],
+//           email:
+//             nameList[Math.floor(Math.random() * nameList.length)] +
+//             "@gmail.com",
+//           phone: generateRandomPhoneNumber(),
+//           dni: generateRandomDni(),
+//           password: generatePassword(),
+//         });
 
+//         const usuario = await newUser.save();
+//         // console.log(usuario);
+//       }
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
-const CreateAppoitments = async () => {
-   try{
-    const user = await User.find().exec()
-    const appoint = await Appointment.find().exec()
-    const branches = await Branch.find().exec()
-    if(!appoint[0]){
-        for(let e = 0; e < 10; e++){
-            for(let i = 0; i < branches.length; i++ ){
-              const number = generateRandomIndex()
-              const number2 = generateRandomIndex()
-                const { id, name, email, phone} = user[number]
-                const rama = branches[number2]
-                const { location, allowedClients, hourRange} = rama
-                const ID = rama.id
-                const newAppoinment = await Appointment.create({
-                    date:  generateRandomDate(),
-                    timeOfAppontment:  generateAppointmentTime(),
-                    status: 'pending',
-                    cancelReason: null,
-                    user: { id, name, email, phone },
-                    sucursal: { id: ID, location, allowedClients, hourRange }
-                    
-                  }) 
-                  const savedAppointment = await newAppoinment.save()
-                 
-            }
-        }
-    }
-    
-   }
-   catch(err){
-    console.log(err)
-   }
-}
+const users = [
+  {
+    dni: 12345678,
+    name: "Administrador General",
+    email: "admin@example.com",
+    phone: 1112345678,
+    password: "testing",
+    admin: true,
+    operator: false,
+  },
+  {
+    dni: 23456789,
+    name: "Operador Sitio",
+    email: "operador@example.com",
+    phone: 1112345678,
+    password: "testing",
+    admin: false,
+    operator: true,
+  },
+  {
+    dni: 34567891,
+    name: "Matias Orlando",
+    email: "matias@example.com",
+    phone: 1112345678,
+    password: "Testing",
+    admin: false,
+    operator: false,
+  },
+  {
+    dni: 45678912,
+    name: "Tomas Camacho",
+    email: "tomas@example.com",
+    phone: 1112345678,
+    password: "Testing123",
+    admin: false,
+    operator: false,
+  },
+  {
+    dni: 56789123,
+    name: "Pedro Ragni",
+    email: "pedro@example.com",
+    phone: 1112345678,
+    password: "Testing123!",
+    admin: false,
+    operator: false,
+  },
+];
+
 
 
 const CreateAdmin = async () => {
@@ -234,16 +239,82 @@ const CreateAdmin = async () => {
   }catch(err){
       console.log(err)
   }
-}
+  }
 
+const CreateBranches = async () => {
+  try {
+    const branches = await Branch.find().exec();
+    if (branches[0] === undefined) {
+      for (let i = 0; i < 20; i++) {
+        const newUser = new User({
+          name: nameList[Math.floor(Math.random() * nameList.length)],
+          email:
+            nameList[Math.floor(Math.random() * nameList.length)] +
+            "@gmail.com",
+          phone: generateRandomPhoneNumber(),
+          dni: generateRandomDni(),
+          password: generatePassword(),
+          operator: true,
+        });
 
+        const newOperator = await newUser.save();
+        const { operator, email, phone, id } = newOperator;
+        const newBranch = new Branch({
+          name:
+            location[Math.floor(Math.random() * location.length)] + " SUCURSAL",
+          location: location[Math.floor(Math.random() * location.length)],
+          hourRange: generateHourRange(),
+          allowedClients: ramdomAllowedClients(),
+          user: { id, email, phone, operator },
+        });
 
+        const savedBranch = await newBranch.save();
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const CreateAppoitments = async () => {
+  try {
+    const user = await User.find().exec();
+    const appoint = await Appointment.find().exec();
+    const branches = await Branch.find().exec();
+    if (!appoint[0]) {
+      for (let e = 0; e < 10; e++) {
+        for (let i = 0; i < branches.length; i++) {
+          const { id, name, email, phone } = user[i];
+          const {
+            location,
+            allowedClients,
+            hourRange,
+            name: nombre,
+          } = branches[i];
+          const ID = branches[i].id;
+          const newAppoinment = await Appointment.create({
+            date: generateRandomDate(),
+            timeOfAppontment: generateAppointmentTime(),
+            status: "pending",
+            cancelReason: null,
+            user: { id, name, email, phone },
+            sucursal: { id: ID, location, allowedClients, hourRange },
+          });
+          const savedAppointment = await newAppoinment.save();
+        }
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const executor = async () => {
-    await CreateAdmin()
-    await CreateUsers()
-    await CreateBranches()
-    await CreateAppoitments()
-}
+  await CreateUsers();
+  await CreateBranches();
+  await CreateAppoitments();
+  // await CreateUsers2();
+};
+
 
 executor()

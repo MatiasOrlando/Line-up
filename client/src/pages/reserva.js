@@ -1,9 +1,9 @@
-import FormUserData from "@/components/FormUseData/FormUserData";
+import FormReserva from "@/components/FormReserva/reserva";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-const user = () => {
+export default function Reserva() {
   const { data } = useSession();
   const router = useRouter();
   useEffect(() => {
@@ -11,12 +11,5 @@ const user = () => {
       router.push("/");
     }
   }, [data, router]);
-
-  return (
-    <div>
-      <FormUserData />
-    </div>
-  );
-};
-
-export default user;
+  return <FormReserva />;
+}
