@@ -6,6 +6,7 @@ const {
   passwordUpdate,
 } = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
+const jwt = require("jsonwebtoken");
 
 router.post("/register", async (req, res) => {
   try {
@@ -46,25 +47,6 @@ router.get("/:id", async (req, res) => {
     const userFound = await User.findById(id);
     const selectedUser = mapUser([userFound]);
     return res.send(selectedUser);
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-router.get("/email/:email", async (req, res) => {
-  // Recibo por params id Usuario const {id} = req.params
-  const email = req.params.email;
-  try {
-    if (!email) {
-      return res.status(400).send({ message: "email cannot be undefined" });
-    }
-    const userFound = await User.find({ email: email }).exec();
-    if (!userFound) {
-      return res
-        .status(400)
-        .send({ message: "the email passed is not from any saved user" });
-    }
-    return res.status(200).send(mapUser(userFound)[0]);
   } catch (error) {
     console.error(error);
   }
@@ -117,6 +99,17 @@ router.post("/password-update", async (req, res) => {
     res.send(`Email de actualizacion de contraseña enviado`);
   } catch {
     return res.status(400).send({ message: "Invalid email" });
+  }
+});
+
+router.get("/email/token", async (req, res) => {
+  // Recibo por params id Usuario const {id} = req.params
+  const { token } = req.query;
+  try {
+    const decodeUser = jwt.verify(token, "Matias");
+    res.status(200).send(decodeUser);
+  } catch (error) {
+    return res.status(400).send({ message: "Invalid token" });
   }
 });
 
