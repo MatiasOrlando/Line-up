@@ -11,7 +11,7 @@ export default function Appoinments() {
           "http://localhost:3001/api/appointments/123"
         );
 
-        setAppoinments(result.data);
+        setAppoinments(result.data.slice(0, 15));
       } catch (error) {
         console.error(error);
       }

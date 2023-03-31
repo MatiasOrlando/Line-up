@@ -1,7 +1,10 @@
 const User = require("../models/user");
 const Branch = require("../models/branch");
 const router = require("express").Router();
-const emailConfirmation = require("../config/emailConfirmation");
+const {
+  emailConfirmation,
+  passwordUpdate,
+} = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
 
 router.post("/register", async (req, res) => {
@@ -38,8 +41,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  // Recibo por params id Usuario const {id} = req.params
-  const id = "64249f1465fdb6b8327d0465";
+  const { id } = req.params;
   try {
     const userFound = await User.findById(id);
     const selectedUser = mapUser([userFound]);
@@ -70,52 +72,59 @@ router.get("/email/:email", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   // Recibimos por req.body newPassword, idUser
-  if(!req.body.phone){
-    const { password } = req.body
-    try {
-      const userPasswordUpdate = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        {
-          password
-        },
-        { new: true }
-      );
-      await userPasswordUpdate.save();
-      return res.send(`Password was successfully updated`);
-    } catch (error) {
-      console.error(error);
-    }
-  }else if(req.body.phone && req.body.password){
-    const {phone, password} = req.body
-    try {
-      const userPasswordUpdate = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        {
-          password, phone
-        },
-        { new: true }
-      );
-      await userPasswordUpdate.save();
-      return res.send(`Password was successfully updated`);
-    } catch (error) {
-      console.error(error);
-    }
+  const { password } = req.body;
+  try {
+    const userPasswordUpdate = await User.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        password,
+      },
+      { new: true }
+    );
+    await userPasswordUpdate.save();
+    return res.send(`Password was successfully updated`);
+  } catch (error) {
+    console.error(error);
   }
-
-  
+  // } else if (req.body.phone && req.body.password) {
+  //   const { phone, password } = req.body;
+  //   try {
+  //     const userPasswordUpdate = await User.findByIdAndUpdate(
+  //       { _id: req.params.id },
+  //       {
+  //         password,
+  //         phone,
+  //       },
+  //       { new: true }
+  //     );
+  //     await userPasswordUpdate.save();
+  //     return res.send(`Password was successfully updated`);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 });
 
 router.post("/appointmentBooked", async (req, res) => {
   emailConfirmation();
 });
 
+router.post("/password-update", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const selectedUser = await User.findOne({ email });
+    passwordUpdate(email, selectedUser._id);
+    res.send(`Email de actualizacion de contraseña enviado`);
+  } catch {
+    return res.status(400).send({ message: "Invalid email" });
+  }
+});
 
 router.get("/email/:email", async (req, res) => {
   // Recibo por params id Usuario const {id} = req.params
   const email = req.params.email;
   try {
     if (!email) {
-
       return res.status(400).send({ message: "email cannot be undefined" });
     }
     const userFound = await User.findOne({ email: email }).exec();
@@ -123,7 +132,6 @@ router.get("/email/:email", async (req, res) => {
       return res
         .status(400)
         .send({ message: "the email passed is not from any saved user" });
-
     }
     return res.status(200).send(userFound);
   } catch (error) {

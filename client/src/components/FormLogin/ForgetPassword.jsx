@@ -1,10 +1,12 @@
 import Modal from "@/commons/Modal";
 import React, { useState } from "react";
 import { BsCheckSquare } from "react-icons/bs";
+import axios from "axios";
 
 const ForgetPassword = ({ setForgetPassword }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [email, setEmail] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(true);
   const handlePassword = () => {
     setForgetPassword(false);
   };
@@ -14,11 +16,27 @@ const ForgetPassword = ({ setForgetPassword }) => {
     setForgetPassword(false);
   };
 
+  const handleEmailPasswordUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const passwordUpdate = await axios.post(
+        "http://localhost:3001/api/user/password-update",
+        {
+          email,
+        }
+      );
+      passwordUpdate && setIsOpen(true);
+    } catch {
+      setIsOpen(false);
+      setIsValidEmail(false);
+    }
+  };
+
   return (
     <>
       <div className="container-form-login">
         <div className="container-form-login__first-div">
-          <form className="login-form">
+          <form className="login-form" onSubmit={handleEmailPasswordUpdate}>
             <div className="login-form_box-title">
               <h2>¿Olvidaste tu contraseña?</h2>
             </div>
@@ -35,18 +53,22 @@ const ForgetPassword = ({ setForgetPassword }) => {
                 className={`input-primary width-100`}
                 type="text"
                 id="user"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (e.target.value === "") {
+                    setIsValidEmail(true);
+                  }
+                }}
               />
               <div className="box-span"></div>
             </div>
+            <div className="credentials-box">
+              <span>
+                {!isValidEmail ? `El email ingresado no es válido` : ``}
+              </span>
+            </div>
             <div>
-              <button
-                className="btn-primary width-100"
-                type="submit"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  setIsOpen(true);
-                }}
-              >
+              <button className="btn-primary width-100" type="submit">
                 Enviar correo electronico
               </button>
             </div>
