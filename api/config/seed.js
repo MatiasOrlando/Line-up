@@ -295,7 +295,8 @@ const users = [
     phone: 1112345678,
     password: "testing",
     admin: true,
-    operator: false,
+    operator: true,
+    dni: 2345333339,
   },
   {
     dni: 23456789,
