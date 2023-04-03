@@ -38,7 +38,6 @@ export default function FormUserData() {
     },
 
     onSubmit: async (data) => {
-<<<<<<< HEAD
       const { password } = data;
       const response = await axios.put(
         `http://localhost:3001/api/user/new-password-profile`,
@@ -47,16 +46,7 @@ export default function FormUserData() {
           token: userToken.user,
         }
       );
-      setIsOpen(true);
-=======
-      const { password, phone } = data;
-      const id = user._id;
-      const response = await axios.put(`http://localhost:3001/api/user/${id}`, {
-        password,
-        phone,
-      });
       setModalIsOpen(true);
->>>>>>> develop
     },
     validationSchema: validationUserData.validationSchema,
   });

@@ -9,32 +9,7 @@ import validationPassword from "../../components/FormLogin/validation/validation
 const createPassword = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const router = useRouter();
-<<<<<<< HEAD:client/src/pages/password/[token].js
   const { token } = router.query;
-  const handleCloseModal = () => {
-    setIsOpen(false);
-    router.push("/");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (token) {
-        const res = await axios.put(
-          `http://localhost:3001/api/user/new-password-email`,
-          {
-            password: newPassword,
-            token,
-          }
-        );
-        setIsOpen(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-=======
-  const { id } = router.query;
 
   const formik = useFormik({
     initialValues: {
@@ -43,17 +18,22 @@ const createPassword = () => {
     },
     onSubmit: async (data) => {
       try {
-        await axios.put(`http://localhost:3001/api/user/${id}`, {
-          password: data.password,
-        });
-        setModalIsOpen(true);
+        if (token) {
+          const res = await axios.put(
+            `http://localhost:3001/api/user/new-password-email`,
+            {
+              password: data.password,
+              token,
+            }
+          );
+          setModalIsOpen(true);
+        }
       } catch (error) {
         console.error(error);
       }
     },
     validationSchema: validationPassword.validationSchema,
   });
->>>>>>> develop:client/src/pages/password/[id].js
 
   return (
     <>

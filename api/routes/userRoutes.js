@@ -5,10 +5,8 @@ const {
   passwordUpdate,
 } = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
-const {
-  validateToken,
-  generateToken,
-} = require("../middleWare/validateMiddleware");
+const { validateToken, generateToken } = require("../config/token");
+const jwt = require("jsonwebtoken");
 
 router.post("/register", async (req, res) => {
   try {

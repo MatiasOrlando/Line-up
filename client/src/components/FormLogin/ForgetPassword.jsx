@@ -7,13 +7,6 @@ const ForgetPassword = ({ setForgetPassword }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
-<<<<<<< HEAD
-
-  const handlePassword = () => {
-    setForgetPassword(false);
-  };
-=======
->>>>>>> develop
 
   const handlePassword = () => {
     setForgetPassword(false);
@@ -22,20 +15,13 @@ const ForgetPassword = ({ setForgetPassword }) => {
   const handleEmailPasswordUpdate = async (e) => {
     e.preventDefault();
     try {
-<<<<<<< HEAD
       const passwordUpdate = await axios.put(
         "http://localhost:3001/api/user/password-update-email",
         {
           email,
         }
       );
-      passwordUpdate && setIsOpen(true);
-=======
-      await axios.post("http://localhost:3001/api/user/password-update", {
-        email,
-      });
-      setModalIsOpen(true);
->>>>>>> develop
+      passwordUpdate && setModalIsOpen(true);
     } catch {
       setIsValidEmail(false);
     }
