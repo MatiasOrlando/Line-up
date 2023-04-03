@@ -360,7 +360,7 @@ const CreateBranches = async () => {
           email: `${generateRandomDni()}` + "@gmail.com",
           phone: generateRandomPhoneNumber(),
           dni: generateRandomDni(),
-          password: generatePassword(),
+          password: "testing",
           operator: true,
         });
 
