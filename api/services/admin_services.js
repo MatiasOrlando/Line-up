@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const Branch = require("../models/branch");
-const validateMiddleware = require("../config/validateMiddleware").isAdmin;
+
 
 
 
