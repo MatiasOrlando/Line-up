@@ -54,7 +54,7 @@ export default function FormUserData() {
   return (
     <>
       <div className="container-form-userdata">
-        <div className="container-form-userdata__first-div">
+        <div className="container-form-userdata-first-div">
           <form
             onSubmit={(e) => {
               e.preventDefault();

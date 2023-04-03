@@ -30,7 +30,7 @@ const ForgetPassword = ({ setForgetPassword }) => {
   return (
     <>
       <div className="container-form-login">
-        <div className="container-form-login__first-div">
+        <div className="container-form-login-first-div">
           <form className="login-form" onSubmit={handleEmailPasswordUpdate}>
             <div
               className="login-form_box-title"
