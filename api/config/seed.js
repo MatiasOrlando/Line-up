@@ -290,7 +290,6 @@ function generateAppointmentTime() {
 
 const users = [
   {
-    dni: 12345678,
     name: "Administrador General",
     email: "admin@example.com",
     phone: 1112345678,

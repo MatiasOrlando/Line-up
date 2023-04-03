@@ -14,7 +14,7 @@ router.post("/register", async (req, res) => {
     return res.status(200).send(`User registered successfully`);
   } catch (error) {
     return res.status(400).send("Invalid data");
-  }
+}
 });
 
 router.get("/all-users", async (req, res) => {
@@ -97,6 +97,7 @@ router.put("/new-password-profile", async (req, res) => {
     return res.status(404).send(`Password update currently unavailable`);
   }
 });
+
 
 router.post("/appointmentBooked", async (req, res) => {
   emailConfirmation();
