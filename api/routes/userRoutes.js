@@ -5,7 +5,10 @@ const {
   passwordUpdate,
 } = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
-const { validateToken, generateToken } = require("../config/token");
+const {
+  validateToken,
+  generateToken,
+} = require("../middleWare/validateMiddleware");
 
 router.post("/register", async (req, res) => {
   try {
