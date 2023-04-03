@@ -103,7 +103,7 @@ export default function FormLogin() {
           <div>
             <Link href={"/registro"}>
               <button className="btn-secondary width-100" type="button">
-                ¿No tenes cuenta? Registrate
+                ¿No tenés cuenta? Registrate
               </button>
             </Link>
           </div>
