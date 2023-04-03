@@ -12,14 +12,14 @@ exports.get_all_appointments_get = async (req, res, next) => {
   const { _id } = decodedUser
   const number = req.params.numberOfPages
   const limit = number * 7
-  console.log(_id)
   try {
     const pageOfAppointments = await operator_services.getAllAppointments(limit, _id)
-    if(!pageOfAppointments[0].sucursal){
-      return res.status(404).send({message: "unknown error"})
+    if(pageOfAppointments.error && !pageOfAppointments.data[0]){
+      return res.status(400).send({message: "There is not any appointment for this branch"})
     }
     return res.status(200).send(pageOfAppointments)
   } catch (err) {
+    console.log(err)
     return res.status(400).send("key data is missing")
   }
 }
@@ -33,10 +33,14 @@ exports.edit_status_of_appointment = async (req, res, next) => {
   const { _id } = decodedUser
   try{
    const stateOfUpdate = await operator_services.editStatusOfAppointment(status, appointmentId, _id)
-   if(stateOfUpdate.status === 200){
-    return res.status(200).send({message: "succesfully updated"})
+   if(stateOfUpdate.error && stateOfUpdate.data){
+    return res.status(400).send({message: "failed to update the branch status"})
    }
-   else if(stateOfUpdate.status === 401){
+   
+   if(!stateOfUpdate.err && stateOfUpdate.data){
+    return res.status(200).send({message: "updated the status of the branch"})
+   }
+   else if(stateOfUpdate.err && stateOfUpdate.data){
     return res.status(401).send({message: "operator can only change appointment status of his branch"})
    }
    return res.status(404).send({message: "unknown error"})

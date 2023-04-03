@@ -1,5 +1,3 @@
-const User = require("../models/user");
-const Branch = require("../models/branch");
 const router = require("express").Router();
 const adminController = require("../controllers/admin_controller")
 const validateMiddleware = require("../middleWare/validateMiddleware");
