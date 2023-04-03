@@ -7,9 +7,11 @@ const operator_services = require("../services/operator_services")
 
 
 exports.get_all_appointments_get = async (req, res, next) => {
-  const id = req.params.id
+  const { token } = req.query;
+  const decodedUser = validateToken(token);
+  const id = decodedUser.id
   const number = req.params.numberOfPages
-  const limit = number * 12
+  const limit = number * 7
   try {
     const pageOfAppointments = await operator_services.getAllAppointments(limit, id)
     if(!pageOfAppointments[0].sucursal){
@@ -24,7 +26,10 @@ exports.get_all_appointments_get = async (req, res, next) => {
 
 exports.edit_status_of_appointment = async (req, res, next) => {
   const status = req.body.status;
-  const {appointmentId, id} = req.params
+  const {appointmentId } = req.params
+  const { token } = req.query;
+  const decodedUser = validateToken(token);
+  const id = decodedUser.id
   try{
    const stateOfUpdate = await operator_services.editStatusOfAppointment(status, appointmentId, id)
    if(stateOfUpdate.status === 200){

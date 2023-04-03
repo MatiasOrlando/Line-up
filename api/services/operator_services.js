@@ -21,7 +21,7 @@ const getAllAppointments = async (limit, id) => {
         }
         const dataForOperator = appointmentsOfBranchArray.map((item) => { return { date: item.date, timeOfAppontment: item.timeOfAppontment, status: item.status, sucursal: item.sucursal.location, user: item.user.name, id: item.id } })
         if (dataForOperator[0]) {
-          const page = dataForOperator.splice(limit - 12, limit)
+          const page = dataForOperator.splice(limit - 7, limit)
           if (!page[0].sucursal) {
             return({ error: "Page selected is empty" })
           }
