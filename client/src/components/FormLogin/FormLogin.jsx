@@ -45,7 +45,7 @@ export default function FormLogin() {
 
   return (
     <div className="container-form-login">
-      <div className="container-form-login__first-div">
+      <div className="container-form-login-first-div">
         <form className="login-form">
           <div className="login-form_box-title">
             <h2>Iniciar sesión</h2>
