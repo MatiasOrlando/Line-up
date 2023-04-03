@@ -1,6 +1,7 @@
-import axios from "axios";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import axios from "axios";
+import jwt from "jsonwebtoken";
 
 export default NextAuth({
   providers: [
@@ -16,46 +17,38 @@ export default NextAuth({
             "http://localhost:3001/api/user/login",
             payload
           );
-          return res.data;
+          const user = res.data;
+          return user;
         } catch (error) {
-          return;
+          return null;
         }
       },
     }),
   ],
   secret: process.env.SECRET,
-  basePath: process.env.NEXTAUTH_URL,
-  pages: {
-    signIn: "/",
+  session: {
+    jwt: true,
+    maxAge: 30 * 24 * 60 * 60,
+  },
+  jwt: {
+    secret: "Matias",
+    signingKey: "Matias",
+    encryption: true,
   },
   callbacks: {
-    async jwt({ token, user, account }) {
-      if (account && user) {
-        return {
-          ...token,
-          accessToken: user.token,
-          refreshToken: user.refreshToken,
-        };
+    async jwt({ token, user }) {
+      const isUserSignedIn = user ? true : false;
+      if (isUserSignedIn) {
+        const dataToken = jwt.sign(user, "Matias", {
+          expiresIn: "2d",
+        });
+        token.accessToken = dataToken;
       }
       return token;
     },
     async session({ session, token }) {
-      try {
-        const userData = await this.getData(session.user.email);
-        session.user.data = userData;
-        session.user.accessToken = token.accessToken;
-        session.user.refreshToken = token.refreshToken;
-        session.user.accessTokenExpires = token.accessTokenExpires;
-        return session;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async getData(email) {
-      const res = await axios.get(
-        `http://localhost:3001/api/user/email/${email}`
-      );
-      return res.data;
+      session.user = token.accessToken;
+      return session;
     },
   },
 });

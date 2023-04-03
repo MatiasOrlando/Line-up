@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import validationRegister from "./validation/validationregister";
 import { useRef } from "react";
@@ -9,32 +8,29 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { BsCheckSquare } from "react-icons/bs";
 import { MdCancelPresentation } from "react-icons/md";
 import Modal from "@/commons/Modal";
+import { useRouter } from "next/router";
 
 export default function FormRegister() {
-  const input = useRef(null);
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
+  const input = useRef(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [mail, setMail] = useState("");
   const [mayuscula, setMayuscula] = useState({
-    oracion: "ABC tiene una mayuscula",
+    oracion: "ABC tiene una mayúscula",
     color: "$septenaryGrey",
   });
   const [minuscula, setMinuscula] = useState({
-    oracion: "ABC tiene una minuscula",
+    oracion: "ABC tiene una minúscula",
     color: "$septenaryGrey",
   });
   const [numero, setNumero] = useState({
-    oracion: "123 tiene un Numero",
+    oracion: "123 tiene un Número",
     color: "$septenaryGrey",
   });
   const [caracteres, setCaracteres] = useState({
     oracion: "*** Minimo 8 caracteres",
     color: "$septenaryGrey",
   });
-
-  const handleCloseModal = () => {
-    setIsOpen(false);
-    router.push("/");
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -53,10 +49,11 @@ export default function FormRegister() {
           email,
           password,
         });
-        setIsOpen(true);
+        setModalIsOpen(true);
       } catch (err) {
-        setIsOpen(true);
-        console.log(err);
+        if (err) {
+          setMail("error-input");
+        }
       }
     },
     validationSchema: validationRegister.validationSchema,
@@ -100,14 +97,14 @@ export default function FormRegister() {
             }}
           >
             <Link href="/" className="a">
-              <AiOutlineArrowLeft className="icon" /> Atras
+              <AiOutlineArrowLeft className="icon" /> Atrás
             </Link>
             <div>
               <h1>Crear cuenta</h1>
             </div>
             <div className="flex margin">
               <div className="input-margin">
-                <label htmlFor="nombre">Nombre</label>
+                <label htmlFor="nombre">Nombre y Apellido</label>
                 <input
                   className={`input-primary senary ${
                     formik.touched.name && formik.errors.name
@@ -136,7 +133,7 @@ export default function FormRegister() {
             <div className="email margin">
               <label htmlFor="email">Mail</label>
               <input
-                className={`input-primary ten ${
+                className={`input-primary ten ${mail} ${
                   formik.touched.email && formik.errors.email
                     ? "error-input"
                     : ""
@@ -180,7 +177,7 @@ export default function FormRegister() {
               </div>
             </div>
             <div className="validations">
-              <h5>La contraseña debe tener</h5>
+              <h5>La contraseña debe contener:</h5>
               <hr></hr>
               <div className="flex">
                 <span
@@ -259,7 +256,7 @@ export default function FormRegister() {
             <div className="link">
               <Link href="/">
                 <button className="btn-secondary ten">
-                  ¿Ya tenés cuenta? Inicia sesión
+                  ¿Ya tenés cuenta? Iniciá sesión
                 </button>
               </Link>
             </div>
@@ -267,19 +264,17 @@ export default function FormRegister() {
         </div>
       </div>
       <div>
-        <Modal isOpen={isOpen} onClose={handleCloseModal}>
-          <div className="center width-100">
-            <BsCheckSquare className="icon" />
-            <h2>Usuario creado correctamente</h2>
-            <p>Inicia sesion para continuar</p>
-            <button
-              className="btn-primary width-100"
-              onClick={handleCloseModal}
-            >
-              Aceptar
-            </button>
-          </div>
-        </Modal>
+        <Modal
+          modalIsOpen={modalIsOpen}
+          setModalIsOpen={setModalIsOpen}
+          redirect={{ function: router.push, rute: "/" }}
+          modalContent={{
+            title: "Usuario creado correctamente",
+            description: "Iniciá sesion para continuar",
+            button: "Aceptar",
+            icon: <BsCheckSquare className="icon" />,
+          }}
+        ></Modal>
       </div>
     </div>
   );

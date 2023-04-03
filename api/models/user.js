@@ -4,14 +4,19 @@ const bcrypt = require("bcrypt");
 const { isEmail } = require("validator");
 
 const userSchema = new mongoose.Schema({
-  dni: { type: Number, unique: true, require: true },
+  dni: { type: Number, unique: true, required: true },
   name: { type: String, required: true },
-  email: { type: String, unique: true,  required: true, validate: [isEmail, "invalid email"] },
+  email: {
+    type: String,
+    required: true,
+    validate: [isEmail, "invalid email"],
+    unique: true,
+  },
   phone: {
     type: Number,
     min: [7, "too few numbers"],
     maxLength: [15, "too many numbers"],
-    default: 11000000
+    default: 11000000,
   },
   password: { type: String, required: true },
   salt: { type: String },

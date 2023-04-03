@@ -356,9 +356,7 @@ const CreateBranches = async () => {
       for (let i = 0; i < 20; i++) {
         const newUser = new User({
           name: nameList[Math.floor(Math.random() * nameList.length)],
-          email:
-             `${generateRandomDni()}` +
-            "@gmail.com",
+          email: `${generateRandomDni()}` + "@gmail.com",
           phone: generateRandomPhoneNumber(),
           dni: generateRandomDni(),
           password: generatePassword(),
@@ -376,7 +374,7 @@ const CreateBranches = async () => {
           user: { id, email, phone, operator },
         });
 
-        const savedBranch = await newBranch.save();
+        await newBranch.save();
       }
     }
   } catch (err) {
