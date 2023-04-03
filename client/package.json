@@ -19,6 +19,7 @@
     "bcryptjs": "^2.4.3",
     "concurrently": "^7.6.0",
     "formik": "^2.2.9",
+    "jsonwebtoken": "^9.0.0",
     "luxon": "^3.3.0",
     "mongodb": "^5.1.0",
     "mongoose": "^7.0.3",
