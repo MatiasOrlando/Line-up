@@ -1,14 +1,7 @@
 import * as Yup from "yup";
 
-const validationRegister = {
+const validationLogin = {
   validationSchema: Yup.object({
-    name: Yup.string().required(),
-    dni: Yup.number()
-      .required()
-      .test("min-length", "El DNI debe tener 7 u 8 dígitos", (value) => {
-        return value.toString().length === 7 || value.toString().length === 8;
-      }),
-    email: Yup.string().email().required(),
     password: Yup.string()
       .required()
       .test("has-lowercase", (value) => {
@@ -42,4 +35,4 @@ const validationRegister = {
   }),
 };
 
-export default validationRegister;
+export default validationLogin;
