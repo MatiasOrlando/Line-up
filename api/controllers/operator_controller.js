@@ -1,19 +1,20 @@
 const User = require("../models/user");
 const Branch = require("../models/branch");
 const Appointment = require("../models/appointment");
-const operator_services = require("../services/operator_services")
-
+const { operator_services } = require("../services/operator_services")
+const { validateToken } = require("../config/token")
 
 
 
 exports.get_all_appointments_get = async (req, res, next) => {
   const { token } = req.query;
   const decodedUser = validateToken(token);
-  const id = decodedUser.id
+  const { _id } = decodedUser
   const number = req.params.numberOfPages
   const limit = number * 7
+  console.log(_id)
   try {
-    const pageOfAppointments = await operator_services.getAllAppointments(limit, id)
+    const pageOfAppointments = await operator_services.getAllAppointments(limit, _id)
     if(!pageOfAppointments[0].sucursal){
       return res.status(404).send({message: "unknown error"})
     }
@@ -29,9 +30,9 @@ exports.edit_status_of_appointment = async (req, res, next) => {
   const {appointmentId } = req.params
   const { token } = req.query;
   const decodedUser = validateToken(token);
-  const id = decodedUser.id
+  const { _id } = decodedUser
   try{
-   const stateOfUpdate = await operator_services.editStatusOfAppointment(status, appointmentId, id)
+   const stateOfUpdate = await operator_services.editStatusOfAppointment(status, appointmentId, _id)
    if(stateOfUpdate.status === 200){
     return res.status(200).send({message: "succesfully updated"})
    }

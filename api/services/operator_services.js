@@ -3,15 +3,17 @@ const Branch = require("../models/branch");
 const Appointment = require("../models/appointment");
 
 
-const getAllAppointments = async (limit, id) => {
+
+class operator_services {
+  static async getAllAppointments(limit, _id) {
     try {
         const branchArray = await Branch.find({
-          "user.id": id,
+          "user.id": _id,
         });
-    
         if (!branchArray[0].id) {
           return({ error: "operator branch does not exist" });
         }
+        console.log(branchArray[0])
         const branchId = branchArray[0].id;
         const appointmentsOfBranchArray = await Appointment.find({
           "sucursal.id": branchId,
@@ -35,7 +37,7 @@ const getAllAppointments = async (limit, id) => {
 }
 
 
-const editStatusOfAppointment = async (status, appointmentId, id) => {
+static async editStatusOfAppointment(status, appointmentId, _id) {
   try {
     if (!status) {
       return({ error: "status data missing" });
@@ -60,7 +62,7 @@ const editStatusOfAppointment = async (status, appointmentId, id) => {
         return({error: "branch of appointment does not exist"})
     }
 
-    if (branch.user.id === id) {
+    if (branch.user.id === _id) {
       updatedState.save();
      return({status: 200});
     } else {
@@ -71,5 +73,7 @@ const editStatusOfAppointment = async (status, appointmentId, id) => {
   }
 }
 
+}
 
-module.exports = { getAllAppointments, editStatusOfAppointment }
+
+module.exports = { operator_services }
