@@ -1,70 +1,40 @@
 const User = require("../models/user");
 const Branch = require("../models/branch");
 const Appointment = require("../models/appointment");
+const operator_services = require("../services/operator_services")
 
 
-exports.get_all_appointments_get = async(req, res, next) => {
-    try {
-        const branchArray = await Branch.find({
-          "user.id": req.params.id,
-        });
-        if (!branchArray[0].id) {
-          return res
-            .status(400)
-            .send({ message: "operator branch does not exist" });
-        }
-        const branchId = branchArray[0].id;
-        const appointmentsOfBranchArray = await Appointment.find({
-          "sucursal.id": branchId,
-        });
-        if (!appointmentsOfBranchArray[0]) {
-          return res
-            .status(404)
-            .send({ message: "appointments of operator branch does not exist" });
-        }
-        return res.status(200).send(appointmentsOfBranchArray);
-      } catch (err) {
-        console.log(err);
-      }
+
+
+exports.get_all_appointments_get = async (req, res, next) => {
+  const id = req.params.id
+  const number = req.params.numberOfPages
+  const limit = number * 12
+  try {
+    const pageOfAppointments = await operator_services.getAllAppointments(limit, id)
+    if(!pageOfAppointments[0].sucursal){
+      return res.status(404).send({message: "unknown error"})
+    }
+    return res.status(200).send(pageOfAppointments)
+  } catch (err) {
+    return res.status(400).send("key data is missing")
+  }
 }
 
 
-exports.edit_status_of_appointment = async(req, res, next) => {
-    const status = req.body.status;
-    const appointmentId = req.params.appointmentId;
-    try {
-      if (!status) {
-        return res.status(400).send({ message: "status data missing" });
-      }
-
-      if (status !== "pending" && status !== "completed") {
-        return res.status(400).send({ message: "status passed not valid" });
-      }
-      if (!appointmentId) {
-        return res.status(400).send({ message: "key info missing" });
-      }
-      const updatedState = await Appointment.findOneAndUpdate(
-        { _id: appointmentId },
-        { $set: { status: status } },
-        { new: true }
-      );
-      if (!updatedState) {
-        return res.status(400).send({ message: "appoinment does not exist" });
-      }
-      const branch = await Branch.findById(updatedState.sucursal.id);
-
-      if (branch.id === updatedState.sucursal.id.toString()) {
-        updatedState.save();
-        res.status(200).send({ message: "succesfully updated status" });
-      } else {
-        res
-          .status(401)
-          .send({
-            message:
-              "operator cannot modified status of an appointment from another branch",
-          });
-      }
-    } catch (err) {
-      console.log(err);
-    }
+exports.edit_status_of_appointment = async (req, res, next) => {
+  const status = req.body.status;
+  const {appointmentId, id} = req.params
+  try{
+   const stateOfUpdate = await operator_services.editStatusOfAppointment(status, appointmentId, id)
+   if(stateOfUpdate.status === 200){
+    return res.status(200).send({message: "succesfully updated"})
+   }
+   else if(stateOfUpdate.status === 401){
+    return res.status(401).send({message: "operator can only change appointment status of his branch"})
+   }
+   return res.status(404).send({message: "unknown error"})
+  }catch (err) {
+    return res.status(400).send("key data is missing")
+  }
 }

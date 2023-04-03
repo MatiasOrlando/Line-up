@@ -12,7 +12,7 @@ router.post("/register", async (req, res) => {
     const userCreated = await User.create(req.body);
     return res.status(200).send(`User registered successfully`);
   } catch (error) {
-    console.error(error);
+    res.status(400).send("mail");
   }
 });
 
@@ -104,6 +104,7 @@ router.put("/:id", async (req, res) => {
   //   }
   // }
 });
+
 
 router.post("/appointmentBooked", async (req, res) => {
   emailConfirmation();

@@ -290,7 +290,6 @@ function generateAppointmentTime() {
 
 const users = [
   {
-    dni: 12345678,
     name: "Administrador General",
     email: "admin@example.com",
     phone: 1112345678,
@@ -358,7 +357,7 @@ const CreateBranches = async () => {
         const newUser = new User({
           name: nameList[Math.floor(Math.random() * nameList.length)],
           email:
-            nameList[Math.floor(Math.random() * nameList.length)] +
+             `${generateRandomDni()}` +
             "@gmail.com",
           phone: generateRandomPhoneNumber(),
           dni: generateRandomDni(),
