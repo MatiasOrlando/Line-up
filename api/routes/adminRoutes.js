@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const Branch = require("../models/branch");
 const router = require("express").Router();
-const validateMiddleware = require("../config/validateMiddleware").isAdmin;
+const validateMiddleware = require("../middleWare/validateMiddleware").isAdmin;
 
 // admin id
 router.post("/:id", validateMiddleware, async (req, res, next) => {
@@ -163,6 +163,5 @@ router.get("/:id/branch", validateMiddleware, async (req, res) => {
     return res.status(200).send(allBranches);
   }
 });
-
 
 module.exports = router;

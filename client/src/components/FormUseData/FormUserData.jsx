@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import validationUserData from "./validation/validationUserData";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { BsCheckSquare } from "react-icons/bs";
 import Modal from "@/commons/Modal";
@@ -11,12 +11,24 @@ export default function FormUserData() {
   const [user, setUser] = useState();
   const [status, setStatus] = useState(true);
   const { data } = useSession();
-
-  if (data && data.user && data.user.email && !user) {
-    axios
-      .get(`http://localhost:3001/api/user/email/${data.user.email}`)
-      .then((res) => setUser(res.data));
-  }
+  const userToken = data;
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (data && data?.user) {
+          const tokenUser = await axios.get(
+            `http://localhost:3001/api/user/email/token?token=${data.user}`
+          );
+          if (tokenUser) {
+            setUser(tokenUser.data);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserData();
+  }, [data]);
 
   const formik = useFormik({
     initialValues: {
@@ -24,13 +36,16 @@ export default function FormUserData() {
       repeatPassword: "",
       phone: user?.phone || null,
     },
+
     onSubmit: async (data) => {
-      const { password, phone } = data;
-      const id = user._id;
-      const response = await axios.put(`http://localhost:3001/api/user/${id}`, {
-        password,
-        phone,
-      });
+      const { password } = data;
+      const response = await axios.put(
+        `http://localhost:3001/api/user/new-password-profile`,
+        {
+          password,
+          token: userToken.user,
+        }
+      );
       setModalIsOpen(true);
     },
     validationSchema: validationUserData.validationSchema,

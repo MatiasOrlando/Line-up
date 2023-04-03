@@ -6,6 +6,8 @@ function mapUser(arr) {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      admin: user.admin,
+      operator: user.operator,
     };
     return newUser;
   });

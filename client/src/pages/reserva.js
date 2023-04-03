@@ -1,15 +1,18 @@
 import FormReserva from "@/components/FormReserva/reserva";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+
+export async function getServerSideProps(context) {
+  const sessionToken = context.req.cookies["next-auth.session-token"];
+  if (!sessionToken) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+}
 
 export default function Reserva() {
-  const { data } = useSession();
-  const router = useRouter();
-  useEffect(() => {
-    if (!data && router.pathname !== "/") {
-      router.push("/");
-    }
-  }, [data, router]);
   return <FormReserva />;
 }

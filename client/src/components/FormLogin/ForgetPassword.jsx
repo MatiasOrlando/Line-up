@@ -15,10 +15,13 @@ const ForgetPassword = ({ setForgetPassword }) => {
   const handleEmailPasswordUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/api/user/password-update", {
-        email,
-      });
-      setModalIsOpen(true);
+      const passwordUpdate = await axios.put(
+        "http://localhost:3001/api/user/password-update-email",
+        {
+          email,
+        }
+      );
+      passwordUpdate && setModalIsOpen(true);
     } catch {
       setIsValidEmail(false);
     }

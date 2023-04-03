@@ -1,18 +1,19 @@
 const User = require("../models/user");
-const Branch = require("../models/branch");
 const router = require("express").Router();
 const {
   emailConfirmation,
   passwordUpdate,
 } = require("../config/emailConfirmation");
 const mapUser = require("../config/userMapped");
+const { validateToken, generateToken } = require("../config/token");
+const jwt = require("jsonwebtoken");
 
 router.post("/register", async (req, res) => {
   try {
-    const userCreated = await User.create(req.body);
+    await User.create(req.body);
     return res.status(200).send(`User registered successfully`);
   } catch (error) {
-    console.error(error);
+    return res.status(400).send("Invalid data");
   }
 });
 
@@ -20,7 +21,7 @@ router.get("/all-users", async (req, res) => {
   try {
     const users = await User.find().exec();
     const allUsers = mapUser(users);
-    return res.send(allUsers);
+    return res.status(200).send(allUsers);
   } catch (error) {
     console.error(error);
   }
@@ -34,7 +35,7 @@ router.post("/login", async (req, res) => {
     const validatedUser = await user.validatePassword(password);
     if (!validatedUser)
       return res.status(401).send(`No authorization, Invalid credentials`);
-    return res.status(200).send(user);
+    return res.status(200).send(mapUser([user])[0]);
   } catch {
     return res.status(404).send("User not found");
   }
@@ -45,78 +46,87 @@ router.get("/:id", async (req, res) => {
   try {
     const userFound = await User.findById(id);
     const selectedUser = mapUser([userFound]);
-    return res.send(selectedUser);
+    return res.status(200).send(selectedUser[0]);
   } catch (error) {
     console.error(error);
   }
 });
 
-router.get("/email/:email", async (req, res) => {
-  // Recibo por params id Usuario const {id} = req.params
-  const email = req.params.email;
+router.put("/new-password-email", async (req, res) => {
+  // Recibimos por req.body newPassword, idUser, y token
+  const { password, token } = req.body;
   try {
-    if (!email) {
-      return res.status(400).send({ message: "email cannot be undefined" });
+    const validUser = validateToken(token);
+    if (validUser.payload) {
+      const userPasswordUpdate = await User.findByIdAndUpdate(
+        { _id: validUser.payload._id },
+        {
+          password,
+        },
+        { new: true }
+      );
+      await userPasswordUpdate.save();
+      return res.status(200).send(`Password was successfully updated`);
+    } else {
+      return res.status(404).send(`Invalid credentials`);
     }
-    const userFound = await User.find({ email: email }).exec();
-    if (!userFound) {
-      return res
-        .status(400)
-        .send({ message: "the email passed is not from any saved user" });
-    }
-    return res.status(200).send(mapUser(userFound)[0]);
   } catch (error) {
-    console.error(error);
+    return res.status(404).send(`Password update currently unavailable`);
   }
 });
 
-router.put("/:id", async (req, res) => {
-  // Recibimos por req.body newPassword, idUser
-  const { password } = req.body;
+router.put("/new-password-profile", async (req, res) => {
+  // Recibimos por req.body newPassword y token
+  const { password, token } = req.body;
   try {
-    const userPasswordUpdate = await User.findByIdAndUpdate(
-      { _id: req.params.id },
-      {
-        password,
-      },
-      { new: true }
-    );
-    await userPasswordUpdate.save();
-    return res.send(`Password was successfully updated`);
+    const validUser = validateToken(token);
+    if (validUser) {
+      const userPasswordUpdate = await User.findByIdAndUpdate(
+        { _id: validUser._id },
+        {
+          password,
+        },
+        { new: true }
+      );
+      await userPasswordUpdate.save();
+      return res.status(200).send(`Password was successfully updated`);
+    } else {
+      return res.status(404).send(`Invalid credentials`);
+    }
   } catch (error) {
-    console.error(error);
+    return res.status(404).send(`Password update currently unavailable`);
   }
-  // } else if (req.body.phone && req.body.password) {
-  //   const { phone, password } = req.body;
-  //   try {
-  //     const userPasswordUpdate = await User.findByIdAndUpdate(
-  //       { _id: req.params.id },
-  //       {
-  //         password,
-  //         phone,
-  //       },
-  //       { new: true }
-  //     );
-  //     await userPasswordUpdate.save();
-  //     return res.send(`Password was successfully updated`);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 });
 
 router.post("/appointmentBooked", async (req, res) => {
   emailConfirmation();
 });
 
-router.post("/password-update", async (req, res) => {
+router.put("/password-update-email", async (req, res) => {
   const { email } = req.body;
   try {
     const selectedUser = await User.findOne({ email });
-    passwordUpdate(email, selectedUser._id);
-    res.send(`Email de actualizacion de contraseña enviado`);
+    if (selectedUser) {
+      const userToken = generateToken(selectedUser);
+      passwordUpdate(email, userToken);
+      res.status(200).send(`Email update password sent`);
+    } else {
+      return res.status(400).send({ message: "Invalid email" });
+    }
   } catch {
-    return res.status(400).send({ message: "Invalid email" });
+    return res
+      .status(400)
+      .send({ message: "Currently unavailable to update password" });
+  }
+});
+
+router.get("/email/token", async (req, res) => {
+  const { token } = req.query;
+  try {
+    const decodeUser = validateToken(token);
+    res.status(200).send(mapUser([decodeUser])[0]);
+  } catch (error) {
+    return res.status(400).send({ message: "Invalid token" });
   }
 });
 
