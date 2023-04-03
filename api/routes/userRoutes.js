@@ -12,7 +12,7 @@ router.post("/register", async (req, res) => {
     await User.create(req.body);
     return res.status(200).send(`User registered successfully`);
   } catch (error) {
-    console.error(error);
+    return res.status(400).send("Invalid data");
   }
 });
 
