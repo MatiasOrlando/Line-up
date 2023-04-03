@@ -34,7 +34,6 @@ export default NextAuth({
     secret: "Matias",
     signingKey: "Matias",
     encryption: true,
-    // encryptionKey: process.env.JWT_ENCRYPTION_KEY,
   },
   callbacks: {
     async jwt({ token, user }) {

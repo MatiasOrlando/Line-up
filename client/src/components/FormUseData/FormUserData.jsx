@@ -11,16 +11,20 @@ export default function FormUserData() {
   const [user, setUser] = useState();
   const [status, setStatus] = useState(true);
   const { data } = useSession();
-
+  const userToken = data;
   useEffect(() => {
     const fetchUserData = async () => {
-      if (data && data?.user) {
-        const tokenUser = await axios.get(
-          `http://localhost:3001/api/user/email/token?token=${data.user}`
-        );
-        if (tokenUser) {
-          setUser(tokenUser.data);
+      try {
+        if (data && data?.user) {
+          const tokenUser = await axios.get(
+            `http://localhost:3001/api/user/email/token?token=${data.user}`
+          );
+          if (tokenUser) {
+            setUser(tokenUser.data);
+          }
         }
+      } catch (error) {
+        console.error(error);
       }
     };
     fetchUserData();
@@ -35,13 +39,16 @@ export default function FormUserData() {
       password: "",
       phone: user?.phone || null,
     },
+
     onSubmit: async (data) => {
-      const { password, phone } = data;
-      const id = user._id;
-      const response = await axios.put(`http://localhost:3001/api/user/${id}`, {
-        password,
-        phone,
-      });
+      const { password } = data;
+      const response = await axios.put(
+        `http://localhost:3001/api/user/new-password-profile`,
+        {
+          password,
+          token: userToken.user,
+        }
+      );
       setIsOpen(true);
     },
     validationSchema: validationUserData.validationSchema,

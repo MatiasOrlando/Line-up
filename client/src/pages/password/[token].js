@@ -8,7 +8,7 @@ const createPassword = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const router = useRouter();
-  const { id } = router.query;
+  const { token } = router.query;
   const handleCloseModal = () => {
     setIsOpen(false);
     router.push("/");
@@ -17,10 +17,16 @@ const createPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`http://localhost:3001/api/user/${id}`, {
-        password: newPassword,
-      });
-      setIsOpen(true);
+      if (token) {
+        const res = await axios.put(
+          `http://localhost:3001/api/user/new-password-email`,
+          {
+            password: newPassword,
+            token,
+          }
+        );
+        setIsOpen(true);
+      }
     } catch (error) {
       console.error(error);
     }

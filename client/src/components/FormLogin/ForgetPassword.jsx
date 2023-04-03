@@ -7,6 +7,7 @@ const ForgetPassword = ({ setForgetPassword }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
+
   const handlePassword = () => {
     setForgetPassword(false);
   };
@@ -19,8 +20,8 @@ const ForgetPassword = ({ setForgetPassword }) => {
   const handleEmailPasswordUpdate = async (e) => {
     e.preventDefault();
     try {
-      const passwordUpdate = await axios.post(
-        "http://localhost:3001/api/user/password-update",
+      const passwordUpdate = await axios.put(
+        "http://localhost:3001/api/user/password-update-email",
         {
           email,
         }
