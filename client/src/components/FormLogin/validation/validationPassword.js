@@ -3,7 +3,7 @@ import * as Yup from "yup";
 const validationLogin = {
   validationSchema: Yup.object({
     password: Yup.string()
-      .required()
+      .required("")
       .test("has-lowercase", (value) => {
         return /[a-z]/.test(value);
       })
