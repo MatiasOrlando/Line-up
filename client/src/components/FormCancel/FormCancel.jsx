@@ -13,6 +13,8 @@ const FormCancel = () => {
     const newCheckboxes = checkboxes.map((checkbox) => {
       if (checkbox.id === id) {
         return { ...checkbox, isChecked: !checkbox.isChecked };
+      } else if (checkbox.isChecked) {
+        return { ...checkbox, isChecked: false };
       } else {
         return checkbox;
       }
