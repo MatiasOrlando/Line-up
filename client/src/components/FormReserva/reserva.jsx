@@ -2,7 +2,9 @@ import { DateTime } from "luxon";
 import { useEffect } from "react";
 import { useState } from "react";
 //const nombreMes = dt.get("monthLong").charAt(0).toUpperCase() + dt.get("monthLong").slice(1);
-export default function FormReserva() {
+
+export default function FormReserva({branches}) {
+  console.log(branches)
   const today = DateTime.local();
   const initialDayOfCurrentMonth = today.startOf("month").weekday
   const nombreMes =
@@ -77,7 +79,13 @@ export default function FormReserva() {
           <h3 className="reserva-title-3">Seleccioná tu sucursal</h3>
           <p>form check</p>
           <h3 className="reserva-title-3">Sucursal</h3>
-          <select className="input-primary w100" />
+          <select className="input-primary w100">
+            {branches.map((name, i) =>{
+              return (<option key={i}>
+                {name}
+              </option>)
+            })}
+          </select>
         </div>
         <div className="calendar-container">
           <h2>{nombreMes} {year}</h2>
