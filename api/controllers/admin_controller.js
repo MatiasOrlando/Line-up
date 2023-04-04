@@ -201,7 +201,7 @@ exports.get_all_branches_get = async (req, res, next) => {
         return res.status(400).send({ message: "failed to map the data" })
       }
       const page = branchesData.splice(limit - 7, limit)
-      return res.status(200).send(branchesData)
+      return res.status(200).send(page)
     }
   } catch (err) {
     return res.status(400).send({ message: "Missing key data" });

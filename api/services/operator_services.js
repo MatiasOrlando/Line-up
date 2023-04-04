@@ -8,12 +8,11 @@ class operator_services {
   static async getAllAppointments(limit, _id) {
     try {
         const branchArray = await Branch.find({
-          "user.id": _id,
+          "user.id": _id ,
         });
-        if (!branchArray[0].id) {
-          return({ error: "operator branch does not exist" });
+        if (!branchArray[0]) {
+          return({ error: true, data: branchArray });
         }
-        console.log(branchArray[0])
         const branchId = branchArray[0].id;
         const appointmentsOfBranchArray = await Appointment.find({
           "sucursal.id": branchId,
@@ -39,15 +38,8 @@ class operator_services {
 
 static async editStatusOfAppointment(status, appointmentId, _id) {
   try {
-    if (!status) {
-      return({ error: "status data missing" });
-    }
-
-    if (status !== "pending" && status !== "completed") {
+   if (status !== "pending" && status !== "completed") {
       return({ error: "status passed not valid" });
-    }
-    if (!appointmentId) {
-      return({ error: "key info missing" });
     }
     const updatedState = await Appointment.findOneAndUpdate(
       { _id: appointmentId },
@@ -55,18 +47,17 @@ static async editStatusOfAppointment(status, appointmentId, _id) {
       { new: true }
     );
     if (!updatedState) {
-      return({ error: "appoinment does not exist" });
+      return({ error: true, data: updatedState });
     }
     const branch = await Branch.findById(updatedState.sucursal.id);
     if(!branch.user){
-        return({error: "branch of appointment does not exist"})
+        return({error:true , data: branch})
     }
-
-    if (branch.user.id === _id) {
+    if (branch.user.id == _id) {
       updatedState.save();
-     return({status: 200});
+     return({error: false, data: updatedState});
     } else {
-      return({status:401});
+      return({error: true, data: updatedState});
     }
   } catch (err) {
     console.log(err);
