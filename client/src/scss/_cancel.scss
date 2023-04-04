@@ -26,8 +26,7 @@ font-style: normal;
 font-weight: 600;
 font-size: 24px;
 line-height: 32px;
-font-feature-settings: 'zero' on;
-color: #000000;
+color: $primaryBlack;
 }
 
 .container-reason {
@@ -41,7 +40,7 @@ font-style: normal;
 font-weight: 400;
 font-size: 14px;
 line-height: 16px;
-color: #505050;
+color: $octonaryGrey;
 flex: none;
 order: 0;
 align-self: stretch;
@@ -56,8 +55,7 @@ font-style: normal;
 font-weight: 600;
 font-size: 16px;
 line-height: 20px;
-font-feature-settings: 'zero' on;
-color: #505050;
+color: $octonaryGrey;
 flex: none;
 order: 1;
 align-self: stretch;
@@ -70,7 +68,7 @@ margin-left: 96px;
 margin-top: 26px;
 width: 779px;
 height: 0px;
-border: 1px solid #C8C8C8;
+border: 1px solid $cuaternaryGrey;
 flex: none;
 order: 1;
 align-self: stretch;
@@ -89,7 +87,7 @@ font-size: 14px;
 line-height: 16px;
 display: flex;
 align-items: center;
-color: #505050;
+color: $octonaryGrey;
 flex: none;
 order: 1;
 flex-grow: 1;
@@ -101,6 +99,7 @@ border-radius: 0px;
 margin-right: 5.67px;
 }
 }
+
 
 .container-cancel {
 margin-top: 26px;
@@ -126,8 +125,7 @@ font-style: normal;
 font-weight: 400;
 font-size: 14px;
 line-height: 16px;
-font-feature-settings: 'ss01' on, 'case' on;
-color: #505050;
+color: $octonaryGrey;
 flex: none;
 order: 0;
 align-self: stretch;
@@ -158,7 +156,7 @@ display: flex;
 align-items: center;
 text-align: center;
 font-feature-settings: 'zero' on;
-color: #FFFFFF;
+color: $primaryWhite;
 flex: none;
 order: 1;
 flex-grow: 0;
@@ -167,11 +165,9 @@ padding: 12px 24px 12px 24px
 }
 
 .box-reservation-data {
-margin-bottom: 200px;
-margin-left: 96px;
+margin-left: 150px;
 margin-top: 48px;
 width: 282px;
-height: 0px;
 flex: none;
 order: 2;
 align-self: stretch;
@@ -184,10 +180,8 @@ font-style: normal;
 font-weight: 400;
 font-size: 13px;
 line-height: 16px;
-font-feature-settings: 'ss01' on, 'case' on;
-color: #8C8C8C;
+color: $senaryGrey;
 flex: none;
-order: 0;
 align-self: stretch;
 flex-grow: 0;
 }
@@ -201,22 +195,21 @@ font-style: normal;
 font-weight: 700;
 font-size: 19px;
 line-height: 24px;
-font-feature-settings: 'zero' on;
-color: #000000;
+color: $primaryBlack;
 flex: none;
 order: 1;
 align-self: stretch;
 flex-grow: 0   
 }
 .span-reservation {
-  width: 21px;
+width: 21px;
 height: 16px;
 font-family: 'Roboto';
 font-style: normal;
 font-weight: 600;
 font-size: 14px;
 line-height: 16px;
-color: #6E6E6E;
+color: $septenaryGrey;
 flex: none;
 order: 0;
 flex-grow: 0;  
@@ -230,11 +223,10 @@ font-style: normal;
 font-weight: 400;
 font-size: 14px;
 line-height: 16px;
-color: #8C8C8C;
+color: $senaryGrey;
 flex: none;
 order: 1;
 flex-grow: 1;
 }
-
 }
 
