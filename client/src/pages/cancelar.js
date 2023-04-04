@@ -3,6 +3,19 @@ import Link from "next/link";
 import FormCancel from "@/components/FormCancel/FormCancel";
 import InfoReservation from "@/components/InfoReservation/InfoReservation";
 
+export async function getServerSideProps(context) {
+  const sessionToken = context.req.cookies["next-auth.session-token"];
+  if (!sessionToken) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
+}
+
 const cancel = () => {
   return (
     <>

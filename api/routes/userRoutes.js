@@ -14,7 +14,7 @@ router.post("/register", async (req, res) => {
     return res.status(200).send(`User registered successfully`);
   } catch (error) {
     return res.status(400).send("Invalid data");
-}
+  }
 });
 
 router.get("/all-users", async (req, res) => {
@@ -98,7 +98,6 @@ router.put("/new-password-profile", async (req, res) => {
   }
 });
 
-
 router.post("/appointmentBooked", async (req, res) => {
   emailConfirmation();
 });
@@ -128,25 +127,6 @@ router.get("/email/token", async (req, res) => {
     res.status(200).send(mapUser([decodeUser])[0]);
   } catch (error) {
     return res.status(400).send({ message: "Invalid token" });
-  }
-});
-
-router.get("/email/:email", async (req, res) => {
-  // Recibo por params id Usuario const {id} = req.params
-  const email = req.params.email;
-  try {
-    if (!email) {
-      return res.status(400).send({ message: "email cannot be undefined" });
-    }
-    const userFound = await User.findOne({ email: email }).exec();
-    if (!userFound) {
-      return res
-        .status(400)
-        .send({ message: "the email passed is not from any saved user" });
-    }
-    return res.status(200).send(userFound);
-  } catch (error) {
-    console.error(error);
   }
 });
 
