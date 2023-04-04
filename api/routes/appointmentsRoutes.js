@@ -44,6 +44,20 @@ router.post("/add", async (req, res) => {
   }
 });
 
+router.get("/branches", async (req,res) => {
+  try {
+    const names = []
+    const branchesNames = await Branch.find({});
+    branchesNames.map(branch => {
+     return names.push(branch.name)
+    })
+    return res.status(200).send(names)
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
 router.get("/:id", async (req, res) => {
   // Recibo por params idUsuario y busco en coleccion apppointments todas las que coincidan con el userId recibido
   try {
