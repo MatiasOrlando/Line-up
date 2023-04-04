@@ -6,7 +6,10 @@ const { passwordUpdate } = require("../config/emailConfirmation");
 const registerUser = async (req, res) => {
   try {
     const newUser = await UsersService.userRegister(req.body);
-    return res.status(201).send(mapUser([newUser.data])[0]);
+    if (!newUser.error) {
+      res.status(200).send(mapUser([newUser.data])[0]);
+    }
+    return res.status(400).send(newUser.data.message);
   } catch {
     return res.status(404).send(`ERROR registration process`);
   }
