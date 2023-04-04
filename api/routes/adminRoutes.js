@@ -1,167 +1,42 @@
-const User = require("../models/user");
-const Branch = require("../models/branch");
 const router = require("express").Router();
-const validateMiddleware = require("../middleWare/validateMiddleware").isAdmin;
+const adminController = require("../controllers/admin_controller")
+const validateMiddleware = require("../middleWare/validateMiddleware");
 
-// admin id
-router.post("/:id", validateMiddleware, async (req, res, next) => {
-  try {
-    const { name, location, hourRange, allowedClients } = req.body;
-    if (
-      !req.body.user.email ||
-      !req.body.user.phone ||
-      !req.body.user.operator ||
-      !req.body.user.name ||
-      !req.body.user.password ||
-      !name ||
-      !location ||
-      !hourRange ||
-      !allowedClients
-    ) {
-      return res.status(400).send({ message: "Missing key data" });
-    }
-    const operador = await User.create(req.body.user);
-    const { id, email, phone, operator } = operador;
 
-    const createdBranch = await Branch.create({
-      name,
-      location,
-      hourRange,
-      allowedClients,
-      user: { id, email, phone, operator },
-    });
-    createdBranch.save();
-    return res.status(201).send(createdBranch);
-  } catch (err) {
-    console.log(err);
-  }
-});
+// admin id 
+// CREA OPERADOR(REQ.BODY) Y LE PISA EL BRANCH.USER(VACIO) CON LOS DATOS DEL NUEVO OPERADOR, ASIGNANDOLE UN OPERADOR A LA SUCURSAL(hay que pasarle req.boy.location) Y VICE VERSA
+router.post("/create-operator", validateMiddleware.isAdmin, adminController.create_operator_post);
 
-// admin id , branch id , req.body = new Operator COMPLETO
-router.put(
-  "/:id/editOperator/:branchId",
-  validateMiddleware,
-  async (req, res, next) => {
-    const branchId = req.params.branchId;
-    try {
-      console.log("REQ BODY", req.body);
-      if (
-        !req.body.email ||
-        !req.body.phone ||
-        !req.body.operator ||
-        !req.body.name ||
-        !req.body.password ||
-        !branchId
-      ) {
-        return res.status(400).send({ message: "Missing key data" });
-      }
-      const operador = await User.create(req.body);
-      console.log("OPERATOR", operador);
-      const { id, email, phone, operator } = operador;
-      const user = { id, email, phone, operator };
+// CREA UN OPERADOR(REQ.BODY.USER) Y CREA UNA SUCURSAL(REQ.BODY) Y LE ASIGNA LOS DATOS DEL OPERADOR CREADO COMO USER
+router.post("/create-branch-and-operator", validateMiddleware.isAdmin, adminController.createOperatorAndBranch);
 
-      if (!id || !email || !phone || !operator) {
-        return res.status(400).send({ message: "Missing key data" });
-      }
+// CREA UNA SUCURSAL SIN NINGUN OPERADOR PARA QUE DESPUES SE LO ASIGNES CUANDO LO CREES EN LA PRIMERA RUTA COMO EN EL FIGMA
+router.post("/create-branch", validateMiddleware.isAdmin, adminController.createBranchContoller);
 
-      const updatedBranch = await Branch.findOneAndUpdate(
-        { _id: branchId },
-        { $set: { user: user } },
-        { new: true }
-      );
-      const savedBranch = await updatedBranch.save();
-      return res.status(200).send(savedBranch);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-);
 
-router.put(
-  "/:id/editBranchInfo/:branchId",
-  validateMiddleware,
-  async (req, res, next) => {
-    const branchId = req.params.branchId;
-    const { hourRange, allowedClients } = req.body;
-    try {
-      console.log("REQ BODY", req.body);
-      if (!hourRange || !allowedClients || !branchId) {
-        return res.status(400).send({ message: "Missing key data" });
-      }
+// MODIFICA EL OPERADOR DE UNA SUCURSAL, LA BRANCH LA ENCUENTRA POR(req.params.branchId) y le llega por body todos los datos del nuevo operador para crear 
+//const body = { email: req.body.email, phone: req.body.phone, operator: req.body.operator, name: req.body.name, password: req.body.password }
+router.put("/edit-operator/:branchId", validateMiddleware.isAdmin, adminController.edit_operator_put);
 
-      const updatedBranch = await Branch.findOneAndUpdate(
-        { _id: branchId },
-        { $set: { allowedClients: allowedClients, hourRange: hourRange } },
-        { new: true }
-      );
-      const savedBranch = await updatedBranch.save();
-      return res.status(200).send(savedBranch);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-);
+// MODIFICA LA INFORMACION DE LA BRANCH(NO EL OPERADOR),  const { hourRange, allowedClients } = req.body, const { branchId } = req.params  
+// LA SUCURSAL LA ENCUETRA POR branchId y le modifica el hourRange o u y AllowedClients
+router.put("/edit-branch-info/:branchId", validateMiddleware.isAdmin, adminController.edit_branch_info);
 
-router.delete(
-  "/:id/deleteBranch/:branchId",
-  validateMiddleware,
-  async (req, res, next) => {
-    const branchId = req.params.branchId;
-    try {
-      if (!branchId) {
-        return res.status(400).send({ message: "Invalid branchId value" });
-      }
 
-      const deletedBranch = await Branch.findByIdAndRemove(branchId);
-      if (!deletedBranch) {
-        return res.status(404).send({ message: "branch not found " });
-      } else {
-        return res.status(200).send({ message: "Deleted succesfully" });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-);
+// BORRA UNA SUCURSAL QUE SE LE PASE POR PARAMS  const { branchId } = req.params
+router.delete("/delete-branch/:branchId", validateMiddleware.isAdmin , adminController.delete_branch_delete);
 
-router.delete(
-  "/:id/deleteUser/:userId",
-  validateMiddleware,
-  async (req, res) => {
-    const userId = req.params.userId;
-    try {
-      if (!userId) {
-        return res.status(400).send({ message: "Invalid userId value" });
-      }
+// BORRA UN USUARIO QUE SE LE PASE POR PARAMS  const { userId } = req.params
+router.delete("/delete-user/:userId", validateMiddleware.isAdmin, adminController.delete_user_delete);
 
-      const deletedUser = await User.findByIdAndRemove(userId);
-      if (!deletedUser) {
-        return res.status(404).send({ message: "user not found " });
-      } else {
-        return res.status(200).send({ message: "Deleted succesfully" });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-);
+// TRAE TODOS LOS USUARIOS DEL LA PAGINA QUE LE PASES COMO PARAMS, SI EL NUMERO ES 1 TRAE LOS USUARIOS DEL 1 AL 7, SI EL NUMERO ES 2 TRAE LOS USUARIOS DEL 7 AL 14
+router.get("/get-all-users/:number", validateMiddleware.isAdmin, adminController.get_all_users_get);
 
-router.get("/:id/user", validateMiddleware, async (req, res) => {
-  const allUsers = await User.find();
-  if (!allUsers) {
-    return res.status(400).send({ message: "users dont exist" });
-  } else {
-    return res.status(200).send(allUsers);
-  }
-});
+// TRAE TODOS LOS OPERADORES DE LA PAGINA QUE LE PASES COMO PARAMS, SI EL NUMERO ES 1 TRAE LOS OPERADORES DEL 1 AL 7, SI EL NUMERO ES 2 TRAE LOS OPERADORES DEL 7 AL 14
+router.get("/get-all-operators/:number", validateMiddleware.isAdmin, adminController.get_all_operators_get);
 
-router.get("/:id/branch", validateMiddleware, async (req, res) => {
-  const allBranches = await Branch.find();
-  if (!allBranches) {
-    return res.status(400).send({ message: "branches dont exist" });
-  } else {
-    return res.status(200).send(allBranches);
-  }
-});
+// TRAE TODOS LOS SUCURSALES DE LA PAGINA QUE LE PASES COMO PARAMS, SI EL NUMERO ES 1 TRAE LAS SUCURSALES DEL 1 AL 7, SI EL NUMERO ES 2 TRAE LAS SUCURSALES DEL 7 AL 14
+router.get("/get-all-branches/:number", validateMiddleware.isAdmin, adminController.get_all_branches_get);
+ 
 
 module.exports = router;
