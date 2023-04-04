@@ -1,210 +1,169 @@
 const User = require("../models/user");
 const Branch = require("../models/branch");
-const admin_services = require("../services/admin_services")
+const { admin_services } = require("../services/admin_services")
 
 
 
 exports.create_operator_post = async (req, res, next) => {
-  const operatorInfo = { name: req.body.name, email: req.body.email, phone: req.body.phone, operator: req.body.operator, password: req.body.password, dni: req.body.dni }
-  const { location } = req.body
+  const operatorInfo = { name: req.body.name, email: req.body.email, phone: req.body.phone, operator: req.body.operator, password: req.body.password, dni: req.body.dni };
+  const { location } = req.body;
   try {
-    const operatorResult = await admin_services.create_operator(operatorInfo, location)
-    console.log("RESULTADO", operatorResult)
-      if (operatorResult.status === 201) {
-      return res.status(201).send({ message: "operator created and updated branch" })
+    if (typeof (operatorInfo.phone) !== "number" || typeof (operatorInfo.email) !== "string" || (operatorInfo.operator) !== true || typeof (operatorInfo.name) !== "string" || typeof (operatorInfo.password) !== "string" || typeof (operatorInfo.dni) !== "number" || typeof (location) !== "string") {
+      return res.status(400).send({message: "invalid data types"});
+  }
+    const operatorResult = await admin_services.create_operator(operatorInfo, location);
+    if(!operatorResult.error){
+      return res.status(201).send({message: "operator created succesfully in the database"});
     }
-    if (operatorResult.status === 500) {
-      return res.status(400).send({ message: "failed to create operator because dni or gmail already exist" })
-    }
-    if (operatorResult.status === 400) {
-      return res.status(400).send({ message: "failed to updated branch" })
-    }
-    else {
-      return res.status(404).send({ message: "unknown error" })
-    }  
+    return res.status(400).send({message: operatorResult.data.message});
+
   } catch (err) {
-    return res.status(400).send({ message: "missing key data || operator gmail and dni may already exist" })
+    return res.status(400).send({ message: "failed to create the operator in the database" });
   }
 }
 
 exports.createOperatorAndBranch = async (req, res, next) => {
-  const branchInfo = { name: req.body.name, location: req.body.location, hourRange: req.body.hourRange, allowedClients: req.body.hourRange }
-  const userInfo = { name: req.body.user.name, email: req.body.user.email, phone: req.body.user.phone, operator: req.body.user.operator, password: req.body.user.password, dni: req.body.user.dni }
+  const branchInfo = { name: req.body.name, location: req.body.location, hourRange: req.body.hourRange, allowedClients: req.body.allowedClients };
+  const userInfo = { name: req.body.user.name, email: req.body.user.email, phone: req.body.user.phone, operator: req.body.user.operator, password: req.body.user.password, dni: req.body.user.dni };
   try {
-    const branchResult = await admin_services.createOperatorBranch(branchInfo, userInfo)
-    if (!branchResult.location) {
-      return res.status(404).send({ message: "unknown error" })
+    if (typeof (userInfo.phone) !== "number" || typeof (userInfo.email) !== "string" || typeof (userInfo.operator) !== "boolean" || typeof (userInfo.name) !== "string" || typeof (userInfo.password) !== "string") {
+      return res.status(400).send({ message: "invalid type of body" });
+  }
+    const branchResult = await admin_services.createOperatorBranch(branchInfo, userInfo);
+    if (!branchResult.error) {
+      return res.status(200).send({ message: "operator and branch created succesfully in the database" });
     }
-    return res.status(200).send({ message: "created succesfully" })
+    return res.status(400).send({ message: branchResult.data.message });
   } catch (err) {
-    return res.status(400).send({ message: "Missing key data" });
+    return res.status(400).send({ message: "failed to create the operator and branch in the database" });
   }
 }
 
 
-exports.create_branch_post = async (req, res, next) => {
-try{
-  const newBranch = await admin_services.createBranch(req.body);
-  console.log(newBranch);
-  res.status(201).send("branch created succesfully");
+exports.createBranchContoller = async (req, res, next) => {
+  const body = {name: req.body.name, location: req.body.location, hourRange: req.body.hourRange, allowedClients: req.body.allowedClients };
+  try {
+    if (typeof(body.name) !== "string" || typeof (body.location) !== "string" || typeof (body.hourRange) !== "string" || typeof (body.allowedClients) !== "number") {   
+     return res.status(400).send({message: "invalid data types"});}
 
-}catch(err){
-  console.log(err);
-}
-
-
-
-  /* try {
-    const branchResult = await admin_services.createBranch(req.body)
-    if (branchResult.status === 201) {
-      return res.status(201).send({ message: "created succesfully" })
+    const branchResult = await admin_services.createBranchOnly(body);
+    if (!branchResult.error) {
+      return res.status(201).send({ message: "created succesfully" });
     }
-
-    if (branchResult.status === 400) {
-      return res.status(400).send({ message: "bad request" })
-    }
-    else {
-      return res.status(404).send({ message: "unknown error" })
-    }
+    return res.status(400).send({message: branchResult.data.message});
   } catch (err) {
-    return res.status(400).send({ message: "Missing key data" });
-  } */
+    return res.status(400).send({ message: "failed to create the branch in the database" });
+  } 
 }
 
 
 exports.edit_operator_put = async (req, res, next) => {
-  const branchId = req.params.branchId
-  const body = { email: req.body.email, phone: req.body.phone, operator: req.body.operator, name: req.body.name, password: req.body.password }
+  const branchId = req.params.branchId;
+  const body = { email: req.body.email, phone: req.body.phone, operator: req.body.operator, name: req.body.name, password: req.body.password, dni: req.body.dni };
   try {
     if (typeof (body.phone) !== "number" || typeof (body.email) !== "string" || typeof (body.operator) !== "boolean" || typeof (body.name) !== "string" || typeof (body.password) !== "string") {
-      return res.status(400).send({ message: "invalid type of body" })
-    }
-    const operador = await User.create(body);
-    const user = { id: operador.id, email: operador.email, phone: operador.phone, operator: operador.operator }
-
-    const updatedBranch = await Branch.findOneAndUpdate({ _id: branchId }, { $set: { user: user } }, { new: true })
-    const savedBranch = await updatedBranch.save()
-    return res.status(200).send(savedBranch)
+      return res.status(400).send({message: "invalid data type"});
+    };
+  const updateOperator = await admin_services.editOperator(branchId, body);
+  if(!updateOperator.error){
+    return res.status(200).send({message: "operator updated succesfully"});
+  }
+    return res.status(400).send({ message: updateOperator.data.message});
 
   } catch (err) {
-    return res.status(400).send({ message: "Missing key data" });
+    return res.status(400).send({ message: "failed to update the operator in the branch" });
   }
 }
 
 
 exports.edit_branch_info = async (req, res, next) => {
-  const { branchId } = req.params
-  const { hourRange, allowedClients } = req.body
+  const { branchId } = req.params;
+  const { hourRange, allowedClients } = req.body;
   try {
-    const updatedBranch = await Branch.findOneAndUpdate({ _id: branchId }, { $set: { allowedClients: allowedClients, hourRange: hourRange } }, { new: true })
-    const savedBranch = await updatedBranch.save()
-    return res.status(200).send(savedBranch)
+    const updatedBranchInfo = await admin_services.editBranchInfo(branchId, hourRange, allowedClients);
+    if(!updatedBranchInfo.error){
+      return res.status(200).send({message: "branch info updated succesfully"});
+    }
+    return res.status(400).send({ message: updatedBranchInfo.data.message});
+
   } catch (err) {
-    return res.status(400).send({ message: "Missing key data" });
+    return res.status(400).send({ message: "failed to update the branch info" });
   }
 }
 
 
 exports.delete_branch_delete = async (req, res, next) => {
-  const { branchId } = req.params
+  const { branchId } = req.params;
   try {
-    const deletedBranch = await Branch.findByIdAndRemove(branchId)
-    if (!deletedBranch) {
-      return res.status(404).send({ message: "branch not found " })
-    } else {
-      return res.status(200).send({ message: "Deleted succesfully" })
+    const deletedBranch = await admin_services.deleteBranch(branchId);
+    if(!deletedBranch.error){
+      return res.status(200).send({message: "branch erased succesfully from the database"});
     }
+    return res.status(400).send({message: deletedBranch.data.message});
   } catch (err) {
-    return res.status(400).send({ message: "Missing key data" });
+    return res.status(400).send({ message: "failed to delete the branch from the database" });
   }
 }
 
 
 
 exports.delete_user_delete = async (req, res, next) => {
-  const { userId } = req.params
+  const { userId } = req.params;
   try {
-    const deletedUser = await User.findByIdAndRemove(userId)
-    if (!deletedUser) {
-      return res.status(404).send({ message: "user not found " })
-    } else {
-      return res.status(200).send({ message: "Deleted succesfully" })
-    }
+    const deletedUser = await admin_services.deleteUser(userId);
+    if (!deletedUser.error) {
+      return res.status(200).send({ message: "user erased succesfully from the database" })};
+
+      return res.status(400).send({message: deletedUser.data.message});
+   
   } catch (err) {
-    return res.status(400).send({ message: "Missing key data" });
+    return res.status(400).send({ message: "failed to delete the user from the database" });
   }
 }
 
 
 exports.get_all_users_get = async (req, res, next) => {
-  const { number } = req.params
+  const { number } = req.params;
   try {
-    const limit = number * 7
-    const allUsers = await User.find()
-    if (!allUsers[0].name) {
-      return res.status(400).send({ message: "users dont exist" })
-    } else {
-      const filter = allUsers.map((item) => { return { name: item.name, id: item.id, email: item.email, salt: item.salt } })
-      if (!filter[0].name) {
-        return res.status(400).send("failed to map the data")
-      }
-      const page = filter.splice(limit - 7, limit)
-      return res.status(200).send(page)
+    const limit = number * 7;
+    const allUsers = await admin_services.getAllUser(limit);
+    if(!allUsers.error){
+      return res.status(200).send(allUsers);
     }
+    return res.status(400).send({message: allUsers.data.message});
   }
   catch (err) {
-    return res.status(400).send({ message: "Missing key data" });
+    return res.status(400).send({ message: "failed to get all users in page: " + number + " from the database" });
   }
 }
 
+
 exports.get_all_operators_get = async (req, res, next) => {
-  const number = req.params.number
+  const number = req.params.number;
+  const limit = number * 7;
   try {
-    if (!req.params.number) {
-      return res.status(400).send({ message: "Number of page is necessary" })
+    const allOperators = await admin_services.getAllOperator(limit);
+    if(!allOperators.error){
+      return res.status(200).send(allOperators);
     }
-    const limit = number * 7
-    const allUsers = await User.find({ operator: true })
-    if (!allUsers[0].name) {
-      return res.status(400).send({ message: "operators dont exist" })
-    } else {
-      const allBranches = await Branch.find()
-      if (!allBranches[0].location) {
-        return res.status(400).send({ message: "No branches found" })
-      }
-      const operatorsMapper = allUsers.map((item) => { return { name: item.name, id: item.id, email: item.email, salt: item.salt, sucursal: allBranches.filter((branchItem) => { return branchItem.user.id.toString() === item.id })[0].location } })
-      if (!operatorsMapper[0].name) {
-        return res.status(400).send({ message: "failed to map the data" })
-      }
-      const page = operatorsMapper.splice(limit - 7, limit)
-      return res.status(200).send(page)
-    }
+    return res.status(400).send({message: allOperators.data.message});
   }
   catch (err) {
-    return res.status(400).send({ message: "Missing key data" });
+    return res.status(400).send({ message: "failed to get all operators in page " + number + " from the database" });
   }
 }
 
 
 exports.get_all_branches_get = async (req, res, next) => {
-  const number = req.params.number
+  const number = req.params.number;
+  const limit = number * 7;
   try {
-    const limit = number * 7
-    const allBranches = await Branch.find()
-    if (!allBranches) {
-      return res.status(400).send({ message: "branches dont exist" })
-    } else {
-      const branchesData = allBranches.map((item) => {
-        return { email: item.user.email, allowedClients: item.allowedClients, hourRange: item.hourRange, id: item.id }
-      })
-      if (!branchesData[0].email) {
-        return res.status(400).send({ message: "failed to map the data" })
-      }
-      const page = branchesData.splice(limit - 7, limit)
-      return res.status(200).send(branchesData)
+    const allBranches = await admin_services.getAllBraches(limit);
+    if(!allBranches.error){
+      return res.status(200).send(allBranches);
     }
+    return res.status(400).send({message: allBranches.data.message});
   } catch (err) {
-    return res.status(400).send({ message: "Missing key data" });
+    return res.status(400).send({ message: "failed to get all branches in page " + number + " from the database" });
   }
-
 }
