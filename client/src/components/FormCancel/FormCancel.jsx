@@ -42,7 +42,9 @@ const FormCancel = () => {
                   onChange={() => handleCheckboxChange(checkbox.id)}
                   className="checkbox-noshow"
                 />
-                <p>{checkbox.text}</p>
+                <p style={checkbox.isChecked ? { fontWeight: "bolder" } : {}}>
+                  {checkbox.text}
+                </p>
               </div>
               {checkbox.isChecked && (
                 <div className="container-cancel">
