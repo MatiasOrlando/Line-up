@@ -1,9 +1,10 @@
 @import "./colors";
 
-body{
+
+
+.master-div{
     background-color: $secondaryGrey;
 }
-
 
 .reserva-title{
     margin: 0 auto;
@@ -25,6 +26,9 @@ body{
 .reserva-title-2{
     font-size: 18px;
     font-weight: 600;
+    :disabled{
+        color: $cuaternaryGrey;
+    }
 }
 
 .reserva-title-3{
@@ -84,20 +88,19 @@ ol{
     margin: 0 auto;
   }
   
-  .countdown-container{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    }
+.countdown-container{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
     
-  .sc{
-    background-color: $secondaryColor;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1.5rem;
-    margin-top: 5rem;
-    
-  }
+.sc{
+  background-color: $secondaryColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  margin-top: 5rem;
+}
   
