@@ -25,6 +25,7 @@
     "mongoose": "^7.0.3",
     "next": "13.2.4",
     "next-auth": "^4.20.1",
+    "pdfmake": "^0.2.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",

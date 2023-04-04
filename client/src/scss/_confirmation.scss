@@ -1,0 +1,79 @@
+@import "./colors";
+
+.container-confirmation {
+  width: 100%;
+  padding: 0px 96px 96px 96px;
+  margin-top: 5%;
+  hr {
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: $primaryGrey;
+    border: 0;
+    height: 2px;
+  }
+  .container-confirmation-center {
+    text-align: center;
+    margin-bottom: 56px;
+    .icon {
+      font-size: 40px;
+      color: $secondaryColor;
+      margin-bottom: 28px;
+    }
+    h1 {
+      font-size: 26px;
+      color: $primaryColor;
+      margin-bottom: 24px;
+    }
+    p {
+      font-size: 14px;
+      color: $octonaryGrey;
+      margin-bottom: 24px;
+    }
+    button {
+      padding: 12px 24px;
+      line-height: 20px;
+      width: 382px;
+    }
+  }
+  .container-confirmation-flex {
+    margin-top: 5%;
+    margin-bottom: 64px;
+    width: 100%;
+    position: relative;
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      right: 0;
+      width: 183px;
+      .icon {
+        font-size: 21px;
+        margin-right: 3px;
+      }
+    }
+    .button:first-child {
+      top: 0;
+    }
+    .button:last-child {
+      top: 50px;
+      color: $errorColor;
+    }
+    .number {
+      display: flex;
+      margin-bottom: 12px;
+    }
+  }
+  .data {
+    width: 360px;
+    margin-right: 48px;
+    h3 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    p {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+  }
+}
