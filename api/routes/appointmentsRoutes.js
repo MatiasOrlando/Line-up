@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../models/user");
 const Branch = require("../models/branch");
 const Appointment = require("../models/appointment");
+const { DateTime } = require("luxon");
 
 router.post("/add", async (req, res) => {
   const idUser = "6421daa054ed9950496a68b3";
@@ -44,19 +45,43 @@ router.post("/add", async (req, res) => {
   }
 });
 
-router.get("/branches", async (req,res) => {
+router.get("/branches", async (req, res) => {
   try {
-    const names = []
+    const names = [];
     const branchesNames = await Branch.find({});
-    branchesNames.map(branch => {
-     return names.push(branch.name)
-    })
-    return res.status(200).send(names)
+    branchesNames.map((branch) => {
+      return names.push(branch.name);
+    });
+    return res.status(200).send(names);
   } catch (error) {
     console.log(error);
   }
 });
 
+router.get("/daysavailable", async (req, res) => {
+  const { days, branch } = req.body;
+  try {
+    const selectedBranch = await Branch.find({ name: branch });
+    const { openingHour, closingHour, allowedClients } = selectedBranch;
+    const openingTime = DateTime.fromFormat(openingHour, "HH:mm");
+    const closingTime = DateTime.fromFormat(closingHour, "HH:mm");
+    const hoursOpen = closingTime.diff(openingTime, "hours").hours;
+    const appoinmentsPerDay = hoursOpen * 4 * allowedClients;
+    const arrayToSend = [];
+    const promises = days.map(async (day) => {
+      const availableAppointments = await Appointment.find({ date: day });
+      if (availableAppointments.length < appoinmentsPerDay) {
+        arrayToSend.push(day);
+      }
+    });
+
+    await Promise.all(promises);
+
+    return res.status(200).send(arrayToSend);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 router.get("/:id", async (req, res) => {
   // Recibo por params idUsuario y busco en coleccion apppointments todas las que coincidan con el userId recibido
