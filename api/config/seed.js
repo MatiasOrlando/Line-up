@@ -335,30 +335,13 @@ const users = [
     operator: false,
   },
 ];
-// {
-//   "_id": {
-//     "$oid": "642b40762d24210ed96931e5"
-//   },
-//   "name": "Amsterdam SUCURSAL",
-//   "location": "Berlin",
-//   "hourRange": "87-54",
-//   "allowedClients": 373,
-//   "user": {
-//     "id": {
-//       "$oid": "642b40762d24210ed96931e3"
-//     },
-//     "email": "Enemy@gmail.com",
-//     "phone": 7669420080,
-//     "operator": true
-//   },
-//   "__v": 0
-// }
+
 const sucursal = [
   {
     name: "Palermo",
     location: "CABA",
-    openingHour: "10",
-    closingHour: "22",
+    openingHour: "10:30",
+    closingHour: "22:00",
     allowedClients: 2,
     user: {
       email: "operator@example.com",
@@ -369,8 +352,8 @@ const sucursal = [
   {
     name: "San Telmo",
     location: "CABA",
-    openingHour: "07",
-    closingHour: "20",
+    openingHour: "07:30",
+    closingHour: "20:00",
     allowedClients: 3,
     user: {
       email: "operator2@example.com",
@@ -381,8 +364,8 @@ const sucursal = [
   {
     name: "Villa Urquiza",
     location: "CABA",
-    openingHour: "08",
-    closingHour: "17",
+    openingHour: "08:30",
+    closingHour: "17:30",
     allowedClients: 4,
     user: {
       email: "operator3@example.com",
@@ -393,8 +376,8 @@ const sucursal = [
   {
     name: "Rosario",
     location: "Santa Fe",
-    openingHour: "08",
-    closingHour: "17",
+    openingHour: "08:00",
+    closingHour: "17:00",
     allowedClients: 2,
     user: {
       email: "operator4@example.com",
@@ -405,8 +388,8 @@ const sucursal = [
   {
     name: "Villa Lynch",
     location: "Buenos Aires",
-    openingHour: "12",
-    closingHour: "18",
+    openingHour: "12:00",
+    closingHour: "18:00",
     allowedClients: 5,
     user: {
       email: "operator5@example.com",
@@ -415,6 +398,45 @@ const sucursal = [
     },
   },
 ];
+
+const turnos = [
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+]
+
+// date: { type: String, required: true },
+// timeOfAppontment: { type: String, required: true },
+// status: { type: String, enum: state, required: true, default: "pending" },
+// cancelReason: { type: String, default: null },
+// createdAt: { type: Date, default: Date.now() },
+// user: {
+//   id: { type: mongoose.Schema.Types.ObjectId, required: true },
+//   name: { type: String, required: true },
+//   email: {
+//     type: String,
+//     required: true,
+//     validate: [isEmail, "invalid email"],
+//   },
+//   phone: {
+//     type: Number,
+//     min: [9, "too few numbers"],
+//     maxLength: [15, "too many numbers"],
+//     required: true,
+//   },
+// },
+// sucursal: {
+//   id: { type: mongoose.Schema.Types.ObjectId, required: true },
+//   location: { type: String, required: true },
+//   allowedClients: { type: Number, required: true },
+//   hourRange: { type: String, required: true },
+// },
+// });
+
 
 const CreateUsers = async () => {
   try {
