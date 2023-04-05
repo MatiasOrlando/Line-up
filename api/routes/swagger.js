@@ -1,4 +1,3 @@
-const { application } = require("express");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
 
@@ -7,7 +6,7 @@ const options = {
     openapi: "3.0.0",
     info: { title: "Line-up web app", version: "1.0.0" },
   },
-  apis: ["api/routes/index.js", "api/db/index.js"],
+  apis: ["./routes/*.js", "./models/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
@@ -19,7 +18,7 @@ const swaggerDocs = (app, num) => {
     res.send(swaggerSpec);
   });
 
-  console.log(`TEST FUNCIONA http://locahost:${num}/api/docs`);
+  console.log(`TEST FUNCIONA http://localhost:${num}/api/docs`);
 };
 
 module.exports = { swaggerDocs };

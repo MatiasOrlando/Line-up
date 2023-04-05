@@ -7,7 +7,7 @@ const Branch = require("./models/branch");
 const Appointment = require("./models/appointment");
 const seed = require("./config/seed");
 const routerIndex = require("./routes");
-const { swaggerDocs: hola } = require("./routes/swagger");
+const { swaggerDocs } = require("./routes/swagger");
 
 // Crear el servidor/aplicación de express
 const app = express();
@@ -29,5 +29,5 @@ app.use("/api", routerIndex);
 
 app.listen(3001, () => {
   console.log(`Servidor corriendo en puerto ${3001}`);
-  hola(app, 3001);
+  swaggerDocs(app, 3001);
 });
