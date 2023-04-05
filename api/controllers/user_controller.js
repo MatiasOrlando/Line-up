@@ -18,6 +18,9 @@ const registerUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const getAllUsers = await UsersService.getAllUsers();
+    if (getAllUsers.error) {
+      return res.status(400).send(getAllUsers.data.message);
+    }
     return res.status(200).send(mapUser(getAllUsers.data));
   } catch {
     return res.status(404).send(`ERROR Fetching all users`);
@@ -42,6 +45,9 @@ const getSingleUser = async (req, res) => {
   const { id } = req.params;
   try {
     const userFound = await UsersService.getSingleUser(id);
+    if (userFound.error) {
+      return res.status(400).send(userFound.data.message);
+    }
     return res.status(200).send(mapUser([userFound][0]));
   } catch {
     return res.status(404).send("User doest not exist");
@@ -57,6 +63,9 @@ const newPasswordEmail = async (req, res) => {
         validUser.payload._id,
         password
       );
+      if (userPasswordUpdate.error) {
+        return res.status(400).send(userPasswordUpdate.data.message);
+      }
       await userPasswordUpdate.data.save();
       return res.status(200).send(`Password was successfully updated`);
     } else {
@@ -76,6 +85,9 @@ const newPasswordProfile = async (req, res) => {
         validUser._id,
         password
       );
+      if (userPasswordUpdate.error) {
+        return res.status(400).send(userPasswordUpdate.data.message);
+      }
       await userPasswordUpdate.data.save();
       return res.status(200).send(`Password was successfully updated`);
     } else {
