@@ -59,8 +59,6 @@ router.get("/branches", async (req,res) => {
 });
 
 
-
-
 router.get("/:id", async (req, res) => {
   // Recibo por params idUsuario y busco en coleccion apppointments todas las que coincidan con el userId recibido
   try {

@@ -5,9 +5,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { BsCheckSquare } from "react-icons/bs";
 import Modal from "@/commons/Modal";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function FormUserData() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [repeatPasswordShown, setRepeatPasswordShown] = useState(false);
   const [user, setUser] = useState();
   const [status, setStatus] = useState(true);
   const { data } = useSession();
@@ -50,6 +53,12 @@ export default function FormUserData() {
     },
     validationSchema: validationUserData.validationSchema,
   });
+
+  const togglePasswordVisibility = (password) => {
+    password === "password"
+      ? setPasswordShown(!passwordShown)
+      : setRepeatPasswordShown(!repeatPasswordShown);
+  };
 
   return (
     <>
@@ -119,38 +128,62 @@ export default function FormUserData() {
             </div>
             <div className="div-split-two">
               <div className="div-inter-50-left">
-                <label htmlFor="pass">Contraseña</label>
-                <input
-                  className={`input-primary width-100 ${
-                    formik.touched.password && formik.errors.password
-                      ? "error-input"
-                      : ""
-                  }`}
-                  type="password"
-                  id="password"
-                  onChange={formik.handleChange}
-                  placeholder={"Ingrese su nueva contraseña"}
-                  disabled={status}
-                  value={formik.values.password || ""}
-                />
+                <label htmlFor="pass" className="password-label">
+                  Contraseña
+                  <button
+                    type="button"
+                    style={{ top: "55%" }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      togglePasswordVisibility("password");
+                    }}
+                  >
+                    {repeatPasswordShown ? <FaEye /> : <FaEyeSlash />}
+                  </button>
+                  <input
+                    className={`input-primary width-100 ${
+                      formik.touched.password && formik.errors.password
+                        ? "error-input"
+                        : ""
+                    }`}
+                    type={passwordShown ? "text" : "password"}
+                    id="password"
+                    onChange={formik.handleChange}
+                    placeholder={"Ingrese su nueva contraseña"}
+                    disabled={status}
+                    value={formik.values.password || ""}
+                  />
+                </label>
                 <span>{formik.errors.password}</span>
               </div>
 
               <div className="div-inter-50-right">
-                <label htmlFor="pass">Repetir Contraseña</label>
-                <input
-                  className={`input-primary width-100 ${
-                    formik.touched.password && formik.errors.password
-                      ? "error-input"
-                      : ""
-                  }`}
-                  type="password"
-                  id="repeatPassword"
-                  onChange={formik.handleChange}
-                  placeholder={"Ingrese su nueva contraseña"}
-                  disabled={status}
-                  value={formik.values.repeatPassword || ""}
-                />
+                <label htmlFor="pass" className="password-label">
+                  Repetir Contraseña
+                  <button
+                    type="button"
+                    style={{ top: "55%" }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      togglePasswordVisibility("repeatPassword");
+                    }}
+                  >
+                    {repeatPasswordShown ? <FaEye /> : <FaEyeSlash />}
+                  </button>
+                  <input
+                    className={`input-primary width-100 ${
+                      formik.touched.password && formik.errors.password
+                        ? "error-input"
+                        : ""
+                    }`}
+                    type={repeatPasswordShown ? "text" : "password"}
+                    id="repeatPassword"
+                    onChange={formik.handleChange}
+                    placeholder={"Ingrese su nueva contraseña"}
+                    disabled={status}
+                    value={formik.values.repeatPassword || ""}
+                  />
+                </label>
                 <span>{formik.errors.repeatPassword}</span>
               </div>
             </div>

@@ -9,11 +9,14 @@ import { BsCheckSquare } from "react-icons/bs";
 import { MdCancelPresentation } from "react-icons/md";
 import Modal from "@/commons/Modal";
 import { useRouter } from "next/router";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function FormRegister() {
   const router = useRouter();
   const input = useRef(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [repeatPasswordShown, setRepeatPasswordShown] = useState(false);
   const [mail, setMail] = useState("");
   const [mayuscula, setMayuscula] = useState({
     oracion: "ABC tiene una mayúscula",
@@ -31,6 +34,12 @@ export default function FormRegister() {
     oracion: "*** Minimo 8 caracteres",
     color: "$septenaryGrey",
   });
+
+  const togglePasswordVisibility = (password) => {
+    password === "password"
+      ? setPasswordShown(!passwordShown)
+      : setRepeatPasswordShown(!repeatPasswordShown);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -51,8 +60,11 @@ export default function FormRegister() {
         });
         setModalIsOpen(true);
       } catch (err) {
+        setMail("error-input");
         if (err) {
-          setMail("error-input");
+          setTimeout(() => {
+            setMail("");
+          }, 2000);
         }
       }
     },
@@ -143,37 +155,68 @@ export default function FormRegister() {
                 onChange={formik.handleChange}
                 value={formik.values.email}
               />
+              <div className="email-error">
+                {mail === "error-input" ? (
+                  <span className="email-span">
+                    Este mail ya se encuentra en uso
+                  </span>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
             <div className="flex margin">
               <div className="input-margin">
-                <label htmlFor="password">Contraseña</label>
-                <input
-                  ref={input}
-                  className={`input-primary senary ${
-                    formik.touched.password && formik.errors.password
-                      ? "error-input"
-                      : ""
-                  }`}
-                  type="password"
-                  id="password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                />
+                <label htmlFor="password" className="password-label">
+                  Contraseña
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      togglePasswordVisibility("password");
+                    }}
+                  >
+                    {passwordShown ? <FaEye /> : <FaEyeSlash />}
+                  </button>
+                  <input
+                    ref={input}
+                    className={`input-primary senary ${
+                      formik.touched.password && formik.errors.password
+                        ? "error-input"
+                        : ""
+                    }`}
+                    type={passwordShown ? "text" : "password"}
+                    id="password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                  />
+                </label>
               </div>
               <div>
-                <label htmlFor="repeatPassword">Repetir Contraseña</label>
-                <input
-                  className={`input-primary senary ${
-                    formik.touched.repeatPassword &&
-                    formik.errors.repeatPassword
-                      ? "error-input"
-                      : ""
-                  }`}
-                  type="password"
-                  id="repeatPassword"
-                  onChange={formik.handleChange}
-                  value={formik.values.repeatPassword}
-                />
+                <label htmlFor="repeatPassword" className="password-label">
+                  Repetir Contraseña
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      togglePasswordVisibility("repeatPassword");
+                    }}
+                  >
+                    {repeatPasswordShown ? <FaEye /> : <FaEyeSlash />}
+                  </button>
+                  <input
+                    className={`input-primary senary ${
+                      formik.touched.repeatPassword &&
+                      formik.errors.repeatPassword
+                        ? "error-input"
+                        : ""
+                    }`}
+                    type={repeatPasswordShown ? "text" : "password"}
+                    id="repeatPassword"
+                    onChange={formik.handleChange}
+                    value={formik.values.repeatPassword}
+                  />
+                </label>
               </div>
             </div>
             <div className="validations">

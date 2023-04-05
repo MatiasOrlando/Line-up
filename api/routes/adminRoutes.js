@@ -1,5 +1,3 @@
-const User = require("../models/user");
-const Branch = require("../models/branch");
 const router = require("express").Router();
 const adminController = require("../controllers/admin_controller")
 const validateMiddleware = require("../middleWare/validateMiddleware");
@@ -13,7 +11,7 @@ router.post("/create-operator", validateMiddleware.isAdmin, adminController.crea
 router.post("/create-branch-and-operator", validateMiddleware.isAdmin, adminController.createOperatorAndBranch);
 
 // CREA UNA SUCURSAL SIN NINGUN OPERADOR PARA QUE DESPUES SE LO ASIGNES CUANDO LO CREES EN LA PRIMERA RUTA COMO EN EL FIGMA
-router.post("/create-branch", validateMiddleware.isAdmin, adminController.create_branch_post);
+router.post("/create-branch", validateMiddleware.isAdmin, adminController.createBranchContoller);
 
 
 // MODIFICA EL OPERADOR DE UNA SUCURSAL, LA BRANCH LA ENCUENTRA POR(req.params.branchId) y le llega por body todos los datos del nuevo operador para crear 

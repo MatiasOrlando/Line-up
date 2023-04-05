@@ -9,6 +9,7 @@ export default function Message() {
   };
 
   if (closeMessage) return <></>;
+
   return (
     <div className="message-container">
       <div className="message-first">

@@ -1,4 +1,5 @@
-const contacto = () => {
+const contacto = ({ branches }) => {
+  console.log(branches);
   return <div>Contacto</div>;
 };
 
