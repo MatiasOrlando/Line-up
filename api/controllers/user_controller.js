@@ -7,7 +7,7 @@ const registerUser = async (req, res) => {
   try {
     const newUser = await UsersService.userRegister(req.body);
     if (!newUser.error) {
-      res.status(200).send(mapUser([newUser.data])[0]);
+      res.status(201).send(mapUser([newUser.data])[0]);
     }
     return res.status(400).send(newUser.data.message);
   } catch {
