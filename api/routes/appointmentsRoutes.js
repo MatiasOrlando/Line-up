@@ -3,6 +3,7 @@ const User = require("../models/user");
 const Branch = require("../models/branch");
 const Appointment = require("../models/appointment");
 const { DateTime } = require("luxon");
+const moment = require("moment");
 
 router.post("/add", async (req, res) => {
   const idUser = "6421daa054ed9950496a68b3";
@@ -60,17 +61,19 @@ router.get("/branches", async (req, res) => {
 
 router.get("/daysavailable", async (req, res) => {
   const { days, branch } = req.body;
+
   try {
     const selectedBranch = await Branch.find({ name: branch });
-    const { openingHour, closingHour, allowedClients } = selectedBranch;
+    const { openingHour, closingHour, allowedClients } = selectedBranch[0];
+
     const openingTime = DateTime.fromFormat(openingHour, "HH:mm");
     const closingTime = DateTime.fromFormat(closingHour, "HH:mm");
     const hoursOpen = closingTime.diff(openingTime, "hours").hours;
     const appoinmentsPerDay = hoursOpen * 4 * allowedClients;
     const arrayToSend = [];
     const promises = days.map(async (day) => {
-      const availableAppointments = await Appointment.find({ date: day });
-      if (availableAppointments.length < appoinmentsPerDay) {
+      const availableAppoinments = await Appointment.find({ date: day });
+      if (availableAppoinments.length < appoinmentsPerDay) {
         arrayToSend.push(day);
       }
     });
@@ -78,6 +81,60 @@ router.get("/daysavailable", async (req, res) => {
     await Promise.all(promises);
 
     return res.status(200).send(arrayToSend);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/hoursavailable", async (req, res) => {
+  const { day, branch } = req.body;
+  try {
+    const fechaSeleccionada = day; // Reemplaza esto con tu fecha seleccionada
+    const selectedBranch = await Branch.find({ name: branch });
+    const { openingHour, closingHour, allowedClients } = selectedBranch[0];
+    const openingTime = moment(openingHour, "HH:mm");
+    const closingTime = moment(closingHour, "HH:mm");
+    const duration = moment.duration(closingTime.diff(openingTime));
+    const numIntervals = Math.ceil(duration.asMinutes() / 15);
+
+    const horarios = {};
+    for (let i = 0; i < numIntervals; i++) {
+      const start = openingTime.clone().add(i * 15, "minutes");
+      const horario = start.format("HH:mm");
+      horarios[horario] = { horario: horario, count: 0 };
+    }
+
+    // Realiza la consulta de agregación en MongoDB
+    const appointments = await Appointment.aggregate([
+      {
+        $match: { fecha: fechaSeleccionada },
+      },
+      {
+        $group: {
+          _id: "$horario",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Actualiza los valores del objeto con los valores obtenidos de la consulta
+    appointments.forEach((appointment) => {
+      const horario = appointment._id;
+      const count = appointment.count;
+      if (horarios.hasOwnProperty(horario)) {
+        horarios[horario].count = count;
+      }
+    });
+
+    // Convierte el objeto en un array y envíalo como respuesta
+    const resultados = Object.values(horarios);
+    const horariosDisponibles = [];
+    resultados.map((resultado) => {
+      if (resultado.count < allowedClients) {
+        horariosDisponibles.push(resultado.horario);
+      }
+    });
+    res.status(200).send(horariosDisponibles);
   } catch (error) {
     console.log(error);
   }
