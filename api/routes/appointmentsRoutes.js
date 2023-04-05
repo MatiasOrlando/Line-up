@@ -44,10 +44,11 @@ router.post("/add", async (req, res) => {
   }
 });
 
+
 router.get("/branches", async (req,res) => {
   try {
     const names = []
-    const branchesNames = await Branch.find({});
+    const branchesNames = await Branch.find();
     branchesNames.map(branch => {
      return names.push(branch.name)
     })
