@@ -5,9 +5,11 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useFormik } from "formik";
 import validationPassword from "../../components/FormLogin/validation/validationPassword";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const createPassword = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [repeatPasswordShown, setRepeatPasswordShown] = useState(false);
   const router = useRouter();
   const { token } = router.query;
 
@@ -35,6 +37,12 @@ const createPassword = () => {
     validationSchema: validationPassword.validationSchema,
   });
 
+  const togglePasswordVisibility = (password) => {
+    password === "password"
+      ? setPasswordShown(!passwordShown)
+      : setRepeatPasswordShown(!repeatPasswordShown);
+  };
+
   return (
     <>
       <div className="container-form-login">
@@ -57,35 +65,60 @@ const createPassword = () => {
               </p>
             </div>
             <div className="login-form_box-input">
-              <label>Contraseña</label>
-              <input
-                style={{ marginBottom: "20px" }}
-                className={`input-primary width-100 ${
-                  formik.touched.password && formik.errors.password
-                    ? "error-input"
-                    : ""
-                }`}
-                type="password"
-                id="password"
-                onChange={formik.handleChange}
-                value={formik.values.password}
-              />
+              <label className="password-label">
+                Contraseña
+                <button
+                  type="button"
+                  style={{ top: "42%" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    togglePasswordVisibility("password");
+                  }}
+                >
+                  {repeatPasswordShown ? <FaEye /> : <FaEyeSlash />}
+                </button>
+                <input
+                  style={{ marginBottom: "20px" }}
+                  className={`input-primary width-100 ${
+                    formik.touched.password && formik.errors.password
+                      ? "error-input"
+                      : ""
+                  }`}
+                  type={passwordShown ? "text" : "password"}
+                  id="password"
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
+                />
+              </label>
               <div className="box-span"></div>
             </div>
             <div className="login-form_box-input">
-              <label>Repetir Contraseña</label>
-              <input
-                style={{ marginBottom: "20px" }}
-                className={`input-primary width-100 ${
-                  formik.touched.repeatPassword && formik.errors.repeatPassword
-                    ? "error-input"
-                    : ""
-                }`}
-                type="password"
-                id="repeatPassword"
-                onChange={formik.handleChange}
-                value={formik.values.repeatPassword}
-              />
+              <label className="password-label">
+                Repetir Contraseña
+                <button
+                  type="button"
+                  style={{ top: "42%" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    togglePasswordVisibility("repeatPassword");
+                  }}
+                >
+                  {repeatPasswordShown ? <FaEye /> : <FaEyeSlash />}
+                </button>
+                <input
+                  style={{ marginBottom: "20px" }}
+                  className={`input-primary width-100 ${
+                    formik.touched.repeatPassword &&
+                    formik.errors.repeatPassword
+                      ? "error-input"
+                      : ""
+                  }`}
+                  type={repeatPasswordShown ? "text" : "password"}
+                  id="repeatPassword"
+                  onChange={formik.handleChange}
+                  value={formik.values.repeatPassword}
+                />
+              </label>
               <div className="box-span"></div>
             </div>
             <div>

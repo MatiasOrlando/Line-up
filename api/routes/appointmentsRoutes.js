@@ -104,7 +104,6 @@ router.get("/hoursavailable", async (req, res) => {
       horarios[horario] = { horario: horario, count: 0 };
     }
 
-    // Realiza la consulta de agregación en MongoDB
     const appointments = await Appointment.aggregate([
       {
         $match: { fecha: fechaSeleccionada },
@@ -117,7 +116,7 @@ router.get("/hoursavailable", async (req, res) => {
       },
     ]);
 
-    // Actualiza los valores del objeto con los valores obtenidos de la consulta
+  
     appointments.forEach((appointment) => {
       const horario = appointment._id;
       const count = appointment.count;
@@ -126,7 +125,7 @@ router.get("/hoursavailable", async (req, res) => {
       }
     });
 
-    // Convierte el objeto en un array y envíalo como respuesta
+
     const resultados = Object.values(horarios);
     const horariosDisponibles = [];
     resultados.map((resultado) => {
@@ -141,7 +140,6 @@ router.get("/hoursavailable", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  // Recibo por params idUsuario y busco en coleccion apppointments todas las que coincidan con el userId recibido
   try {
     const idUser = "6422b1e34da6f9b3f79ba531";
     /* const userAppointments = await Appointment.find({

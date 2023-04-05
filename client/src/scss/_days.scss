@@ -1,6 +1,6 @@
 @import "./colors";
 
-button {
+.button-day {
   appearance: none;
   border: none;
   background: none;
@@ -8,6 +8,7 @@ button {
   font: inherit;
   padding: 0;
   margin: 0;
+  margin-bottom: 0.5rem;
 }
 .calendary-days {
   display: flex;

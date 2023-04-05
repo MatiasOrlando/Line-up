@@ -5,11 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ForgetPassword from "./ForgetPassword";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function FormLogin() {
   const [forgetPassword, setForgetPassword] = useState(false);
   const [credentials, setCredentials] = useState("");
+  const [passwordShown, setPasswordShown] = useState(false);
   const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       user: "",
@@ -39,6 +42,10 @@ export default function FormLogin() {
     setForgetPassword(true);
   };
 
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
+  };
+
   if (forgetPassword) {
     return <ForgetPassword setForgetPassword={setForgetPassword} />;
   }
@@ -63,17 +70,29 @@ export default function FormLogin() {
             />
             <div className="box-span"></div>
           </div>
-          <div className="login-form_box-input">
-            <label htmlFor="pass">Contraseña</label>
-            <input
-              className={`input-primary width-100 ${
-                formik.touched.pass && formik.errors.pass ? "error-input" : ""
-              }`}
-              type="password"
-              id="pass"
-              onChange={formik.handleChange}
-              value={formik.values.pass}
-            />
+          <div
+            className="login-form_box-input
+           password-label"
+          >
+            <label htmlFor="pass">
+              Contraseña
+              <button
+                type="button"
+                style={{ top: "55%" }}
+                onClick={() => togglePasswordVisibility()}
+              >
+                {passwordShown ? <FaEye /> : <FaEyeSlash />}
+              </button>
+              <input
+                className={`input-primary width-100 ${
+                  formik.touched.pass && formik.errors.pass ? "error-input" : ""
+                }`}
+                type={passwordShown ? "text" : "password"}
+                id="pass"
+                onChange={formik.handleChange}
+                value={formik.values.pass}
+              />
+            </label>
           </div>
           <div className="credentials-box">
             <span>{credentials}</span>
