@@ -1,9 +1,12 @@
 import { DateTime } from "luxon";
 import { useEffect } from "react";
 import { useState } from "react";
-//const nombreMes = dt.get("monthLong").charAt(0).toUpperCase() + dt.get("monthLong").slice(1);
+import { useRouter } from "next/router";
 
 export default function FormReserva() {
+  const router = useRouter();
+  const pathname = router.pathname;
+
   const today = DateTime.local();
   const initialDayOfCurrentMonth = today.startOf("month").weekday;
   const nombreMes =
@@ -16,8 +19,12 @@ export default function FormReserva() {
   const maxItems = 42;
   const loadingData = new Array(42).fill("x", 0, maxItems);
   let aux = initialDayOfCurrentMonth - 1;
-
   const currentMonthDates = [];
+
+  useEffect(() => {
+    if (pathname === "/reserva") document.body.classList.add("bg-grey2");
+  }, [pathname]);
+
   for (let i = 0; i < lastDayOfMonth.day; i++) {
     currentMonthDates.push(firstDayOfMonth.plus({ days: i }));
   }
@@ -70,56 +77,60 @@ export default function FormReserva() {
     }
   }, [tiempoRestante]);
 
-  const arr=[]
+  const arr = [];
 
-  loadingData.forEach(date => {
-   arr.push(date.toFormat("dd-MM-yyyy"))
+  loadingData.forEach((date) => {
+    arr.push(date.toFormat("dd-MM-yyyy"));
   });
 
-  const fechasFiltradas = arr.filter(fecha => {
-    const fechaComparar = DateTime.fromFormat(fecha, 'dd-MM-yyyy');
+  const fechasFiltradas = arr.filter((fecha) => {
+    const fechaComparar = DateTime.fromFormat(fecha, "dd-MM-yyyy");
     return fechaComparar >= today;
   });
 
-  fechasFiltradas.unshift(today.toFormat("dd-MM-yyyy"))//enviar al back
+  fechasFiltradas.unshift(today.toFormat("dd-MM-yyyy")); //enviar al back
 
+  console.log(fechasFiltradas);
+  
   return (
-    <div className="master-div">
-      <div className="content-container">
-        <h1 className="reserva-title">Hacer una reserva</h1>
-        <div className="reserva-form-container">
-          <h2 className="reserva-title-2">Reserva</h2>
-          <h3 className="reserva-title-3">Seleccioná tu sucursal</h3>
-          <p>form check</p>
-          <h3 className="reserva-title-3">Sucursal</h3>
-          <select className="input-primary w100" />
-        </div>
-        <div className="calendar-container" >
-          <h2>
-            {nombreMes} {year}
-          </h2>
-          <ol>
-            <li className="day-name">Do</li>
-            <li className="day-name">Lu</li>
-            <li className="day-name">Ma</li>
-            <li className="day-name">Mi</li>
-            <li className="day-name">Ju</li>
-            <li className="day-name">Vi</li>
-            <li className="day-name">Sa</li>
-            {loadingData.map((day, i) => {
-              return (
-                <button disabled={true} className="calendary-days button-day" key={i}>
-                  {day.day}
-                </button>
-              );
-            })}
-          </ol>
-        </div>
-        <div className="countdown-container">
-          <button className="btn-primary sc">
-            Quedan {formatearTiempo(tiempoRestante)}
-          </button>
-        </div>
+    <div className="content-container">
+      <h1 className="reserva-title">Hacer una reserva</h1>
+      <div className="reserva-form-container">
+        <h2>Reserva</h2>
+        <h3 className="reserva-title-3">Seleccioná tu sucursal</h3>
+        <p>form check</p>
+        <h3 className="reserva-title-3">Sucursal</h3>
+        <select className="input-primary w100" />
+      </div>
+      <div className="calendar-container color-grey4">
+        <h2>
+          {nombreMes} {year}
+        </h2>
+        <ol>
+          <li className="day-name color-grey4">Do</li>
+          <li className="day-name color-grey4">Lu</li>
+          <li className="day-name color-grey4">Ma</li>
+          <li className="day-name color-grey4">Mi</li>
+          <li className="day-name color-grey4">Ju</li>
+          <li className="day-name color-grey4">Vi</li>
+          <li className="day-name color-grey4">Sa</li>
+          {loadingData.map((day, i) => {
+            return (
+              <button
+                disabled={true}
+                className="calendary-days button-day"
+                key={i}
+              >
+                {day.day}
+              </button>
+            );
+          })}
+        </ol>
+      </div>
+      <div className="countdown-container">
+        <button className="btn-primary sc">
+          Quedan {formatearTiempo(tiempoRestante)}
+        </button>
       </div>
     </div>
   );
