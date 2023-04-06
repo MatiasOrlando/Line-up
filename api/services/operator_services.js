@@ -12,11 +12,12 @@ class operator_services {
         const appointmentsOfBranchArray = await Appointment.find({"sucursal.id": branchId,});
         const dataForOperator = appointmentsOfBranchArray.map((item) => { return { date: item.date, timeOfAppontment: item.timeOfAppontment, status: item.status, sucursal: item.sucursal.location, user: item.user.name, id: item.id } });
         const page = dataForOperator.splice(limit - 7, limit);
-        return({error: false, data: page});
+        return({error: false, data: page, length: appointmentsOfBranchArray.length});
       } catch (err) {
         return({error: true, data: err})
       }
 }
+
 
 
 static async editStatusOfAppointment(status, appointmentId, _id) {

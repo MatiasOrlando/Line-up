@@ -167,3 +167,4 @@ exports.get_all_branches_get = async (req, res, next) => {
     return res.status(400).send({ message: "failed to get all branches in page " + number + " from the database" });
   }
 }
+

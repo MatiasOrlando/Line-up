@@ -117,13 +117,14 @@ class admin_services {
             const allBranches = await Branch.find();
             const branchesData = allBranches.map((item) => { return { email: item.user.email, allowedClients: item.allowedClients, hourRange: item.hourRange, id: item.id } });
             const page = branchesData.splice(limit - 7, limit);
-            return ({ error: false, data: page });
+            return ({ error: false, data: page, length: allBranches.length });
         }
         catch (err) {
             return ({ error: true, data: err });
         }
     }
 }
+
 
 
 
