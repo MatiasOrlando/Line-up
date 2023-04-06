@@ -86,11 +86,11 @@
  *           type: string
  *         location:
  *           type: string
- *         openingHour:
+ *         openingHour: 
  *           type: string
- *         closingHour:
+ *         closingHour: 
  *           type: string
- *         allowedClients:
+ *         allowedClients: 
  *           type: number
  *     CreateBranch:
  *       type: object
@@ -99,16 +99,16 @@
  *           type: string
  *         location:
  *           type: string
- *         openingHour:
+ *         openingHour: 
  *           type: string
- *         closingHour:
+ *         closingHour: 
  *           type: string
- *         allowedClients:
+ *         allowedClients: 
  *           type: number
  *         user:
  *           type: object
  *           properties:
- *             email:
+ *             email: 
  *               type: string
  *             phone:
  *               type: number
@@ -119,5 +119,5 @@
  *             name:
  *               type: string
  *             dni:
- *               type: number
+ *               type: number      
  */

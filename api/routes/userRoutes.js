@@ -3,8 +3,8 @@ const userControllers = require("../controllers/user_controller");
 const { emailConfirmation } = require("../config/emailConfirmation");
 
 /**
- * @openapi
- * /api/user/register:
+ *  @openapi
+ *  /api/user/register:
  *    post:
  *      tags:
  *        - users
