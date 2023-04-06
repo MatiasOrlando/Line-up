@@ -49,6 +49,9 @@ export default function FormUserData() {
         }
       );
       setModalIsOpen(true);
+      formik.values.password = "";
+      formik.values.repeatPassword = "";
+      setStatus(true);
     },
     validationSchema: validationUserData.validationSchema,
   });
@@ -58,7 +61,6 @@ export default function FormUserData() {
       ? setPasswordShown(!passwordShown)
       : setRepeatPasswordShown(!repeatPasswordShown);
   };
-  console.log(data);
   return (
     <>
       <div className="container-form-userdata">

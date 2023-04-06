@@ -4,7 +4,7 @@ import { getSession, useSession } from "next-auth/react";
 
 export async function getServerSideProps(context) {
   const token = await getSession(context);
-  if (!token.user) {
+  if (!token) {
     return {
       redirect: {
         destination: "/",
