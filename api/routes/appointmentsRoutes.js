@@ -65,7 +65,6 @@ router.get("/daysavailable", async (req, res) => {
   try {
     const selectedBranch = await Branch.find({ name: branch });
     const { openingHour, closingHour, allowedClients } = selectedBranch[0];
-
     const openingTime = DateTime.fromFormat(openingHour, "HH:mm");
     const closingTime = DateTime.fromFormat(closingHour, "HH:mm");
     const hoursOpen = closingTime.diff(openingTime, "hours").hours;
@@ -116,7 +115,6 @@ router.get("/hoursavailable", async (req, res) => {
       },
     ]);
 
-  
     appointments.forEach((appointment) => {
       const horario = appointment._id;
       const count = appointment.count;
@@ -124,7 +122,6 @@ router.get("/hoursavailable", async (req, res) => {
         horarios[horario].count = count;
       }
     });
-
 
     const resultados = Object.values(horarios);
     const horariosDisponibles = [];

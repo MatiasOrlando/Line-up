@@ -4,7 +4,7 @@ const validationUserData = {
   validationSchema: Yup.object({
     /*     phone: Yup.number(),  */
     password: Yup.string()
-      .required()
+      .required("")
       .test("has-lowercase", "ABC tiene una minúscula", (value) => {
         return /[a-z]/.test(value);
       })

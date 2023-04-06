@@ -13,15 +13,10 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    console.log("???????");
     const response = await fetch(
       `http://localhost:3001/api/operator/appointment/${pagination}/token?token=${token.user}`
     );
-
-
     const data = await response.json();
-
-    console.log(data);
     if (pagination > Math.ceil(data.length / 7) && data.length > 1) {
       return {
         redirect: {
