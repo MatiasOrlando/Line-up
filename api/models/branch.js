@@ -13,6 +13,7 @@ const BranchSchema = new mongoose.Schema({
       type: String,
       default: null,
     },
+    name: { type: String, default: null },
     phone: {
       type: Number,
       min: [9, "too few numbers"],

@@ -11,7 +11,7 @@ const registerUser = async (req, res) => {
     }
     return res.status(400).send(newUser.data.message);
   } catch {
-    return res.status(404).send(`ERROR registration process`);
+    return res.status(500).send(`ERROR proceso de registro`);
   }
 };
 
@@ -19,11 +19,11 @@ const getAllUsers = async (req, res) => {
   try {
     const getAllUsers = await UsersService.getAllUsers();
     if (getAllUsers.error) {
-      return res.status(400).send(getAllUsers.data.message);
+      return res.status(401).send(getAllUsers.data.message);
     }
     return res.status(200).send(mapUser(getAllUsers.data));
   } catch {
-    return res.status(404).send(`ERROR Fetching all users`);
+    return res.status(500).send(`ERROR Fetching all users`);
   }
 };
 
@@ -37,7 +37,7 @@ const logIn = async (req, res) => {
       return res.status(401).send(`No authorization, Invalid credentials`);
     return res.status(200).send(mapUser([userLogged.data])[0]);
   } catch {
-    return res.status(404).send("User not found");
+    return res.status(500).send("Server error");
   }
 };
 
@@ -46,55 +46,33 @@ const getSingleUser = async (req, res) => {
   try {
     const userFound = await UsersService.getSingleUser(id);
     if (userFound.error) {
-      return res.status(400).send(userFound.data.message);
+      return res.status(404).send(userFound.data.message);
     }
-    return res.status(200).send(mapUser([userFound][0]));
+    return res.status(200).send(mapUser([userFound.data])[0]);
   } catch {
-    return res.status(404).send("User doest not exist");
+    return res.status(500).send("Server error");
   }
 };
 
-const newPasswordEmail = async (req, res) => {
+const newPassword = async (req, res) => {
   const { password, token } = req.body;
   try {
     const validUser = validateToken(token);
-    if (validUser.payload) {
-      const userPasswordUpdate = await UsersService.newPasswordEmail(
-        validUser.payload._id,
+    if (validUser || validUser.payload) {
+      const userPasswordUpdate = await UsersService.newPassword(
+        validUser._id || validUser.payload._id,
         password
       );
       if (userPasswordUpdate.error) {
-        return res.status(400).send(userPasswordUpdate.data.message);
+        return res.status(404).send(userPasswordUpdate.data.message);
       }
       await userPasswordUpdate.data.save();
       return res.status(200).send(`Password was successfully updated`);
     } else {
-      return res.status(404).send(`Invalid credentials`);
+      return res.status(400).send(`Invalid credentials`);
     }
   } catch {
-    return res.status(404).send(`Password update currently unavailable`);
-  }
-};
-
-const newPasswordProfile = async (req, res) => {
-  const { password, token } = req.body;
-  try {
-    const validUser = validateToken(token);
-    if (validUser) {
-      const userPasswordUpdate = await UsersService.newPasswordEmail(
-        validUser._id,
-        password
-      );
-      if (userPasswordUpdate.error) {
-        return res.status(400).send(userPasswordUpdate.data.message);
-      }
-      await userPasswordUpdate.data.save();
-      return res.status(200).send(`Password was successfully updated`);
-    } else {
-      return res.status(404).send(`Invalid credentials`);
-    }
-  } catch {
-    return res.status(404).send(`Password update currently unavailable`);
+    return res.status(500).send(`Server Error`);
   }
 };
 
@@ -110,7 +88,7 @@ const passwordEmailUpdate = async (req, res) => {
       return res.status(400).send(`Invalid email`);
     }
   } catch {
-    return res.status(400).send(`Currently unavailable to update password`);
+    return res.status(500).send(`Currently unavailable to update password`);
   }
 };
 
@@ -118,9 +96,12 @@ const validateUserdata = async (req, res) => {
   const { token } = req.query;
   try {
     const decodeUser = await UsersService.validateUserdata(token);
+    if (decodeUser.error) {
+      return res.status(400).send("Invalid token");
+    }
     res.status(200).send(mapUser([decodeUser.data])[0]);
   } catch (error) {
-    return res.status(400).send({ message: "Invalid token" });
+    return res.status(500).send("Internal server error");
   }
 };
 
@@ -129,8 +110,7 @@ module.exports = {
   getAllUsers,
   logIn,
   getSingleUser,
-  newPasswordEmail,
-  newPasswordProfile,
+  newPassword,
   passwordEmailUpdate,
   validateUserdata,
 };

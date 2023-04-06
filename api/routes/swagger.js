@@ -18,7 +18,9 @@ const swaggerDocs = (app, num) => {
     res.send(swaggerSpec);
   });
 
-  console.log(`TEST FUNCIONA http://localhost:${num}/api/docs`);
+  console.log(
+    `Acceso documentacion rutas back-end http://localhost:${num}/api/docs`
+  );
 };
 
 module.exports = { swaggerDocs };

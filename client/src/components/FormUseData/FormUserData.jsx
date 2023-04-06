@@ -20,7 +20,7 @@ export default function FormUserData() {
       try {
         if (data && data?.user) {
           const tokenUser = await axios.get(
-            `http://localhost:3001/api/user/email/token?token=${data.user}`
+            `http://localhost:3001/api/user/validate/token?token=${data.user}`
           );
           if (tokenUser) {
             setUser(tokenUser.data);
@@ -32,7 +32,6 @@ export default function FormUserData() {
     };
     fetchUserData();
   }, [data]);
-
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -43,13 +42,16 @@ export default function FormUserData() {
     onSubmit: async (data) => {
       const { password } = data;
       const response = await axios.put(
-        `http://localhost:3001/api/user/new-password-profile`,
+        `http://localhost:3001/api/user/new-password`,
         {
           password,
           token: userToken.user,
         }
       );
       setModalIsOpen(true);
+      formik.values.password = "";
+      formik.values.repeatPassword = "";
+      setStatus(true);
     },
     validationSchema: validationUserData.validationSchema,
   });
@@ -59,7 +61,6 @@ export default function FormUserData() {
       ? setPasswordShown(!passwordShown)
       : setRepeatPasswordShown(!repeatPasswordShown);
   };
-
   return (
     <>
       <div className="container-form-userdata">

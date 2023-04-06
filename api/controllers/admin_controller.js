@@ -23,7 +23,7 @@ exports.create_operator_post = async (req, res, next) => {
 }
 
 exports.createOperatorAndBranch = async (req, res, next) => {
-  const branchInfo = { name: req.body.name, location: req.body.location, hourRange: req.body.hourRange, allowedClients: req.body.allowedClients };
+  const branchInfo = { name: req.body.name, location: req.body.location, closingHour: req.body.closingHour, openingHour: req.body.openingHour, allowedClients: req.body.allowedClients };
   const userInfo = { name: req.body.user.name, email: req.body.user.email, phone: req.body.user.phone, operator: req.body.user.operator, password: req.body.user.password, dni: req.body.user.dni };
   try {
     if (typeof (userInfo.phone) !== "number" || typeof (userInfo.email) !== "string" || typeof (userInfo.operator) !== "boolean" || typeof (userInfo.name) !== "string" || typeof (userInfo.password) !== "string") {
@@ -41,9 +41,9 @@ exports.createOperatorAndBranch = async (req, res, next) => {
 
 
 exports.createBranchContoller = async (req, res, next) => {
-  const body = {name: req.body.name, location: req.body.location, hourRange: req.body.hourRange, allowedClients: req.body.allowedClients };
+  const body = {name: req.body.name, location: req.body.location, closingHour: req.body.closingHour, openingHour: req.body.openingHour, allowedClients: req.body.allowedClients };
   try {
-    if (typeof(body.name) !== "string" || typeof (body.location) !== "string" || typeof (body.hourRange) !== "string" || typeof (body.allowedClients) !== "number") {   
+    if (typeof(body.name) !== "string" || typeof (body.location) !== "string" || typeof (body.openingHour) !== "string" || typeof (body.closingHour) !== "string" || typeof (body.allowedClients) !== "number") {   
      return res.status(400).send({message: "invalid data types"});}
 
     const branchResult = await admin_services.createBranchOnly(body);
@@ -78,9 +78,9 @@ exports.edit_operator_put = async (req, res, next) => {
 
 exports.edit_branch_info = async (req, res, next) => {
   const { branchId } = req.params;
-  const { hourRange, allowedClients } = req.body;
+  const { closingHour, openingHour , allowedClients } = req.body;
   try {
-    const updatedBranchInfo = await admin_services.editBranchInfo(branchId, hourRange, allowedClients);
+    const updatedBranchInfo = await admin_services.editBranchInfo(branchId, openingHour, closingHour, allowedClients);
     if(!updatedBranchInfo.error){
       return res.status(200).send({message: "branch info updated succesfully"});
     }
@@ -124,8 +124,8 @@ exports.delete_user_delete = async (req, res, next) => {
 
 exports.get_all_users_get = async (req, res, next) => {
   const { number } = req.params;
+  const limit = number * 7;
   try {
-    const limit = number * 7;
     const allUsers = await admin_services.getAllUser(limit);
     if(!allUsers.error){
       return res.status(200).send(allUsers);
@@ -167,3 +167,4 @@ exports.get_all_branches_get = async (req, res, next) => {
     return res.status(400).send({ message: "failed to get all branches in page " + number + " from the database" });
   }
 }
+
