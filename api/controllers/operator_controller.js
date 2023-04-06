@@ -6,11 +6,11 @@ const { validateToken } = require("../config/token")
 exports.get_all_appointments_get = async (req, res, next) => {
   const { token } = req.query;
   const decodedUser = validateToken(token);
-  const { _id } = decodedUser;
+  const { email } = decodedUser;
   const number = req.params.numberOfPages;
   const limit = number * 7;
   try {
-    const pageOfAppointments = await operator_services.getAllAppointments(limit, _id);
+    const pageOfAppointments = await operator_services.getAllAppointments(limit, email);
     if(!pageOfAppointments.error){
       return res.status(200).send(pageOfAppointments);
     }

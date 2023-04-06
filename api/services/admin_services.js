@@ -6,7 +6,7 @@ class admin_services {
     static async create_operator(operatorInfo, location) {
         try {
             const newOperator = await User.create(operatorInfo);
-            const user = { id: newOperator.id, email: newOperator.email, phone: newOperator.phone, operator: newOperator.operator }
+            const user = { id: newOperator.id, name: newOperator.name, email: newOperator.email, phone: newOperator.phone, operator: newOperator.operator }
             const updatedBranch = await Branch.findOneAndUpdate({ location: location }, { $set: { user: user } }, { new: true })
             updatedBranch.save()
             return ({ error: false, data: updatedBranch })
@@ -19,10 +19,10 @@ class admin_services {
     static async createOperatorBranch(branchInfo, userInfo) {
         try {
             const operador = await User.create(userInfo);
-            const { id, email, phone, operator } = operador;
+            const { id, email, phone, operator, name } = operador;
             const createdBranch = await Branch.create({
                 name: branchInfo.name, location: branchInfo.location, closingHour: branchInfo.closingHour,openingHour: branchInfo.openingHour, allowedClients: branchInfo.allowedClients,
-                user: { id, email, phone, operator },
+                user: { id, email, phone, operator, name },
             });
             return ({ error: false, data: createdBranch });
         } catch (err) {
@@ -115,7 +115,7 @@ class admin_services {
     static async getAllBraches(limit) {
         try {
             const allBranches = await Branch.find();
-            const branchesData = allBranches.map((item) => { return { email: item.user.email, allowedClients: item.allowedClients, hourRange: item.hourRange, id: item.id } });
+            const branchesData = allBranches.map((item) => { return { email: item.user.email, name: item.user.name, allowedClients: item.allowedClients, hourRange: item.hourRange, id: item.id } });
             const page = branchesData.splice(limit - 7, limit);
             return ({ error: false, data: page, length: allBranches.length });
         }

@@ -518,7 +518,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *         in: query
  *     responses:
  *       Unauthorized:
- *         description: (Unauthorized) User unauthorized
+ *         description: (Unauthorized) User Unauthorized
  *       NotFound:
  *         description: (NotFound) No se encontró información
  *       BadRequest:

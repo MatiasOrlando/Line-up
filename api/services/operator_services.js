@@ -5,9 +5,9 @@ const Appointment = require("../models/appointment");
 
 
 class operator_services {
-  static async getAllAppointments(limit, _id) {
+  static async getAllAppointments(limit, email) {
     try {
-        const branchArray = await Branch.find({"user.id": _id ,});
+        const branchArray = await Branch.find({"user.email": email ,});
         const branchId = branchArray[0].id;
         const appointmentsOfBranchArray = await Appointment.find({"sucursal.id": branchId,});
         const dataForOperator = appointmentsOfBranchArray.map((item) => { return { date: item.date, timeOfAppontment: item.timeOfAppontment, status: item.status, sucursal: item.sucursal.location, user: item.user.name, id: item.id } });
