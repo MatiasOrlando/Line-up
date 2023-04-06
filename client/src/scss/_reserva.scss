@@ -115,3 +115,56 @@
 .color-grey4{
     color: $cuaternaryGrey;
 }
+
+.checkboxStage2 {
+appearance: none;
+width: 32px;
+height: 32px;
+background: #A442F1;
+border-radius: 8px;
+border: none;
+color: white;
+}
+.checkboxStage {
+appearance: none;
+width: 32px;
+height: 32px;
+background: $cuaternaryGrey;
+border-radius: 8px;
+border: none;
+color: white;
+
+}
+
+.lineStage2 {
+    position: absolute;
+    width : 100%;
+    height: 2px;
+    background-color: #A442F1;
+    border: 0;
+    z-index: -1;
+}
+.lineStage {
+    position: absolute;
+    width : 100%;
+    height: 2px;
+    background-color: $cuaternaryGrey;
+    border: 0;
+    z-index: -1;
+}
+
+
+.containerMother {
+   display: flex;
+   width: 100%;
+}
+
+.checkboxContainer { 
+  z-index: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+}
