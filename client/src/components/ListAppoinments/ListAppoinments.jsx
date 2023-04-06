@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 export default function ListAppoinments({ branches, length }) {
   const router = useRouter();
 
+  console.log(branches);
+
   const handleChange = (event, value) => {
     router.push(`/operadorReservas/${value}`);
   };

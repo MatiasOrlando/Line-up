@@ -9,7 +9,7 @@ import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-//<Image src={desplegableAbajo} alt="Flecha" />
+
 
 export default function Header({ hide }) {
   const [user, setUser] = useState(null);
@@ -19,9 +19,8 @@ export default function Header({ hide }) {
     const fetchUserData = async () => {
       try {
         if (data && data?.user) {
-          console.log("?");
           const tokenUser = await axios.get(
-            `http://localhost:3001/api/user/email/token?token=${data.user}`
+            `http://localhost:3001/api/user/validate/token?token=${data.user}`
           );
           if (tokenUser) {
             setUser(tokenUser.data);
