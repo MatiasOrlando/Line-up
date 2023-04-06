@@ -156,13 +156,31 @@ export default function FormReserva({ branches }) {
     setHorarios(horario);
     setShow(true);
   };
-
+  const [violet, setViolet] = useState(true);
   return (
     <div className="content-container">
       <h1 className="reserva-title">Hacer una reserva</h1>
       <div className="reserva-form-container">
         <h2>Reserva</h2>
         <h3 className="reserva-title-3">Seleccioná tu sucursal</h3>
+        <div className="containerMother">
+          <div className="checkboxContainer">
+            <input
+              type="button"
+              className={violet ? "checkboxStage2" : "checkboxStage"}
+              value="1"
+            />
+            <hr className={violet ? "lineStage2" : "lineStage"} />
+          </div>
+          <div className="checkboxContainer">
+            <input type="button" className="checkboxStage" value="2" />
+            <hr className="lineStage" />
+          </div>
+          <div className="checkboxContainer">
+            <input type="button" className="checkboxStage" value="3" />
+            <hr className="lineStage" />
+          </div>
+        </div>
         <p>form check</p>
         <h3 className="reserva-title-3">Sucursal</h3>
         <select className="input-primary w100" onChange={handleChange}>
@@ -202,12 +220,12 @@ export default function FormReserva({ branches }) {
                 <h3 className="reserva-title-3">Nombre y Apellido</h3>
                 <input className="input-primary w95" type="text" />
               </div>
-              <div style={{justifyContent: "center"}} className="w50" >
+              <div style={{ justifyContent: "center" }} className="w50">
                 <h3 className="reserva-title-3">Telefono</h3>
-                <input  className="input-primary w95" type="text" />
+                <input className="input-primary w95" type="text" />
               </div>
-               <h3 className="reserva-title-3">Mail</h3>
-                <input className="input-primary w100" type="text" />
+              <h3 className="reserva-title-3">Mail</h3>
+              <input className="input-primary w100" type="text" />
             </form>
           </>
         )}
