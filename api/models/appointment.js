@@ -26,9 +26,10 @@ const AppointmentSchema = new mongoose.Schema({
   },
   sucursal: {
     id: { type: mongoose.Schema.Types.ObjectId, required: true },
-    location: { type: String, required: true },
+    name: { type: String, required: true },
     allowedClients: { type: Number, required: true },
-    hourRange: { type: String, required: true },
+    openingHour: { type: String, required: true },
+    closingHour: { type: String, required: true },
   },
 });
 

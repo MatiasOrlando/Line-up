@@ -28,6 +28,7 @@
 
 .reserva-title-3{
     font-size: 14px;
+    font-weight: 400;
 }
 
 .reserva-form-container{
@@ -59,7 +60,7 @@
     flex-basis: 35%;
 }
 
-ol{
+.grid-container{
     margin-top: 2rem;
     list-style: none;
     display: grid;
@@ -77,6 +78,22 @@ ol{
 .w100{
     width: 100%;
     margin: 0 auto;
+  }
+
+  .w50{
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .w95{
+    width: 95%;
+    margin: 0 auto
+  }
+
+  form > div {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px; /* Para agregar un margen entre los elementos */
   }
   
 .countdown-container{
