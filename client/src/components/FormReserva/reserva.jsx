@@ -3,12 +3,17 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 
+
+export default function FormReserva() {
+  const [violet, setViolet] = useState(true);
+
 export default function FormReserva({ branches }) {
   const [tiempoRestante, setTiempoRestante] = useState(300);
   const [datesAvailable, setDatesAvailable] = useState([]);
   const [show, setShow] = useState(false);
   const [hoursAvailable, setHoursAvailable] = useState([]);
   const [horarios, setHorarios] = useState([]);
+
 
   const router = useRouter();
   const pathname = router.pathname;
@@ -97,6 +102,11 @@ export default function FormReserva({ branches }) {
 
   fechasFiltradas.unshift(today.toFormat("dd-MM-yyyy")); //enviar al back
 
+
+  const [green, setGreen] = useState(false);
+  const handleSelect = () => {
+    setGreen(!green);
+
   const toggleEnabled = function (element, enable) {
     if (!enable) {
       element.disabled = false;
@@ -155,6 +165,7 @@ export default function FormReserva({ branches }) {
     horario = hours.data;
     setHorarios(horario);
     setShow(true);
+
   };
 
   return (
@@ -162,9 +173,34 @@ export default function FormReserva({ branches }) {
       <h1 className="reserva-title">Hacer una reserva</h1>
       <div className="reserva-form-container">
         <h2>Reserva</h2>
+        <div className="containerMother">
+          <div className="checkboxContainer">
+            <input
+              type="button"
+              className={violet ? "checkboxStage2" : "checkboxStage"}
+              value="1"
+            />
+            <hr className={violet ? "lineStage2" : "lineStage"} />
+          </div>
+          <div className="checkboxContainer">
+            <input type="button" className="checkboxStage" value="2" />
+            <hr className="lineStage" />
+          </div>
+          <div className="checkboxContainer">
+            <input type="button" className="checkboxStage" value="3" />
+            <hr className="lineStage" />
+          </div>
+        </div>
         <h3 className="reserva-title-3">Seleccioná tu sucursal</h3>
         <p>form check</p>
         <h3 className="reserva-title-3">Sucursal</h3>
+
+        <select className="input-primary w100" onChange={handleSelect}>
+          <option value="11">Person1</option>
+          <option value="27">Person2</option>
+          <option value="17">Person3</option>
+          <option value="10">Person4</option>
+        </select>
         <select className="input-primary w100" onChange={handleChange}>
           <option value="Selecciona una opcion">Selecciona una opción</option>
           {branches.map((name) => {
@@ -211,6 +247,7 @@ export default function FormReserva({ branches }) {
             </form>
           </>
         )}
+
       </div>
       <div className="calendar-container color-grey4">
         <h2>
