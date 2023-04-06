@@ -6,15 +6,15 @@ import axios from "axios";
 export default function FormReserva({ branches }) {
   const [tiempoRestante, setTiempoRestante] = useState(300);
   const [datesAvailable, setDatesAvailable] = useState([]);
+  const [show, setShow] = useState(false);
   const [hoursAvailable, setHoursAvailable] = useState([]);
-
+  const [horarios, setHorarios] = useState([]);
 
   const router = useRouter();
   const pathname = router.pathname;
 
   let selectedBranch = "";
   let horario = [];
-  let show = false;
 
   const today = DateTime.local();
   const initialDayOfCurrentMonth = today.startOf("month").weekday;
@@ -100,18 +100,17 @@ export default function FormReserva({ branches }) {
   const toggleEnabled = function (element, enable) {
     if (!enable) {
       element.disabled = false;
-      element.addEventListener("click",handleClick)
+      element.addEventListener("click", handleClick);
     } else {
       element.disabled = true;
     }
   };
 
-  
-
   const handleChange = async (e) => {
+    setShow(false);
     const branch = e.target.value;
     if (branch !== "Selecciona una opcion") {
-      selectedBranch = branch
+      selectedBranch = branch;
       const datesAvailables = await axios.post(
         "http://localhost:3001/api/appointments/daysavailable",
         {
@@ -133,7 +132,7 @@ export default function FormReserva({ branches }) {
         });
       });
     } else {
-      selectedBranch = ""
+      selectedBranch = "";
       loadingData.forEach((fecha, i) => {
         fecha.toFormat("dd-MM-yyyy");
         const element = document.getElementById(i);
@@ -143,18 +142,20 @@ export default function FormReserva({ branches }) {
   };
 
   const handleClick = async (e) => {
-    const selectedDate=e.target.value;
+    const selectedDate = e.target.value;
 
-    const hours = await axios.post("http://localhost:3001/api/appointments/hoursavailable",{
-      branch:selectedBranch,
-      day:selectedDate
-    })
+    const hours = await axios.post(
+      "http://localhost:3001/api/appointments/hoursavailable",
+      {
+        branch: selectedBranch,
+        day: selectedDate,
+      }
+    );
 
-    horario = hours.data
-    show = true
+    horario = hours.data;
+    setHorarios(horario);
+    setShow(true);
   };
-
-  useEffect(()=>{},[show])
 
   return (
     <div className="content-container">
@@ -175,26 +176,41 @@ export default function FormReserva({ branches }) {
           })}
         </select>
 
-
-        <div key={show}>{ show ? <> <h3 className="reserva-title-3">Horario</h3>
-        <select className="input-primary w100" onChange={handleChange}>
-          <option value="Selecciona una opcion">Selecciona una opción</option>
-          {branches.map((name) => {
-            return (
-              <option value={name} key={name}>
-                {name}
+        {show && (
+          <>
+            <h3 className="reserva-title-3">Horario</h3>
+            <select
+              className="input-primary w100"
+              onChange={(e) => {
+                console.log(e.target.value);
+              }}
+            >
+              <option value="Selecciona una opcion">
+                Selecciona una opción
               </option>
-            );
-          })}
-        </select></> : null}</div>
-
-
-
-        {/* <form action="submit">
-
-        </form> */}
-
-
+              {console.log(horarios)}
+              {horarios.map((hora) => {
+                return (
+                  <option value={hora} key={hora}>
+                    {hora}
+                  </option>
+                );
+              })}
+            </select>
+            <form className="w100" action="">
+              <div className="w50">
+                <h3 className="reserva-title-3">Nombre y Apellido</h3>
+                <input className="input-primary w95" type="text" />
+              </div>
+              <div style={{justifyContent: "center"}} className="w50" >
+                <h3 className="reserva-title-3">Telefono</h3>
+                <input  className="input-primary w95" type="text" />
+              </div>
+               <h3 className="reserva-title-3">Mail</h3>
+                <input className="input-primary w100" type="text" />
+            </form>
+          </>
+        )}
       </div>
       <div className="calendar-container color-grey4">
         <h2>

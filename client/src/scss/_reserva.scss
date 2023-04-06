@@ -79,6 +79,22 @@
     width: 100%;
     margin: 0 auto;
   }
+
+  .w50{
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .w95{
+    width: 95%;
+    margin: 0 auto
+  }
+
+  form > div {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px; /* Para agregar un margen entre los elementos */
+  }
   
 .countdown-container{
   width: 100%;

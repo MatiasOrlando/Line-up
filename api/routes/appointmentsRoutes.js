@@ -5,44 +5,86 @@ const Appointment = require("../models/appointment");
 const { DateTime } = require("luxon");
 const moment = require("moment");
 
+// router.post("/add", async (req, res) => {
+//   const idUser = "6421daa054ed9950496a68b3";
+//   const idBranch = "6421daa154ed9950496a68f4";
+//   const dateNumber = "2023-10-67742";
+//   try {
+//     const userFound = await User.findById(idUser).exec();
+//     const selectedBranch = await Branch.findById(idBranch).exec();
+//     const userAppointments = await Appointment.find({
+//       "user.id": userFound.id,
+//     });
+//     const arrayAppointmentsDate = userAppointments.filter((appointment) => {
+//       return appointment.date == dateNumber;
+//     });
+//     if (arrayAppointmentsDate.length) {
+//       return res.status(404).send(`No puede reservar mas de un turno por dia`);
+//     } else {
+//       const newAppointment = await Appointment.create({
+//         date: dateNumber,
+//         timeOfAppontment: "10:30",
+//         status: "pending",
+//         user: {
+//           id: userFound.id,
+//           name: userFound.name,
+//           email: userFound.email,
+//           phone: userFound.phone,
+//         },
+//         sucursal: {
+//           id: selectedBranch.id,
+//           location: selectedBranch.location,
+//           allowedClients: selectedBranch.allowedClients,
+//           hourRange: selectedBranch.hourRange,
+//         },
+//       });
+//       newAppointment.save();
+//       return res.send(newAppointment);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// });
+
 router.post("/add", async (req, res) => {
-  const idUser = "6421daa054ed9950496a68b3";
-  const idBranch = "6421daa154ed9950496a68f4";
-  const dateNumber = "2023-10-67742";
+  const { branch, name, email, phoneNew, day, time } = req.body;
   try {
-    const userFound = await User.findById(idUser).exec();
-    const selectedBranch = await Branch.findById(idBranch).exec();
-    const userAppointments = await Appointment.find({
-      "user.id": userFound.id,
+    const selectedBranch = await Branch.find({ name: branch });
+    const { allowedClients, openingHour, closingHour } = selectedBranch[0];
+    const user = await User.findOne({ email: email });
+    const { phone } = user;
+    const fullAppoinment = await Appointment.find({
+      day: day,
+      timeOfAppontment: time,
     });
-    const arrayAppointmentsDate = userAppointments.filter((appointment) => {
-      return appointment.date == dateNumber;
-    });
-    if (arrayAppointmentsDate.length) {
-      return res.status(404).send(`No puede reservar mas de un turno por dia`);
-    } else {
-      const newAppointment = await Appointment.create({
-        date: dateNumber,
-        timeOfAppontment: "10:30",
-        status: "pending",
+    if (fullAppoinment.length < allowedClients) {
+      let turno = {
+        date: day,
+        timeOfAppontment: time,
         user: {
-          id: userFound.id,
-          name: userFound.name,
-          email: userFound.email,
-          phone: userFound.phone,
+          id: user._id,
+          name: name,
+          email: email,
+          phone: phoneNew,
         },
         sucursal: {
-          id: selectedBranch.id,
-          location: selectedBranch.location,
-          allowedClients: selectedBranch.allowedClients,
-          hourRange: selectedBranch.hourRange,
+          id: selectedBranch[0]._id,
+          name: branch,
+          allowedClients: allowedClients,
+          openingHour: openingHour,
+          closingHour: closingHour,
         },
-      });
-      newAppointment.save();
-      return res.send(newAppointment);
+      };
+      await Appointment.create(turno);
+      if (phone !== phoneNew) {
+        await User.updateOne({ email: email }, { phone: phoneNew });
+      }
+      res.status(201).send(turno);
+    } else {
+      res.send("Turnos completos en el horario solicitado");
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 });
 
@@ -115,7 +157,6 @@ router.post("/hoursavailable", async (req, res) => {
       },
     ]);
 
-  
     appointments.forEach((appointment) => {
       const horario = appointment._id;
       const count = appointment.count;
@@ -123,7 +164,6 @@ router.post("/hoursavailable", async (req, res) => {
         horarios[horario].count = count;
       }
     });
-
 
     const resultados = Object.values(horarios);
     const horariosDisponibles = [];
