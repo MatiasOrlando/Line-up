@@ -14,8 +14,6 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *     parameters:
  *       - in: query
  *         name: token
- *         schema:
- *           type: string
  *         required: true
  *         description: Token for authentication
  *     requestBody:
@@ -36,7 +34,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
@@ -48,13 +46,17 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *     responses:
  *       Unauthorized:
  *         description: (Unauthorized) User unauthorized
- *       NotFound:
- *         description: (NotFound) No se encontró información
  *       BadRequest:
  *         description: (Bad Request) key data is missing
  *       ServerError:
  *         description: Error en servidor
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
  */
+
+
+
+
 
 /**
  * @openapi
@@ -62,7 +64,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *   post:
  *     tags:
  *       - operators
- *     summary: create a new operator and assigned him into a branch
+ *     summary: Create a new operator and assign them to a branch.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
@@ -90,7 +92,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
@@ -102,67 +104,35 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *     responses:
  *       Unauthorized:
  *         description: (Unauthorized) User unauthorized
- *       NotFound:
- *         description: (NotFound) No se encontró información
- *       BadRequest:
- *         description: (Bad Request) key data is missing
- *       ServerError:
- *         description: Error en servidor
- */
-
-/**
- * @openapi
- * /api/admin/create-branch-and-operator/token:
- *   post:
- *     tags:
- *       - operators - branches
- *     summary: create a new operator and assigned him into a branch
- *     security:
- *       - ApiKeyAuth: []
- *     parameters:
- *       - in: query
- *         name: token
- *         schema:
- *           type: string
- *         required: true
- *         description: Token for authentication
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateBranch'
- *       required: true
- *     responses:
- *       201:
- *         description: (OK) Created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/CreateBranch   '
- *       400:
- *         $ref: '#/components/responses/BadRequest'
- *       401:
- *         $ref: '#/components/responses/Unauthorized'
- *       404:
- *         $ref: '#/components/responses/NotFound'
- *       500:
- *         $ref: '#/components/responses/ServerError'
- *   components:
- *     securitySchemes:
- *       ApiKeyAuth:
- *         type: apiKey
- *         name: token
- *         in: query
- *     responses:
- *       Unauthorized:
- *         description: (Unauthorized) User unauthorized
- *       NotFound:
- *         description: (NotFound) No se encontró información
+ *               $ref: '#/components/schemas/Error'
  *       BadRequest:
- *         description: (Bad Request) key data is missing
+ *         description: (Bad Request) Key data is missing
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       ServerError:
  *         description: Error en servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       Error:
+ *         type: object
+ *         properties:
+ *           message:
+ *             type: string
+ *         required:
+ *           - message
  */
+
+
+
 
 /**
  * @openapi
@@ -170,7 +140,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *   put:
  *     tags:
  *       - operators - branches
- *     summary: edit operator of a branch
+ *     summary: Change the operator of a branch.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
@@ -203,7 +173,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
@@ -221,7 +191,8 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *         description: (Bad Request) key data is missing
  *       ServerError:
  *         description: Error en servidor
- */
+ */  
+
 
 /**
  * @openapi
@@ -229,7 +200,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *   put:
  *     tags:
  *       - branches 
- *     summary: edit branch info 
+ *     summary: Edit branch Closing-Hour, Opening-Hour and AllowedClients.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
@@ -262,7 +233,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
@@ -288,7 +259,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *   delete:
  *     tags:
  *       - branch 
- *     summary: delete user 
+ *     summary: Delete user from the database.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
@@ -311,7 +282,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
@@ -337,7 +308,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *   delete:
  *     tags:
  *       - branches 
- *     summary: delete branch 
+ *     summary: Delete a branch from the database.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
@@ -360,7 +331,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
@@ -386,7 +357,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *   get:
  *     tags:
  *       - users 
- *     summary: get all users
+ *     summary: Get all users based on the number of page requested.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
@@ -409,7 +380,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
@@ -435,7 +406,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *   get:
  *     tags:
  *       - branches 
- *     summary: get all branches
+ *     summary: Get all the branches based on the number of page requested.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
@@ -458,7 +429,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
@@ -484,7 +455,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *   get:
  *     tags:
  *       - operators 
- *     summary: get all operators
+ *     summary: Get all the operators based on the number of page requested.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
@@ -507,7 +478,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
