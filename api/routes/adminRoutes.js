@@ -2,6 +2,538 @@ const router = require("express").Router();
 const adminController = require("../controllers/admin_controller")
 const validateMiddleware = require("../middleWare/validateMiddleware");
 
+/**
+ * @openapi
+ * /api/admin/create-branch:
+ *   post:
+ *     tags:
+ *       - branches
+ *     summary: Create a new branch in the database with user null
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateBranchWithOperatorNull'
+ *       required: true
+ *     responses:
+ *       201:
+ *         description: (OK) Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CreateBranchWithOperatorNull'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+/**
+ * @openapi
+ * /api/admin/create-operator:
+ *   post:
+ *     tags:
+ *       - operators
+ *     summary: create a new operator and assigned him into a branch
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/createOperator'
+ *       required: true
+ *     responses:
+ *       201:
+ *         description: (OK) Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/createOperator'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+/**
+ * @openapi
+ * /api/admin/create-branch-and-operator:
+ *   post:
+ *     tags:
+ *       - operators - branches
+ *     summary: create a new operator and assigned him into a branch
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateBranch'
+ *       required: true
+ *     responses:
+ *       201:
+ *         description: (OK) Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CreateBranch   '
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+/**
+ * @openapi
+ * /api/admin/edit-operator/{branchId}:
+ *   put:
+ *     tags:
+ *       - operators - branches
+ *     summary: edit operator of a branch
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: branchId
+ *         in: path
+ *         schema: 
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/editOperator'
+ *       required: true
+ *     responses:
+ *       200:
+ *         description: (OK) Modified
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/editOperator'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+/**
+ * @openapi
+ * /api/admin/edit-branch-info/{branchId}:
+ *   put:
+ *     tags:
+ *       - branches 
+ *     summary: edit branch info 
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: branchId
+ *         in: path
+ *         schema: 
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/editBranch'
+ *       required: true
+ *     responses:
+ *       200:
+ *         description: (OK) Modified
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/editBranch'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+/**
+ * @openapi
+ * /api/admin/delete-user/{userId}:
+ *   delete:
+ *     tags:
+ *       - branch 
+ *     summary: delete user 
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         schema: 
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     responses:
+ *       200:
+ *         description: (OK) Deleted
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+/**
+ * @openapi
+ * /api/admin/delete-branch/{branchId}:
+ *   delete:
+ *     tags:
+ *       - branches 
+ *     summary: delete branch 
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: branchId
+ *         in: path
+ *         schema: 
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     responses:
+ *       200:
+ *         description: (OK) Deleted
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+/**
+ * @openapi
+ * /api/admin/get-all-users/{number}:
+ *   get:
+ *     tags:
+ *       - users 
+ *     summary: get all users
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: number
+ *         in: path
+ *         schema: 
+ *           type: number
+ *         required: true
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     responses:
+ *       200:
+ *         description: (OK) OK
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+/**
+ * @openapi
+ * /api/admin/get-all-branches/{number}:
+ *   get:
+ *     tags:
+ *       - branches 
+ *     summary: get all branches
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: number
+ *         in: path
+ *         schema: 
+ *           type: number
+ *         required: true
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     responses:
+ *       200:
+ *         description: (OK) OK
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+/**
+ * @openapi
+ * /api/admin/get-all-operators/{number}:
+ *   get:
+ *     tags:
+ *       - operators 
+ *     summary: get all operators
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: number
+ *         in: path
+ *         schema: 
+ *           type: number
+ *         required: true
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     responses:
+ *       200:
+ *         description: (OK) OK
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
+
+
+
+
+
+
+
+
 
 // admin id 
 // CREA OPERADOR(REQ.BODY) Y LE PISA EL BRANCH.USER(VACIO) CON LOS DATOS DEL NUEVO OPERADOR, ASIGNANDOLE UN OPERADOR A LA SUCURSAL(hay que pasarle req.boy.location) Y VICE VERSA

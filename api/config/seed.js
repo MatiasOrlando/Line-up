@@ -464,7 +464,8 @@ const CreateBranches = async () => {
 //           name:
 //             location[Math.floor(Math.random() * location.length)] + " SUCURSAL",
 //           location: location[Math.floor(Math.random() * location.length)],
-//           hourRange: generateHourRange(),
+//           closingHour: generateHourRange(),
+//           openingHour: generateHourRange(),
 //           allowedClients: ramdomAllowedClients(),
 //           user: { id, email, phone, operator },
 //         });

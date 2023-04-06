@@ -5,8 +5,8 @@ const { validateToken } = require("../config/token");
 const userControllers = require("../controllers/user_controller");
 
 /**
- * @openapi
- * /api/user/register:
+ *  @openapi
+ *  /api/user/register:
  *    post:
  *      tags:
  *        - users
