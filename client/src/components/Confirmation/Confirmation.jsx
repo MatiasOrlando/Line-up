@@ -4,6 +4,7 @@ import { AiOutlineTool } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import Link from "next/link";
 
 const Confirmation = () => {
   const num = "#1043812955480-01";
@@ -135,7 +136,9 @@ const Confirmation = () => {
             </button>
             <button className="button btn-quaternary">
               <AiOutlineClose className="icon" />
-              Cancelar reserva
+              <Link href={"/cancelar"} className="link">
+                Cancelar reserva
+              </Link>
             </button>
           </div>
         </div>

@@ -2,7 +2,6 @@
 
 .header-box {
   height: 76px;
-  background-color: white;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.08);
   background-color: white;
   display: flex;
@@ -17,23 +16,26 @@
     font-weight: 600;
     font-style: 14px;
     line-height: 16px;
-    font-family: 'Roboto';
+    font-family: "Roboto";
     color: #000000;
   }
-  button{
-    margin-left: 96px;
+  .box-btn {
+    margin-left: 90px;
+    display: flex;
+    gap: 14px;
   }
-  .options{
+  .options {
     margin-right: 80px;
-    display: flex; 
+    display: flex;
     align-items: center;
     gap: 20px;
-    .options-item{
+    .options-item {
       display: flex;
       align-items: center;
-      gap: 5px;
+      a {
+        display: flex;
+        gap: 5px;
+      }
     }
   }
-
 }
- 
