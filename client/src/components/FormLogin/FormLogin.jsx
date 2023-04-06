@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -20,20 +20,29 @@ export default function FormLogin() {
     },
     onSubmit: async () => {
       formik.handleReset();
-      await signIn("credentials", {
+      const signInRes = await signIn("credentials", {
         email: formik.values.user,
         password: formik.values.pass,
         redirect: false,
-      }).then(({ ok, error }) => {
-        if (ok) {
-          router.push("/reserva");
-        } else {
-          setCredentials("Credenciales invalidas");
-          setTimeout(() => {
-            setCredentials("");
-          }, 2000);
-        }
       });
+      const { ok, error } = signInRes;
+      if (ok) {
+        const session = await getSession();
+        if (session && session.role) {
+          if (session.role.admin) {
+            router.push("/sucursales/1");
+          } else if (session.role.operator) {
+            router.push("/operadorReservas/1");
+          } else {
+            router.push("/reserva");
+          }
+        }
+      } else {
+        setCredentials("Credenciales invalidas");
+        setTimeout(() => {
+          setCredentials("");
+        }, 2000);
+      }
     },
     validationSchema: validationLogin.validationSchema,
   });

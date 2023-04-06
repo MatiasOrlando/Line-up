@@ -43,11 +43,13 @@ export default NextAuth({
           expiresIn: "2d",
         });
         token.accessToken = dataToken;
+        token.role = { admin: user.admin, operator: user.operator };
       }
       return token;
     },
     async session({ session, token }) {
       session.user = token.accessToken;
+      session.role = token.role;
       return session;
     },
   },
