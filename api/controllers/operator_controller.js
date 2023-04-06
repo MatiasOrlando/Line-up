@@ -21,6 +21,7 @@ exports.get_all_appointments_get = async (req, res, next) => {
 }
 
 
+
 exports.edit_status_of_appointment = async (req, res, next) => {
   const status = req.body.status;
   const {appointmentId } = req.params;
