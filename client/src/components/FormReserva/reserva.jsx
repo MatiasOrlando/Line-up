@@ -13,6 +13,7 @@ export default function FormReserva({ branches }) {
   const [show, setShow] = useState(false);
   const [hoursAvailable, setHoursAvailable] = useState([]);
   const [horarios, setHorarios] = useState([]);
+  const [violet, setViolet] = useState(true);
 
 
   const router = useRouter();
