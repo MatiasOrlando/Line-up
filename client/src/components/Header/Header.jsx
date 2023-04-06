@@ -8,31 +8,14 @@ import branchIcon from "../../assets/branch.svg";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+import useVerification from "@/hooks/useVerification";
 import axios from "axios";
 
 
 export default function Header({ hide }) {
-  const [user, setUser] = useState(null);
-  const { data } = useSession();
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        if (data && data?.user) {
-          const tokenUser = await axios.get(
-            `http://localhost:3001/api/user/validate/token?token=${data.user}`
-          );
-          if (tokenUser) {
-            setUser(tokenUser.data);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUserData();
-  }, [data]);
-
+  
+  let {data,user} = useVerification();
+ 
   if (hide) {
     return null;
   }
