@@ -22,7 +22,7 @@ const createPassword = () => {
       try {
         if (token) {
           const res = await axios.put(
-            `http://localhost:3001/api/user/new-password-email`,
+            `http://localhost:3001/api/user/new-password`,
             {
               password: data.password,
               token,

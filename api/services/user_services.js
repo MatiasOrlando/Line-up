@@ -36,7 +36,7 @@ class UsersService {
       return { error: true, data: error };
     }
   }
-  static async newPasswordEmail(id, password) {
+  static async newPassword(id, password) {
     try {
       const userPasswordUpdate = await User.findByIdAndUpdate(
         { _id: id },
