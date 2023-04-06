@@ -3,9 +3,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-
 export default function FormReserva() {
-  
+  const [violet, setViolet] = useState(true);
   const router = useRouter();
   const pathname = router.pathname;
 
@@ -92,17 +91,43 @@ export default function FormReserva() {
 
   fechasFiltradas.unshift(today.toFormat("dd-MM-yyyy")); //enviar al back
 
-  console.log(fechasFiltradas);
-  
+  const [green, setGreen] = useState(false);
+  const handleSelect = () => {
+    setGreen(!green);
+  };
+
   return (
     <div className="content-container">
       <h1 className="reserva-title">Hacer una reserva</h1>
       <div className="reserva-form-container">
         <h2>Reserva</h2>
+        <div className="containerMother">
+          <div className="checkboxContainer">
+            <input
+              type="button"
+              className={violet ? "checkboxStage2" : "checkboxStage"}
+              value="1"
+            />
+            <hr className={violet ? "lineStage2" : "lineStage"} />
+          </div>
+          <div className="checkboxContainer">
+            <input type="button" className="checkboxStage" value="2" />
+            <hr className="lineStage" />
+          </div>
+          <div className="checkboxContainer">
+            <input type="button" className="checkboxStage" value="3" />
+            <hr className="lineStage" />
+          </div>
+        </div>
         <h3 className="reserva-title-3">Seleccioná tu sucursal</h3>
         <p>form check</p>
         <h3 className="reserva-title-3">Sucursal</h3>
-        <select className="input-primary w100" />
+        <select className="input-primary w100" onChange={handleSelect}>
+          <option value="11">Person1</option>
+          <option value="27">Person2</option>
+          <option value="17">Person3</option>
+          <option value="10">Person4</option>
+        </select>
       </div>
       <div className="calendar-container color-grey4">
         <h2>
