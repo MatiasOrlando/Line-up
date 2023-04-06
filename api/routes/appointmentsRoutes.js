@@ -59,9 +59,8 @@ router.get("/branches", async (req, res) => {
   }
 });
 
-router.get("/daysavailable", async (req, res) => {
+router.post("/daysavailable", async (req, res) => {
   const { days, branch } = req.body;
-
   try {
     const selectedBranch = await Branch.find({ name: branch });
     const { openingHour, closingHour, allowedClients } = selectedBranch[0];
@@ -86,10 +85,10 @@ router.get("/daysavailable", async (req, res) => {
   }
 });
 
-router.get("/hoursavailable", async (req, res) => {
+router.post("/hoursavailable", async (req, res) => {
   const { day, branch } = req.body;
   try {
-    const fechaSeleccionada = day; // Reemplaza esto con tu fecha seleccionada
+    const fechaSeleccionada = day;
     const selectedBranch = await Branch.find({ name: branch });
     const { openingHour, closingHour, allowedClients } = selectedBranch[0];
     const openingTime = moment(openingHour, "HH:mm");

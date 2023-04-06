@@ -28,6 +28,7 @@
 
 .reserva-title-3{
     font-size: 14px;
+    font-weight: 400;
 }
 
 .reserva-form-container{
@@ -59,7 +60,7 @@
     flex-basis: 35%;
 }
 
-ol{
+.grid-container{
     margin-top: 2rem;
     list-style: none;
     display: grid;
