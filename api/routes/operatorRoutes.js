@@ -1,6 +1,3 @@
-const User = require("../models/user");
-const Branch = require("../models/branch");
-const Appointment = require("../models/appointment");
 const router = require("express").Router();
 const operatorController = require("../controllers/operator_controller")
 const validateMiddleware = require("../middleWare/validateMiddleware").isOperator;
@@ -34,7 +31,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware").isOperato
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
@@ -93,7 +90,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware").isOperato
  *       401:
  *         $ref: '#/components/responses/Unauthorized'
  *       404:
- *         $ref: '#/components/responses/NotFound'
+ *         description: (NotFound) No se encontró información
  *       500:
  *         $ref: '#/components/responses/ServerError'
  *   components:
