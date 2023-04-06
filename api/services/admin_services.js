@@ -21,7 +21,7 @@ class admin_services {
             const operador = await User.create(userInfo);
             const { id, email, phone, operator } = operador;
             const createdBranch = await Branch.create({
-                name: branchInfo.name, location: branchInfo.location, hourRange: branchInfo.hourRange, allowedClients: branchInfo.allowedClients,
+                name: branchInfo.name, location: branchInfo.location, closingHour: branchInfo.closingHour,openingHour: branchInfo.openingHour, allowedClients: branchInfo.allowedClients,
                 user: { id, email, phone, operator },
             });
             return ({ error: false, data: createdBranch });
@@ -35,7 +35,7 @@ class admin_services {
     static async createBranchOnly(body) {
         try {
             const createdBranch = await Branch.create({
-                name: body.name, location: body.location, hourRange: body.hourRange, allowedClients: body.allowedClients
+                name: body.name, location: body.location, closingHour: body.closingHour, openingHour: body.openingHour, allowedClients: body.allowedClients
             });
             return ({ error: false, data: createdBranch });
 
@@ -59,9 +59,9 @@ class admin_services {
         }
     }
 
-    static async editBranchInfo(branchId, hourRange, allowedClients) {
+    static async editBranchInfo(branchId, openingHour, closingHour, allowedClients) {
         try {
-            const updatedBranch = await Branch.findOneAndUpdate({ _id: branchId }, { $set: { allowedClients: allowedClients, hourRange: hourRange } }, { new: true })
+            const updatedBranch = await Branch.findOneAndUpdate({ _id: branchId }, { $set: { openingHour: openingHour, closingHour: closingHour, allowedClients: allowedClients } }, { new: true })
             const savedBranch = await updatedBranch.save()
             return ({ error: false, data: savedBranch })
         } catch (err) {
