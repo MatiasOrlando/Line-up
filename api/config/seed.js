@@ -344,6 +344,7 @@ const sucursal = [
     closingHour: "22:00",
     allowedClients: 2,
     user: {
+      name:"pepe",
       email: "operator@example.com",
       phone: 1122334455,
       operator: true,
@@ -356,6 +357,7 @@ const sucursal = [
     closingHour: "20:00",
     allowedClients: 3,
     user: {
+      name:"pepe",
       email: "operator2@example.com",
       phone: 1122334455,
       operator: true,
@@ -368,6 +370,7 @@ const sucursal = [
     closingHour: "17:30",
     allowedClients: 4,
     user: {
+      name:"pepe",
       email: "operator3@example.com",
       phone: 1122334455,
       operator: true,
@@ -380,6 +383,7 @@ const sucursal = [
     closingHour: "17:00",
     allowedClients: 2,
     user: {
+      name:"pepe",
       email: "operator4@example.com",
       phone: 1122334455,
       operator: true,
@@ -392,6 +396,7 @@ const sucursal = [
     closingHour: "18:00",
     allowedClients: 5,
     user: {
+      name:"pepe",
       email: "operator5@example.com",
       phone: 1122334455,
       operator: true,
