@@ -1,6 +1,5 @@
 import FormReserva from "@/components/FormReserva/reserva";
-
-
+import { useSession } from "next-auth/react";
 
 export async function getServerSideProps(context) {
   const sessionToken = context.req.cookies["next-auth.session-token"];
@@ -12,7 +11,9 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    const response = await fetch("http://localhost:3001/api/appointments/branches");
+    const response = await fetch(
+      "http://localhost:3001/api/appointments/branches"
+    );
     const data = await response.json();
     return {
       props: {
