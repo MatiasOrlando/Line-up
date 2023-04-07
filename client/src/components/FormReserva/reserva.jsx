@@ -9,8 +9,7 @@ export default function FormReserva({ branches }) {
   const [show, setShow] = useState(false);
   const [hoursAvailable, setHoursAvailable] = useState([]);
   const [horarios, setHorarios] = useState([]);
-  const [violet, setViolet] = useState(true);
-
+  const [monthDay, setMonthDay] = useState("");
   const router = useRouter();
   const pathname = router.pathname;
 
@@ -19,9 +18,6 @@ export default function FormReserva({ branches }) {
 
   const today = DateTime.local();
   const initialDayOfCurrentMonth = today.startOf("month").weekday;
-  const nombreMes =
-    today.get("monthLong").charAt(0).toUpperCase() +
-    today.get("monthLong").slice(1);
   const year = today.year;
   const firstDayOfMonth = today.startOf("month");
   const lastDayOfMonth = today.endOf("month");
@@ -30,6 +26,13 @@ export default function FormReserva({ branches }) {
   const loadingData = new Array(42).fill("x", 0, maxItems);
   let aux = initialDayOfCurrentMonth - 1;
   const currentMonthDates = [];
+
+  useEffect(() => {
+    const nombreMes =
+      today.get("monthLong").charAt(0).toUpperCase() +
+      today.get("monthLong").slice(1);
+    setMonthDay(nombreMes);
+  }, []);
 
   useEffect(() => {
     if (pathname === "/reserva") document.body.classList.add("bg-grey2");
@@ -107,6 +110,65 @@ export default function FormReserva({ branches }) {
     }
   };
 
+  const handleClickBox = (index) => {
+    const newColors = [
+      {
+        color: "gray",
+        value: 1,
+        lineColor: "violetLine",
+        text: "Elegí tu sucursal",
+        className: "fontViolet",
+      },
+      {
+        color: "gray",
+        value: 2,
+        lineColor: "greyLine",
+        text: "Seleccioná el día",
+        className: "fontViolet",
+      },
+      {
+        color: "gray",
+        value: 3,
+        lineColor: "greyLine",
+        text: "Completá el formulario",
+        className: "fontViolet",
+      },
+    ];
+    if (index === 0) {
+      newColors[0].className = "fontGreen";
+      newColors[0].color = "green";
+      newColors[0].lineColor = "greenLine";
+      newColors[2].className = "fontGray";
+      newColors[1].color = colors[1].color === "green" ? "green" : "violet";
+      newColors[1].lineColor =
+        colors[1].color === "green" ? "greenLine" : "violetLine";
+      newColors[2].color = colors[1].color === "green" ? "violet" : "gray";
+    } else if (index === 1) {
+      newColors[0].className = "fontGreen";
+      newColors[1].className = "fontGreen";
+      newColors[0].color = colors[0].color === "green" ? "green" : "violet";
+      newColors[0].lineColor = "greenLine";
+      newColors[1].lineColor =
+        colors[1].color === "violet" ? "greenLine" : "violetLine";
+      newColors[1].color = "green";
+      newColors[2].color = "violet";
+      newColors[2].lineColor = "violetLine";
+    } else if (index === 2) {
+      newColors[0].className = "fontGreen";
+      newColors[1].className = "fontGreen";
+      newColors[2].className = "fontGreen";
+      newColors[0].color = colors[0].color === "green" ? "green" : "violet";
+      newColors[0].lineColor = "greenLine";
+      newColors[1].color = colors[1].color === "green" ? "green" : "violet";
+      newColors[1].lineColor =
+        colors[1].color === "green" ? "greenLine" : "violetLine";
+      newColors[2].color = colors[1].color === "green" ? "green" : "violet";
+      newColors[2].lineColor =
+        colors[1].color === "green" ? "greenLine" : "violetLine";
+    }
+    setColors(newColors);
+  };
+
   const handleChange = async (e) => {
     setShow(false);
     const branch = e.target.value;
@@ -158,31 +220,50 @@ export default function FormReserva({ branches }) {
     setShow(true);
   };
 
+  const [colors, setColors] = useState([
+    {
+      color: "violet",
+      value: 1,
+      lineColor: "violetLine",
+      text: "Elegí tu sucursal",
+      className: "fontViolet",
+    },
+    {
+      color: "gray",
+      value: 2,
+      lineColor: "greyLine",
+      text: "Seleccioná el día",
+      className: "fontGray",
+    },
+    {
+      color: "gray",
+      value: 3,
+      lineColor: "greyLine",
+      text: "Completá el formulario",
+      className: "fontGray",
+    },
+  ]);
+
   return (
     <div className="content-container">
       <h1 className="reserva-title">Hacer una reserva</h1>
       <div className="reserva-form-container">
         <h2>Reserva</h2>
-        <h3 className="reserva-title-3">Seleccioná tu sucursal</h3>
         <div className="containerMother">
-          <div className="checkboxContainer">
-            <input
-              type="button"
-              className={violet ? "checkboxStage2" : "checkboxStage"}
-              value="1"
-            />
-            <hr className={violet ? "lineStage2" : "lineStage"} />
-          </div>
-          <div className="checkboxContainer">
-            <input type="button" className="checkboxStage" value="2" />
-            <hr className="lineStage" />
-          </div>
-          <div className="checkboxContainer">
-            <input type="button" className="checkboxStage" value="3" />
-            <hr className="lineStage" />
-          </div>
+          {colors.map((color, index) => (
+            <div key={index} className="checkboxContainer">
+              <input
+                type="button"
+                className={color.color}
+                value={color.color === "green" ? "✓" : color.value}
+                onClick={() => handleClickBox(index)}
+              />
+              <hr className={color.lineColor} />
+              <div className={color.className}>{color.text}</div>
+            </div>
+          ))}
         </div>
-        <p>form check</p>
+        <p style={{ marginTop: "50px" }}>form check</p>
         <h3 className="reserva-title-3">Sucursal</h3>
         <select className="input-primary w100" onChange={handleChange}>
           <option value="Selecciona una opcion">Selecciona una opción</option>
@@ -233,7 +314,7 @@ export default function FormReserva({ branches }) {
       </div>
       <div className="calendar-container color-grey4">
         <h2>
-          {nombreMes} {year}
+          {monthDay} {year}
         </h2>
         <div className="grid-container">
           <div className="day-name color-grey4">Do</div>
