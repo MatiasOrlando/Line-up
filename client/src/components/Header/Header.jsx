@@ -49,7 +49,7 @@ export default function Header({ hide }) {
       <nav className="nav-box">
         <div className="box-btn">
           {user?.operator ? (
-            false
+            ""
           ) : (
             <Link href={user?.admin ? "/crearSucursal" : "/reserva"}>
               <button className="btn-quaternary padding-one ">
@@ -62,11 +62,11 @@ export default function Header({ hide }) {
               <button className="btn-quaternary padding-one ">Sucursal</button>
             </Link>
           ) : (
-            false
+            ""
           )}
         </div>
         <div className="options">
-          {user?.admin ? adminOptions() : false}
+          {user?.admin ? adminOptions() : ""}
           {!user?.admin && (
             <>
               <div className="options-item">
