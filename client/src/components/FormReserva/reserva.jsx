@@ -286,7 +286,8 @@ export default function FormReserva({ branches }) {
                 );
               })}
             </select>
-            <form className="w100" action="">
+            {/* A ESTE FORM SE LE COLOCA LA CLASE:  formReserva !!!!!!!!!!!!!!!!!!!!!!!!! */}
+            <form className="formReserva w100" action="">
               <div className="w50">
                 <h3 className="reserva-title-3">Nombre y Apellido</h3>
                 <input className="input-primary w95" type="text" />
