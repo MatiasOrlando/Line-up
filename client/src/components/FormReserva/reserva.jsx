@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 
-
 export default function FormReserva({ branches }) {
   const [tiempoRestante, setTiempoRestante] = useState(300);
   const [datesAvailable, setDatesAvailable] = useState([]);
@@ -101,11 +100,6 @@ export default function FormReserva({ branches }) {
   });
 
   fechasFiltradas.unshift(today.toFormat("dd-MM-yyyy")); //enviar al back
-
-
-  const [green, setGreen] = useState(false);
-  const handleSelect = () => {
-    setGreen(!green);
 
   const toggleEnabled = function (element, enable) {
     if (!enable) {
@@ -224,7 +218,7 @@ export default function FormReserva({ branches }) {
     horario = hours.data;
     setHorarios(horario);
     setShow(true);
-
+  };
 
   const [colors, setColors] = useState([
     {
@@ -250,7 +244,6 @@ export default function FormReserva({ branches }) {
     },
   ]);
 
-  };
   return (
     <div className="content-container">
       <h1 className="reserva-title">Hacer una reserva</h1>
@@ -272,13 +265,6 @@ export default function FormReserva({ branches }) {
         </div>
         <p style={{ marginTop: "50px" }}>form check</p>
         <h3 className="reserva-title-3">Sucursal</h3>
-
-        <select className="input-primary w100" onChange={handleSelect}>
-          <option value="11">Person1</option>
-          <option value="27">Person2</option>
-          <option value="17">Person3</option>
-          <option value="10">Person4</option>
-        </select>
         <select className="input-primary w100" onChange={handleChange}>
           <option value="Selecciona una opcion">Selecciona una opción</option>
           {branches.map((name) => {
@@ -325,7 +311,6 @@ export default function FormReserva({ branches }) {
             </form>
           </>
         )}
-
       </div>
       <div className="calendar-container color-grey4">
         <h2>
