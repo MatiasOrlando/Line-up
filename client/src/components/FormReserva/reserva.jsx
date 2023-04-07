@@ -110,66 +110,42 @@ export default function FormReserva({ branches }) {
     }
   };
 
-  const handleClickBox = (index) => {
-    const newColors = [
-      {
-        color: "gray",
+   const handleChange = async (e) => {
+    if (e.target.value !== "Selecciona una opcion") {
+      setVio({ ...vio, color: "green", value: "✓", lineColor: "greenLine", className:"fontGreen" });
+      setGra({
+        ...gra,
+        color: "violet",
+        lineColor: "violetLine",
+        className: "fontViolet",
+        value: 2
+      });
+    }
+
+    if (e.target.value === "Selecciona una opcion") {
+      setVio({
+        color: "violet",
         value: 1,
         lineColor: "violetLine",
         text: "Elegí tu sucursal",
         className: "fontViolet",
-      },
-      {
+      });
+
+      setGra({
         color: "gray",
         value: 2,
         lineColor: "greyLine",
         text: "Seleccioná el día",
-        className: "fontViolet",
-      },
-      {
+        className: "fontGray",
+      });
+      setGra2({
         color: "gray",
         value: 3,
         lineColor: "greyLine",
         text: "Completá el formulario",
-        className: "fontViolet",
-      },
-    ];
-    if (index === 0) {
-      newColors[0].className = "fontGreen";
-      newColors[0].color = "green";
-      newColors[0].lineColor = "greenLine";
-      newColors[2].className = "fontGray";
-      newColors[1].color = colors[1].color === "green" ? "green" : "violet";
-      newColors[1].lineColor =
-        colors[1].color === "green" ? "greenLine" : "violetLine";
-      newColors[2].color = colors[1].color === "green" ? "violet" : "gray";
-    } else if (index === 1) {
-      newColors[0].className = "fontGreen";
-      newColors[1].className = "fontGreen";
-      newColors[0].color = colors[0].color === "green" ? "green" : "violet";
-      newColors[0].lineColor = "greenLine";
-      newColors[1].lineColor =
-        colors[1].color === "violet" ? "greenLine" : "violetLine";
-      newColors[1].color = "green";
-      newColors[2].color = "violet";
-      newColors[2].lineColor = "violetLine";
-    } else if (index === 2) {
-      newColors[0].className = "fontGreen";
-      newColors[1].className = "fontGreen";
-      newColors[2].className = "fontGreen";
-      newColors[0].color = colors[0].color === "green" ? "green" : "violet";
-      newColors[0].lineColor = "greenLine";
-      newColors[1].color = colors[1].color === "green" ? "green" : "violet";
-      newColors[1].lineColor =
-        colors[1].color === "green" ? "greenLine" : "violetLine";
-      newColors[2].color = colors[1].color === "green" ? "green" : "violet";
-      newColors[2].lineColor =
-        colors[1].color === "green" ? "greenLine" : "violetLine";
+        className: "fontGray",
+      });
     }
-    setColors(newColors);
-  };
-
-  const handleChange = async (e) => {
     setShow(false);
     const branch = e.target.value;
     if (branch !== "Selecciona una opcion") {
@@ -205,6 +181,14 @@ export default function FormReserva({ branches }) {
   };
 
   const handleClick = async (e) => {
+    setGra({ ...gra, color: "green", value: "✓", lineColor: "greenLine",className:"fontGreen" });
+    setGra2({
+      ...gra2,
+      color: "violet",
+      lineColor: "violetLine",
+      className: "fontViolet",
+    });
+
     const selectedDate = e.target.value;
 
     const hours = await axios.post(
@@ -220,29 +204,29 @@ export default function FormReserva({ branches }) {
     setShow(true);
   };
 
-  const [colors, setColors] = useState([
-    {
-      color: "violet",
-      value: 1,
-      lineColor: "violetLine",
-      text: "Elegí tu sucursal",
-      className: "fontViolet",
-    },
-    {
-      color: "gray",
-      value: 2,
-      lineColor: "greyLine",
-      text: "Seleccioná el día",
-      className: "fontGray",
-    },
-    {
-      color: "gray",
-      value: 3,
-      lineColor: "greyLine",
-      text: "Completá el formulario",
-      className: "fontGray",
-    },
-  ]);
+  const [vio, setVio] = useState({
+    color: "violet",
+    value: 1,
+    lineColor: "violetLine",
+    text: "Elegí tu sucursal",
+    className: "fontViolet",
+  });
+
+  const [gra, setGra] = useState({
+    color: "gray",
+    value: 2,
+    lineColor: "greyLine",
+    text: "Seleccioná el día",
+    className: "fontGray",
+  });
+
+  const [gra2, setGra2] = useState({
+    color: "gray",
+    value: 3,
+    lineColor: "greyLine",
+    text: "Completá el formulario",
+    className: "fontGray",
+  });
 
   return (
     <div className="content-container">
@@ -250,18 +234,23 @@ export default function FormReserva({ branches }) {
       <div className="reserva-form-container">
         <h2>Reserva</h2>
         <div className="containerMother">
-          {colors.map((color, index) => (
-            <div key={index} className="checkboxContainer">
-              <input
-                type="button"
-                className={color.color}
-                value={color.color === "green" ? "✓" : color.value}
-                onClick={() => handleClickBox(index)}
-              />
-              <hr className={color.lineColor} />
-              <div className={color.className}>{color.text}</div>
-            </div>
-          ))}
+          <div className="checkboxContainer">
+            <input type="button" className={vio.color} value={vio.value} />
+            <hr className={vio.lineColor} />
+            <div className={vio.className}>{vio.text}</div>
+          </div>
+
+          <div className="checkboxContainer">
+            <input type="button" className={gra.color} value={gra.value} />
+            <hr className={gra.lineColor} />
+            <div className={gra.className}>{gra.text}</div>
+          </div>
+
+          <div className="checkboxContainer">
+            <input type="button" className={gra2.color} value={gra2.value} />
+            <hr className={gra2.lineColor} />
+            <div className={gra2.className}>{gra2.text}</div>
+          </div>
         </div>
         <p style={{ marginTop: "50px" }}>form check</p>
         <h3 className="reserva-title-3">Sucursal</h3>
@@ -308,6 +297,21 @@ export default function FormReserva({ branches }) {
               </div>
               <h3 className="reserva-title-3">Mail</h3>
               <input className="input-primary w100" type="text" />
+              <button
+                type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setGra2({
+                    ...gra2,
+                    color: "green",
+                    value: "✓",
+                    lineColor: "greenLine",
+                    className: "fontGreen"
+                  });
+                }}
+              >
+                PRUEBA DE FINALIZAR
+              </button>
             </form>
           </>
         )}
