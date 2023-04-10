@@ -18,10 +18,10 @@ export default function ListBranches({ branches, length }) {
             <h2>Reservas</h2>
           </div>
           <div className="container-list">
-            {branches.map((branch) => {
+            {branches.map((branch, index) => {
               console.log(branch);
               return (
-                <div className="item-list" key={branch._id}>
+                <div className="item-list" key={index}>
                   <div className="item-section">
                     <div className="item-title">Nombre y Apellido</div>
                     <div className="item-description">nombre</div>
