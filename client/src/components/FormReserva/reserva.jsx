@@ -166,13 +166,15 @@ export default function FormReserva({ branches, user }) {
         {
           days: fechasFiltradas,
           branch: branch,
-          email:user.email
+          email: user.email,
         }
       );
       loadingData.forEach((fecha, i) => {
-        datesAvailables.data.arrayToSend
-        
-        const filteredArray = datesAvailables.data.arrayToSend.filter((element) => !datesAvailables.data.turnos.includes(element));
+        datesAvailables.data.arrayToSend;
+
+        const filteredArray = datesAvailables.data.arrayToSend.filter(
+          (element) => !datesAvailables.data.turnos.includes(element)
+        );
         filteredArray.forEach((date) => {
           if (fecha.toFormat("dd-MM-yyyy") === date) {
             const element = document.getElementById(i);
@@ -199,17 +201,11 @@ export default function FormReserva({ branches, user }) {
   const handleClick = async (e) => {
     console.log(e.target.value);
     setGra({
-     
       ...gra,
-     
       color: "green",
-     
       value: "✓",
-     
       lineColor: "greenLine",
-      
-      className:  "fontGreen",
-   ,
+      className: "fontGreen",
     });
     setGra2({
       ...gra2,
