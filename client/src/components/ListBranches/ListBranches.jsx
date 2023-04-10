@@ -19,7 +19,7 @@ export default function ListBranches({ branches, length }) {
           </div>
           <div className="container-list">
             {branches.map((branch, index) => {
-              console.log(branch);
+              // console.log(branch);
               return (
                 <div className="item-list" key={index}>
                   <div className="item-section">
