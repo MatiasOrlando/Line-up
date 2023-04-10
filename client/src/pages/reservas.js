@@ -1,6 +1,5 @@
 import Appoinments from "@/components/Appoinments/Appoinments";
-import axios from "axios";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
 export async function getServerSideProps(context) {
   const token = await getSession(context);

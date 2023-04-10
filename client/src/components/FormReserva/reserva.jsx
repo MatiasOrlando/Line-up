@@ -104,7 +104,6 @@ export default function FormReserva({ branches, user }) {
   });
 
   fechasFiltradas.unshift(today.toFormat("dd-MM-yyyy")); //enviar al back
-
   const toggleEnabled = function (element, enable) {
     if (!enable) {
       element.disabled = false;
@@ -200,11 +199,17 @@ export default function FormReserva({ branches, user }) {
   const handleClick = async (e) => {
     console.log(e.target.value);
     setGra({
+     
       ...gra,
+     
       color: "green",
+     
       value: "✓",
+     
       lineColor: "greenLine",
-      className: "fontGreen",
+      
+      className:  "fontGreen",
+   ,
     });
     setGra2({
       ...gra2,
@@ -360,6 +365,14 @@ export default function FormReserva({ branches, user }) {
                 type="submit"
                 onClick={(e) => {
                   handleSubmit(e);
+                  e.preventDefault();
+                  setGra2({
+                    ...gra2,
+                    color: "green",
+                    value: "✓",
+                    lineColor: "greenLine",
+                    className: "fontGreen",
+                  });
                 }}
               >
                 Confirmar reserva

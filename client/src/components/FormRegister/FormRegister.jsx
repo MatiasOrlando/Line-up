@@ -17,7 +17,7 @@ export default function FormRegister() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
   const [repeatPasswordShown, setRepeatPasswordShown] = useState(false);
-  const [mail, setMail] = useState("");
+  const [error, setError] = useState("");
   const [mayuscula, setMayuscula] = useState({
     oracion: "ABC tiene una mayúscula",
     color: "$septenaryGrey",
@@ -60,10 +60,14 @@ export default function FormRegister() {
         });
         setModalIsOpen(true);
       } catch (err) {
-        setMail("error-input");
+        if (err.response.data.includes("email")) {
+          setError("error-input-email");
+        } else if (err.response.data.includes("dni")) {
+          setError("error-input-dni");
+        }
         if (err) {
           setTimeout(() => {
-            setMail("");
+            setError("");
           }, 2000);
         }
       }
@@ -140,12 +144,21 @@ export default function FormRegister() {
                   onChange={formik.handleChange}
                   value={formik.values.dni}
                 />
+                <div className="email-error">
+                  {error === "error-input-dni" ? (
+                    <span className="email-span">
+                      Este dni ya se encuentra en uso
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                </div>
               </div>
             </div>
             <div className="email margin">
               <label htmlFor="email">Mail</label>
               <input
-                className={`input-primary ten ${mail} ${
+                className={`input-primary ten ${error} ${
                   formik.touched.email && formik.errors.email
                     ? "error-input"
                     : ""
@@ -156,7 +169,7 @@ export default function FormRegister() {
                 value={formik.values.email}
               />
               <div className="email-error">
-                {mail === "error-input" ? (
+                {error === "error-input-email" ? (
                   <span className="email-span">
                     Este mail ya se encuentra en uso
                   </span>

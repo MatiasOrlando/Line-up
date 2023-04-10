@@ -18,13 +18,13 @@ export default function ListBranches({ branches, length }) {
             <h2>Reservas</h2>
           </div>
           <div className="container-list">
-            {branches.map((branch) => {
-              console.log(branch);
+            {branches.map((branch, index) => {
+              // console.log(branch);
               return (
-                <div className="item-list" key={branch._id}>
+                <div className="item-list" key={index}>
                   <div className="item-section">
                     <div className="item-title">Nombre y Apellido</div>
-                    <div className="item-description">nombre</div>
+                    <div className="item-description">{branch.name}</div>
                   </div>
                   <div className="item-section">
                     <div className="item-title">Mail</div>
@@ -40,7 +40,9 @@ export default function ListBranches({ branches, length }) {
                     <div className="item-title">
                       Horarios de Inicio y Cierre
                     </div>
-                    <div className="item-description">{branch.hourRange}</div>
+                    <div className="item-description">
+                      {branch.openingHour} - {branch.closingHour}
+                    </div>
                   </div>
                   <div className="item-section">
                     <select className="btn-secondary" name="" id="">
