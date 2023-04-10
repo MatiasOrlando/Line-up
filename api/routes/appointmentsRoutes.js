@@ -46,13 +46,16 @@ const moment = require("moment");
 //   }
 // });
 
+
 router.post("/add", async (req, res) => {
   const { branch, name, email, phoneNew, day, time } = req.body;
   try {
     const selectedBranch = await Branch.find({ name: branch });
-    const { allowedClients, openingHour, closingHour } = selectedBranch[0];
-    const user = await User.findOne({ email: email });
-    const { phone } = user;
+    const allowedClients = selectedBranch[0].allowedClients
+    const openingHour = selectedBranch[0].openingHour
+    const closingHour = selectedBranch[0].closingHour
+    const user = await User.findOne({ email });
+    console.log("USER",user);
     const fullAppoinment = await Appointment.find({
       day: day,
       timeOfAppontment: time,
@@ -76,10 +79,12 @@ router.post("/add", async (req, res) => {
         },
       };
       await Appointment.create(turno);
-      if (phone !== phoneNew) {
-        await User.updateOne({ email: email }, { phone: phoneNew });
+      if (user?.phone) {
+        if (user.phone !== phoneNew ) {
+          await User.updateOne({ email: email }, { phone: phoneNew });
+        }
+        res.status(201).send(turno);
       }
-      res.status(201).send(turno);
     } else {
       res.send("Turnos completos en el horario solicitado");
     }
@@ -102,7 +107,20 @@ router.get("/branches", async (req, res) => {
 });
 
 router.post("/daysavailable", async (req, res) => {
-  const { days, branch } = req.body;
+  const { days, branch, email } = req.body;
+  
+  const userAppointments = await Appointment.find({
+    "user.email" : email
+  });
+  
+
+
+  const turnos = userAppointments.map(turno=>{
+    return turno.date
+  })
+  
+  console.log(turnos);
+
   try {
     const selectedBranch = await Branch.find({ name: branch });
     const { openingHour, closingHour, allowedClients } = selectedBranch[0];
@@ -120,7 +138,10 @@ router.post("/daysavailable", async (req, res) => {
 
     await Promise.all(promises);
 
-    return res.status(200).send(arrayToSend);
+    return res.status(200).send({
+      arrayToSend,
+      turnos
+    });
   } catch (error) {
     console.log(error);
   }
@@ -131,7 +152,9 @@ router.post("/hoursavailable", async (req, res) => {
   try {
     const fechaSeleccionada = day;
     const selectedBranch = await Branch.find({ name: branch });
-    const { openingHour, closingHour, allowedClients } = selectedBranch[0];
+    const allowedClients = selectedBranch[0].allowedClients
+    const openingHour = selectedBranch[0].openingHour
+    const closingHour = selectedBranch[0].closingHour
     const openingTime = moment(openingHour, "HH:mm");
     const closingTime = moment(closingHour, "HH:mm");
     const duration = moment.duration(closingTime.diff(openingTime));

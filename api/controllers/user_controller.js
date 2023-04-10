@@ -94,8 +94,10 @@ const passwordEmailUpdate = async (req, res) => {
 
 const validateUserdata = async (req, res) => {
   const { token } = req.query;
+  
   try {
     const decodeUser = await UsersService.validateUserdata(token);
+  
     if (decodeUser.error) {
       return res.status(400).send("Invalid token");
     }
