@@ -6,6 +6,8 @@ import axios from "axios";
 export default function FormReserva({ branches, user }) {
   const [tiempoRestante, setTiempoRestante] = useState(300);
   const [datesAvailable, setDatesAvailable] = useState([]);
+  const [selectedBranch, setSelectedBranch] = useState("");
+  let selectedBranchAux = "";
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedHour, setSelectedHour] = useState("");
   const [show, setShow] = useState(false);
@@ -15,7 +17,7 @@ export default function FormReserva({ branches, user }) {
   const router = useRouter();
   const pathname = router.pathname;
 
-  let selectedBranch = "";
+  /* let selectedBranch = ""; */
   let horario = [];
 
   const today = DateTime.local();
@@ -157,16 +159,22 @@ export default function FormReserva({ branches, user }) {
     setShow(false);
     const branch = e.target.value;
     if (branch !== "Selecciona una opcion") {
-      selectedBranch = branch;
+      selectedBranchAux = branch;
+      setSelectedBranch(branch);
+      console.log(selectedBranchAux);
       const datesAvailables = await axios.post(
         "http://localhost:3001/api/appointments/daysavailable",
         {
           days: fechasFiltradas,
           branch: branch,
+          email:user.email
         }
       );
       loadingData.forEach((fecha, i) => {
-        datesAvailables.data.forEach((date) => {
+        datesAvailables.data.arrayToSend
+        
+        const filteredArray = datesAvailables.data.arrayToSend.filter((element) => !datesAvailables.data.turnos.includes(element));
+        filteredArray.forEach((date) => {
           if (fecha.toFormat("dd-MM-yyyy") === date) {
             const element = document.getElementById(i);
 
@@ -179,7 +187,8 @@ export default function FormReserva({ branches, user }) {
         });
       });
     } else {
-      selectedBranch = "";
+      selectedBranchAux = "";
+      setSelectedBranch("");
       loadingData.forEach((fecha, i) => {
         fecha.toFormat("dd-MM-yyyy");
         const element = document.getElementById(i);
@@ -189,6 +198,7 @@ export default function FormReserva({ branches, user }) {
   };
 
   const handleClick = async (e) => {
+    console.log(e.target.value);
     setGra({
       ...gra,
       color: "green",
@@ -204,11 +214,12 @@ export default function FormReserva({ branches, user }) {
     });
 
     const selectedDate = e.target.value;
+    setSelectedDay(selectedDate);
 
     const hours = await axios.post(
       "http://localhost:3001/api/appointments/hoursavailable",
       {
-        branch: selectedBranch,
+        branch: selectedBranchAux,
         day: selectedDate,
       }
     );
@@ -242,18 +253,25 @@ export default function FormReserva({ branches, user }) {
     className: "fontGray",
   });
 
-  /* const handleSubmit = () =>{
-    axios.post("http://localhost:3001/api/appointments/add",{
-      branch:selectedBranch,
-      name: user.name
-      email: 
-      phoneNew:
-      day:
-      time: selectedHour
-    })
-    
-  } */
-  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setGra2({
+      ...gra2,
+      color: "green",
+      value: "✓",
+      lineColor: "greenLine",
+      className: "fontGreen",
+    });
+    axios.post("http://localhost:3001/api/appointments/add", {
+      branch: selectedBranch,
+      name: user.name,
+      email: user.email,
+      phoneNew: user.phone,
+      day: selectedDay,
+      time: selectedHour,
+    });
+  };
+
   return (
     <div className="content-container">
       <h1 className="reserva-title">Hacer una reserva</h1>
@@ -278,7 +296,6 @@ export default function FormReserva({ branches, user }) {
             <div className={gra2.className}>{gra2.text}</div>
           </div>
         </div>
-        <p style={{ marginTop: "50px" }}>form check</p>
         <h3 className="reserva-title-3">Sucursal</h3>
         <select className="input-primary w100" onChange={handleChange}>
           <option value="Selecciona una opcion">Selecciona una opción</option>
@@ -303,7 +320,7 @@ export default function FormReserva({ branches, user }) {
               <option value="Selecciona una opcion">
                 Selecciona una opción
               </option>
-              {console.log(horarios)}
+
               {horarios.map((hora) => {
                 return (
                   <option value={hora} key={hora}>
@@ -316,27 +333,33 @@ export default function FormReserva({ branches, user }) {
             <form className="formReserva w100" action="">
               <div className="w50">
                 <h3 className="reserva-title-3">Nombre y Apellido</h3>
-                <input className="input-primary w95" type="text" />
+                <input
+                  disabled={true}
+                  defaultValue={user.name}
+                  className="input-primary w95"
+                  type="text"
+                />
               </div>
               <div style={{ justifyContent: "center" }} className="w50">
                 <h3 className="reserva-title-3">Telefono</h3>
-                <input className="input-primary w95" type="text" />
+                <input
+                  defaultValue={user.phone}
+                  className="input-primary w95"
+                  type="text"
+                />
               </div>
               <h3 className="reserva-title-3">Mail</h3>
-              <input className="input-primary w100" type="text" />
+              <input
+                disabled={true}
+                defaultValue={user.email}
+                className="input-primary w100"
+                type="text"
+              />
               <button
                 className="btn-primary"
                 type="submit"
                 onClick={(e) => {
-                  /* handleSubmit */
-                  e.preventDefault();
-                  setGra2({
-                    ...gra2,
-                    color: "green",
-                    value: "✓",
-                    lineColor: "greenLine",
-                    className: "fontGreen",
-                  });
+                  handleSubmit(e);
                 }}
               >
                 Confirmar reserva
@@ -362,7 +385,7 @@ export default function FormReserva({ branches, user }) {
               <button
                 disabled={true}
                 className="calendary-days button-day"
-                onClick={handleClick}
+                onClick={() => handleClick()}
                 key={i}
                 id={i}
                 value={day.toFormat("dd-MM-yyyy")}

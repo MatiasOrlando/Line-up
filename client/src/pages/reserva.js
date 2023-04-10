@@ -1,5 +1,5 @@
 import FormReserva from "@/components/FormReserva/reserva";
-import { useSession,getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
 
 export async function getServerSideProps(context) {
@@ -13,19 +13,15 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-  
       const res = await fetch(`http://localhost:3001/api/user/validate/token?token=${session.user}`)
-      
       const data= await res.json()
 
-      
-    
-    
     const response = await fetch(
       "http://localhost:3001/api/appointments/branches"
     );
     const branchData = await response.json();
-    
+      
+
     return {
       props: {
         branches: branchData,
@@ -35,7 +31,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function Reserva({ branches }) {
+export default function Reserva({ branches,user }) {
   
-  return <FormReserva branches={branches} />;
+  return <FormReserva branches={branches} user={user} />;
 }
