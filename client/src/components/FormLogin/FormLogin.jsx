@@ -1,17 +1,28 @@
 import { useFormik } from "formik";
 import validationLogin from "./validation/validationLogin";
-import { signIn, getSession } from "next-auth/react";
+import { signIn, getSession, useSession } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ForgetPassword from "./ForgetPassword";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import googleIcon from "../../assets/google.png";
 
 export default function FormLogin() {
   const [forgetPassword, setForgetPassword] = useState(false);
   const [credentials, setCredentials] = useState("");
   const [passwordShown, setPasswordShown] = useState(false);
   const router = useRouter();
+
+  const handleGoogleSignIn = async (e) => {
+    e.preventDefault();
+    await signIn("google", {
+      prompt: "select_account",
+      redirect: true,
+      callbackUrl: "/reserva",
+    });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -126,6 +137,33 @@ export default function FormLogin() {
             >
               Ingresar
             </button>
+            <div
+              style={{
+                paddingTop: "20px",
+                display: "flex",
+              }}
+            >
+              <button
+                className="btn-primary width-100"
+                onClick={(e) => {
+                  handleGoogleSignIn(e);
+                }}
+              >
+                <div style={{ marginBottom: "4px" }}>
+                  Continuar con Google
+                  <Image
+                    style={{
+                      height: "13px",
+                      width: "22px",
+                      marginLeft: "5px",
+                      marginTop: "7px",
+                    }}
+                    src={googleIcon}
+                    alt="google logo"
+                  />
+                </div>
+              </button>
+            </div>
           </div>
           <hr />
           <div>

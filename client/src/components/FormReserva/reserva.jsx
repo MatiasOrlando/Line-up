@@ -100,7 +100,6 @@ export default function FormReserva({ branches }) {
   });
 
   fechasFiltradas.unshift(today.toFormat("dd-MM-yyyy")); //enviar al back
-
   const toggleEnabled = function (element, enable) {
     if (!enable) {
       element.disabled = false;
@@ -110,15 +109,22 @@ export default function FormReserva({ branches }) {
     }
   };
 
-   const handleChange = async (e) => {
+  const handleChange = async (e) => {
+    console.log(e.target.value);
     if (e.target.value !== "Selecciona una opcion") {
-      setVio({ ...vio, color: "green", value: "✓", lineColor: "greenLine", className:"fontGreen" });
+      setVio({
+        ...vio,
+        color: "green",
+        value: "✓",
+        lineColor: "greenLine",
+        className: "fontGreen",
+      });
       setGra({
         ...gra,
         color: "violet",
         lineColor: "violetLine",
         className: "fontViolet",
-        value: 2
+        value: 2,
       });
     }
 
@@ -181,7 +187,13 @@ export default function FormReserva({ branches }) {
   };
 
   const handleClick = async (e) => {
-    setGra({ ...gra, color: "green", value: "✓", lineColor: "greenLine",className:"fontGreen" });
+    setGra({
+      ...gra,
+      color: "green",
+      value: "✓",
+      lineColor: "greenLine",
+      className: "fontGreen",
+    });
     setGra2({
       ...gra2,
       color: "violet",
@@ -307,7 +319,7 @@ export default function FormReserva({ branches }) {
                     color: "green",
                     value: "✓",
                     lineColor: "greenLine",
-                    className: "fontGreen"
+                    className: "fontGreen",
                   });
                 }}
               >
