@@ -11,11 +11,9 @@ import { useState, useEffect } from "react";
 import useVerification from "@/hooks/useVerification";
 import axios from "axios";
 
-
 export default function Header({ hide }) {
-  
-  let {data,user} = useVerification();
- 
+  let { data, user } = useVerification();
+
   if (hide) {
     return null;
   }
@@ -58,8 +56,10 @@ export default function Header({ hide }) {
             </Link>
           )}
           {user?.admin ? (
-            <Link href="/sucursal">
-              <button className="btn-quaternary padding-one ">Sucursal</button>
+            <Link href="/crearOperador">
+              <button className="btn-quaternary padding-one ">
+                Crear operador
+              </button>
             </Link>
           ) : (
             ""

@@ -1,61 +1,67 @@
 import { useFormik } from "formik";
-import validationUserData from "./validation/validationUserData";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { BsCheckSquare } from "react-icons/bs";
 import Modal from "@/commons/Modal";
+import { useRouter } from "next/router";
+import validationNewOperator from "./validation/validation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-export default function FormUserData() {
+export default function FormNewOperator() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
   const [repeatPasswordShown, setRepeatPasswordShown] = useState(false);
-  const [user, setUser] = useState();
-  const [status, setStatus] = useState(true);
   const { data } = useSession();
-  const userToken = data;
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        if (data && data?.user) {
-          const tokenUser = await axios.get(
-            `http://localhost:3001/api/user/validate/token?token=${data.user}`
-          );
-          if (tokenUser) {
-            setUser(tokenUser.data);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUserData();
-  }, [data]);
+  const router = useRouter();
+  const [error, setError] = useState("");
+
   const formik = useFormik({
     initialValues: {
+      name: "",
+      email: "",
       password: "",
+      phone: "",
+      dni: "",
+      location: "",
       repeatPassword: "",
-      phone: user?.phone || null,
     },
 
-    onSubmit: async (data) => {
-      const { password } = data;
-      const response = await axios.put(
-        `http://localhost:3001/api/user/new-password`,
-        {
-          password,
-          token: userToken.user,
+    onSubmit: async (dat) => {
+      const { name, email, password, dni, location } = dat;
+      try {
+        await axios.post(
+          `http://localhost:3001/api/admin/create-operator/token?token=${data.user}`,
+          {
+            name,
+            email,
+            password,
+            dni,
+            location,
+            phone: 111608,
+            operator: true,
+          }
+        );
+        setModalIsOpen(true);
+      } catch (err) {
+        const message = err.response.data.message;
+        if (message.includes("email")) {
+          setError("error-input-email");
+        } else if (message.includes("dni")) {
+          setError("error-input-dni");
+        } else {
+          setError("error-input-location");
         }
-      );
-      setModalIsOpen(true);
-      formik.values.password = "";
-      formik.values.repeatPassword = "";
-      setStatus(true);
+        if (err) {
+          setTimeout(() => {
+            setError("");
+          }, 2000);
+        }
+      }
     },
-    validationSchema: validationUserData.validationSchema,
+    validationSchema: validationNewOperator.validationSchema,
   });
-
+  console.log(error);
   const togglePasswordVisibility = (password) => {
     password === "password"
       ? setPasswordShown(!passwordShown)
@@ -74,73 +80,90 @@ export default function FormUserData() {
             className="login-form"
           >
             <div className="login-form_box-title">
-              <h2>Mis datos</h2>
+              <h2>Crear una nuevo operador</h2>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="user">Nombre</label>
+              <label htmlFor="name">Nombre</label>
               <input
-                disabled={true}
-                className={`input-primary width-100 `}
+                className={`input-primary width-100 ${
+                  formik.touched.name && formik.errors.name ? "error-input" : ""
+                }`}
                 type="text"
-                id="user"
+                id="name"
                 onChange={formik.handleChange}
-                value={user?.name || ""}
+                value={formik.values.name}
               />
               <div className="box-span"></div>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="pass">Mail</label>
+              <label htmlFor="email">Correo electronico</label>
               <input
-                disabled={true}
-                className={`input-primary width-100 `}
+                className={`input-primary width-100 ${
+                  formik.touched.email && formik.errors.email
+                    ? "error-input"
+                    : ""
+                }`}
                 type="text"
-                id="pass"
+                id="email"
                 onChange={formik.handleChange}
-                value={user?.email || ""}
+                value={formik.values.email}
               />
+              <div className="email-error">
+                {error === "error-input-email" ? (
+                  <span className="email-span">
+                    Este mail ya se encuentra en uso
+                  </span>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
-            {user && user.admin ? (
-              <div className="login-form_box-input">
-                <label htmlFor="pass">DNI</label>
+            <div className="div-split-two">
+              <div className="div-inter-50-left">
+                <label htmlFor="dni">DNI</label>
                 <input
-                  disabled={true}
-                  className={`input-primary width-100`}
-                  type="text"
-                  id="pass"
+                  className={`input-primary width-100 ${
+                    formik.touched.dni && formik.errors.dni ? "error-input" : ""
+                  }`}
+                  type="number"
+                  id="dni"
                   onChange={formik.handleChange}
-                  value={user?.dni || ""}
+                  value={formik.values.dni}
                 />
-              </div>
-            ) : (
-              <div className="div-split-two">
-                <div className="div-inter-50-left">
-                  <label htmlFor="pass">DNI</label>
-                  <input
-                    disabled={true}
-                    className={`input-primary width-100`}
-                    type="text"
-                    id="pass"
-                    onChange={formik.handleChange}
-                    value={user?.dni || ""}
-                  />
-                </div>
-                <div className="div-inter-50-right">
-                  <label htmlFor="pass">Telefono</label>
-                  <input
-                    disabled={user?.phone ? true : false}
-                    className={`input-primary width-100  ${
-                      formik.touched.phone && formik.errors.phone
-                        ? "error-input"
-                        : ""
-                    }`}
-                    type="number"
-                    id="phone"
-                    onChange={formik.handleChange}
-                    value={user?.phone || ""}
-                  />
+                <div className="email-error">
+                  {error === "error-input-dni" ? (
+                    <span className="email-span">
+                      Este dni ya se encuentra en uso
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
-            )}
+              <div className="div-inter-50-right">
+                <label htmlFor="location">Sucursal</label>
+                <input
+                  className={`input-primary width-100 ${
+                    formik.touched.location && formik.errors.location
+                      ? "error-input"
+                      : ""
+                  }`}
+                  type="text"
+                  id="location"
+                  onChange={formik.handleChange}
+                  value={formik.values.location}
+                />
+                <div className="email-error">
+                  {error === "error-input-location" ? (
+                    <span className="email-span">
+                      Esta sucursal no se encuentra registrada
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            </div>
             <div className="div-split-two">
               <div className="div-inter-50-left">
                 <label htmlFor="pass" className="password-label">
@@ -165,7 +188,6 @@ export default function FormUserData() {
                     id="password"
                     onChange={formik.handleChange}
                     placeholder={"Ingrese su nueva contraseña"}
-                    disabled={status}
                     value={formik.values.password || ""}
                   />
                 </label>
@@ -195,23 +217,11 @@ export default function FormUserData() {
                     id="repeatPassword"
                     onChange={formik.handleChange}
                     placeholder={"Ingrese su nueva contraseña"}
-                    disabled={status}
                     value={formik.values.repeatPassword || ""}
                   />
                 </label>
                 <span>{formik.errors.repeatPassword}</span>
               </div>
-            </div>
-            <div className="login-form_box-pass">
-              <button
-                type="button"
-                onClick={() => {
-                  setStatus(!status);
-                }}
-                className="btn-tertiary"
-              >
-                Editar contraseña
-              </button>
             </div>
             <div>
               <button className="btn-primary width-100" type="submit">
@@ -224,10 +234,11 @@ export default function FormUserData() {
       <Modal
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
+        redirect={{ function: router.push, rute: "/sucursales/1" }}
         modalContent={{
-          title: "Contraseña actualizada correctamente",
+          title: "Operador creado correctamente",
           description:
-            "A partir de ahora iniciá sesión con tu nueva contraseña",
+            "El operador ya puede iniciar sesion con su nueva cuenta",
           button: "Aceptar",
           icon: <BsCheckSquare className="icon" />,
         }}
