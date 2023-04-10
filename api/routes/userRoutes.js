@@ -1,134 +1,293 @@
-const User = require("../models/user");
-const Branch = require("../models/branch");
 const router = require("express").Router();
-const emailConfirmation = require("../config/emailConfirmation");
-const mapUser = require("../config/userMapped");
+const userControllers = require("../controllers/user_controller");
+const { emailConfirmation } = require("../config/emailConfirmation");
 
-router.post("/register", async (req, res) => {
-  try {
-    const userCreated = await User.create(req.body);
-    return res.status(200).send(`User registered successfully`);
-  } catch (error) {
-    console.error(error);
-  }
-});
+/**
+ *  @openapi
+ *  /api/user/register:
+ *    post:
+ *      tags:
+ *        - users
+ *      summary: Create new user on the db
+ *      requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/userRegisterPost'
+ *        required: true
+ *      responses:
+ *        201:
+ *          description: (OK) User created
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/userRegisterPost'
+ *        400:
+ *          $ref: '#/components/responses/BadRequest'
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ * components:
+ *   responses:
+ *     BadRequest:
+ *       description: (Bad Request) Invalid data
+ *     ServerError:
+ *       description: (ServerError) Server Error
+ */
+router.post("/register", userControllers.registerUser);
 
-router.get("/all-users", async (req, res) => {
-  try {
-    const users = await User.find().exec();
-    const allUsers = mapUser(users);
-    return res.send(allUsers);
-  } catch (error) {
-    console.error(error);
-  }
-});
+/**
+ * @openapi
+ * /api/user/login:
+ *   post:
+ *     tags:
+ *       - users
+ *     summary: Log in user
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/userLogIn'
+ *       required: true
+ *     responses:
+ *       200:
+ *         description: (OK) Successfully logged in
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/userLogIn'
+ *       401:
+ *         $ref: '#/components/responses/BadRequest'
+ *       404:
+ *         $ref: '#/components/responses/UserNotFound'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ * components:
+ *   responses:
+ *     ServerError:
+ *       description: (ServerError) Server Error
+ *     BadRequest:
+ *       description: (Bad Request) Invalid credentials
+ *     UserNotFound:
+ *       description: (UserNotFound) User not found
+ */
+router.post("/login", userControllers.logIn);
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email: email });
-    if (!user) return res.status(401).send(`User not found`);
-    const validatedUser = await user.validatePassword(password);
-    if (!validatedUser)
-      return res.status(401).send(`No authorization, Invalid credentials`);
-    return res.status(200).send(user);
-  } catch {
-    return res.status(404).send("User not found");
-  }
-});
+/**
+ * @openapi
+ * /api/user/all-users:
+ *    get:
+ *      tags:
+ *        - users
+ *      summary: Get all users from DB
+ *      parameters:
+ *        - in: query
+ *          name: allUsers
+ *          description: Returns all registered users
+ *      responses:
+ *        200:
+ *          description: (OK) All users
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/User'
+ *        401:
+ *          $ref: '#/components/responses/Unauthorized'
+ *
+ *        500:
+ *          $ref: '#/components/responses/ServerError'
+ * components:
+ *    responses:
+ *      Unauthorized:
+ *        description: (Unauthorized) User unathorized
+ *      ServerError:
+ *        description: (ServerError) Server Error
+ *    schemas:
+ *      User:
+ *        type: object
+ *        properties:
+ *          _id:
+ *            type: string
+ *          dni:
+ *            type: string
+ *          name:
+ *            type: string
+ *          email:
+ *            type: string
+ *          phone:
+ *            type: integer
+ *          admin:
+ *            type: boolean
+ *          operator:
+ *            type: boolean
+ */
+router.get("/all-users", userControllers.getAllUsers);
 
-router.get("/:id", async (req, res) => {
-  // Recibo por params id Usuario const {id} = req.params
-  const id = "64249f1465fdb6b8327d0465";
-  try {
-    const userFound = await User.findById(id);
-    const selectedUser = mapUser([userFound]);
-    return res.send(selectedUser);
-  } catch (error) {
-    console.error(error);
-  }
-});
+/**
+ * @openapi
+ * /api/user/{id}:
+ *   get:
+ *     tags:
+ *       - users
+ *     summary: Get single user
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Returns a single user
+ *     responses:
+ *       200:
+ *         description: (OK) User ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         $ref: '#/components/responses/BadRequest'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     responses:
+ *       BadRequest:
+ *         description: (BadRequest) Invalid credentials
+ *       ServerError:
+ *         description: (Server Error) Server Error
+ *     schemas:
+ *       User:
+ *         type: object
+ *         properties:
+ *           _id:
+ *             type: string
+ *           dni:
+ *             type: string
+ *           name:
+ *             type: string
+ *           email:
+ *             type: string
+ *           phone:
+ *             type: integer
+ *           admin:
+ *             type: boolean
+ *           operator:
+ *             type: boolean
+ */
+router.get("/:id", userControllers.getSingleUser);
 
-router.get("/email/:email", async (req, res) => {
-  // Recibo por params id Usuario const {id} = req.params
-  const email = req.params.email;
-  try {
-    if (!email) {
-      return res.status(400).send({ message: "email cannot be undefined" });
-    }
-    const userFound = await User.find({ email: email }).exec();
-    if (!userFound) {
-      return res
-        .status(400)
-        .send({ message: "the email passed is not from any saved user" });
-    }
-    return res.status(200).send(mapUser(userFound)[0]);
-  } catch (error) {
-    console.error(error);
-  }
-});
+/**
+ * @openapi
+ * /api/user/new-password:
+ *   put:
+ *     tags:
+ *       - users
+ *     summary: Update user's password
+ *     security:
+ *       - ApiKeyAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/PasswordUpdate'
+ *     responses:
+ *       200:
+ *         description: (OK) Password successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PasswordUpdate'
+ *       404:
+ *         $ref: '#/components/responses/BadRequest'
+ *       400:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: requestBody
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized, invalid credentials
+ *       BadRequest:
+ *         description: (Bad Request) Bad request
+ *       ServerError:
+ *         description: Server Error
+ */
+router.put("/new-password", userControllers.newPassword);
 
-router.put("/:id", async (req, res) => {
-  // Recibimos por req.body newPassword, idUser
-  if(!req.body.phone){
-    const { password } = req.body
-    try {
-      const userPasswordUpdate = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        {
-          password
-        },
-        { new: true }
-      );
-      await userPasswordUpdate.save();
-      return res.send(`Password was successfully updated`);
-    } catch (error) {
-      console.error(error);
-    }
-  }else if(req.body.phone && req.body.password){
-    const {phone, password} = req.body
-    try {
-      const userPasswordUpdate = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        {
-          password, phone
-        },
-        { new: true }
-      );
-      await userPasswordUpdate.save();
-      return res.send(`Password was successfully updated`);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+/**
+ * @openapi
+ * /api/user/password-update-email:
+ *   put:
+ *     tags:
+ *       - users
+ *     summary: Validates email provided by user in order to send an email and update his password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EmailValidation'
+ *     responses:
+ *       200:
+ *         description: (OK) Email sent to update password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EmailValidation'
+ *       400:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) Invalid email
+ *       ServerError:
+ *         description: Server Error
+ */
+router.put("/password-update-email", userControllers.passwordEmailUpdate);
 
-  
-});
+/**
+ * @openapi
+ * /api/user/validate/token:
+ *   get:
+ *     tags:
+ *       - users
+ *     summary: Validates user token to retrieve his personal data
+ *     parameters:
+ *       - name: token
+ *         in: query
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Validates user token and returns user decrypted
+ *     responses:
+ *       200:
+ *         description: (OK) The token corresponds to a valid user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) Invalid token
+ *       ServerError:
+ *         description: (ServerError) Server error
+ *
+ */
+router.get("/validate/token", userControllers.validateUserdata);
 
 router.post("/appointmentBooked", async (req, res) => {
   emailConfirmation();
-});
-
-
-router.get("/email/:email", async (req, res) => {
-  // Recibo por params id Usuario const {id} = req.params
-  const email = req.params.email;
-  try {
-    if (!email) {
-
-      return res.status(400).send({ message: "email cannot be undefined" });
-    }
-    const userFound = await User.findOne({ email: email }).exec();
-    if (!userFound) {
-      return res
-        .status(400)
-        .send({ message: "the email passed is not from any saved user" });
-
-    }
-    return res.status(200).send(userFound);
-  } catch (error) {
-    console.error(error);
-  }
 });
 
 module.exports = router;

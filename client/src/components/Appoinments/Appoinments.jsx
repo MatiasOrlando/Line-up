@@ -1,24 +1,4 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-
-export default function Appoinments() {
-  const [appoinments, setAppoinments] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await axios.get(
-          "http://localhost:3001/api/appointments/123"
-        );
-
-        setAppoinments(result.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchData();
-  }, []);
+export default function Appoinments({ branches }) {
   return (
     <main className="container-appointments">
       <div className="container-appointments_box">
@@ -26,7 +6,7 @@ export default function Appoinments() {
           <h2>Reservas</h2>
         </div>
         <div className="container-list">
-          {appoinments.map((app) => {
+          {branches.map((app) => {
             return (
               <div className="item-list" key={app._id}>
                 <div className="item-section">

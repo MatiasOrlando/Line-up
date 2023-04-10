@@ -2,22 +2,23 @@
 
 .bg-grey2{
     background-color: $secondaryGrey;
-    position: fixed;
-    height: 100%;
-    width: 100%;
 }
 
 .reserva-title{
+    margin: 0 auto;
     font-weight: 600;
     font-size: 20px;
     line-height: 24px;
-    margin-top: 60px;
-    margin-left: 295px;
+    margin-top: 5rem;
+    width: 100%;
 }
 
 .content-container{
     display: flex;
-    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 5rem;
+    max-width: 80%;
+    margin: 0 auto;
 }
 
 .reserva-title-2{
@@ -27,42 +28,220 @@
 
 .reserva-title-3{
     font-size: 14px;
+    font-weight: 400;
 }
 
 .reserva-form-container{
+    margin: 0 auto;
     background-color: white;
-    min-width: 679px;
+    min-width: 457px;
     min-height: 362px;
-    margin-top: 30px;
-    margin-left: 96px;
     border-radius: 8px;
     padding: 32px 40px;
     gap: 32px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    max-width: 60%;
+    flex-basis: 50%;
+    flex-grow: 1;
 }
 
 .calendar-container{
+    margin: 0 auto;
     min-width: 457px;
     min-height: 362px;
     background-color: white;
-    margin-top: 30px;
-    margin-right: 96px;
     border-radius: 8px;
     gap: 10px;
     padding: 32px;
     text-align: center;
+    max-width: 40%;
+    flex-basis: 35%;
 }
 
-ol{
+.grid-container{
+    margin-top: 2rem;
     list-style: none;
     display: grid;
+    justify-items: center;
+    align-items: center;
     grid-template-columns: repeat(7,1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
     padding: 0;
 }
 
 .day-name{
+    color: $septenaryGrey;
+}
 
+.w100{
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .w50{
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .w95{
+    width: 95%;
+    margin: 0 auto
+  }
+
+  .formReserva > div {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px; /* Para agregar un margen entre los elementos */
+  }
+  
+.countdown-container{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+    
+.sc{
+  background-color: $secondaryColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  margin-top: 5rem;
+}
+
+.color-grey4{
+    color: $cuaternaryGrey;
+}
+
+.checkboxStage2 {
+appearance: none;
+width: 32px;
+height: 32px;
+background: #A442F1;
+border-radius: 8px;
+border: none;
+color: white;
+}
+.checkboxStage {
+appearance: none;
+width: 32px;
+height: 32px;
+background: $cuaternaryGrey;
+border-radius: 8px;
+border: none;
+color: white;
+
+}
+
+.lineStage2 {
+    position: absolute;
+    width : 100%;
+    height: 2px;
+    background-color: #A442F1;
+    border: 0;
+    z-index: -1;
+}
+.lineStage {
+    position: absolute;
+    width : 100%;
+    height: 2px;
+    background-color: $cuaternaryGrey;
+    border: 0;
+    z-index: -1;
+}
+
+
+.containerMother {
+   display: flex;
+   width: 100%;
+}
+
+.checkboxContainer { 
+  z-index: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+}
+
+
+.violet {
+appearance: none;
+width: 32px;
+height: 32px;
+background: #A442F1;
+border-radius: 8px;
+border: none;
+color: white;
+
+}
+
+.gray {
+appearance: none;
+width: 32px;
+height: 32px;
+border-radius: 8px;
+border: none;
+color: white;
+background: gray;
+}
+
+.green {
+appearance: none;
+width: 32px;
+height: 32px;
+border-radius: 8px;
+border: none;
+color: white;
+background: green;
+}
+
+.violetLine {
+    position: absolute;
+    width : 100%;
+    height: 2px;
+    background-color: #A442F1;
+    border: 0;
+    z-index: -1;
+}
+
+.greyLine {
+    position: absolute;
+    width : 100%;
+    height: 2px;
+    background-color: $cuaternaryGrey;
+    border: 0;
+    z-index: -1;
+}
+
+.greenLine {
+    position: absolute;
+    width : 100%;
+    height: 2px;
+    background-color: green;
+    border: 0;
+    z-index: -1;
+}
+
+.fontViolet {
+  top: 50px;
+  position: absolute;
+  color:#A442F1;
+}
+
+.fontGray {
+  top: 50px;
+  position: absolute;
+  color: gray;
+}
+
+.fontGreen {
+  top: 50px;
+  position: absolute;
+  color: green
 }

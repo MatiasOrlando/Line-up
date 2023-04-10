@@ -1,28 +1,45 @@
 import Modal from "@/commons/Modal";
 import React, { useState } from "react";
 import { BsCheckSquare } from "react-icons/bs";
+import axios from "axios";
 
 const ForgetPassword = ({ setForgetPassword }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(true);
 
   const handlePassword = () => {
     setForgetPassword(false);
   };
 
-  const handleCloseModal = () => {
-    setIsOpen(false);
-    setForgetPassword(false);
+  const handleEmailPasswordUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const passwordUpdate = await axios.put(
+        "http://localhost:3001/api/user/password-update-email",
+        {
+          email,
+        }
+      );
+      passwordUpdate && setModalIsOpen(true);
+    } catch {
+      setIsValidEmail(false);
+    }
   };
 
   return (
     <>
       <div className="container-form-login">
-        <div className="container-form-login__first-div">
-          <form className="login-form">
-            <div className="login-form_box-title">
+        <div className="container-form-login-first-div">
+          <form className="login-form" onSubmit={handleEmailPasswordUpdate}>
+            <div
+              className="login-form_box-title"
+              style={{ marginBottom: "10px" }}
+            >
               <h2>¿Olvidaste tu contraseña?</h2>
             </div>
-            <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+            <hr></hr>
+            <div style={{ marginTop: "10px", marginBottom: "20px" }}>
               <p style={{ textAlign: "center" }}>
                 Ingresa tu correo electrónico y te enviaremos los pasos a seguir
                 para recuperar tu cuenta.
@@ -31,23 +48,27 @@ const ForgetPassword = ({ setForgetPassword }) => {
             <div className="login-form_box-input">
               <label>Mail</label>
               <input
-                style={{ marginBottom: "20px" }}
                 className={`input-primary width-100`}
                 type="text"
                 id="user"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (e.target.value === "") {
+                    setIsValidEmail(true);
+                  }
+                }}
               />
+
               <div className="box-span"></div>
             </div>
+            <div className="credentials-box">
+              <span>
+                {!isValidEmail ? `El email ingresado no es válido` : ``}
+              </span>
+            </div>
             <div>
-              <button
-                className="btn-primary width-100"
-                type="submit"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  setIsOpen(true);
-                }}
-              >
-                Enviar correo electronico
+              <button className="btn-primary width-100" type="submit">
+                Enviar correo electrónico
               </button>
             </div>
             <hr />
@@ -57,22 +78,24 @@ const ForgetPassword = ({ setForgetPassword }) => {
                 type="button"
                 onClick={handlePassword}
               >
-                Volver al inicio de sesion
+                Volver al inicio de sesión
               </button>
             </div>
           </form>
         </div>
       </div>
-      <Modal isOpen={isOpen} onClose={handleCloseModal}>
-        <div className="center width-100">
-          <BsCheckSquare className="icon" />
-          <h2>Mail enviado correctamente</h2>
-          <p>Mira en tu casilla de correo para recuperar la contraseña</p>
-          <button className="btn-primary width-100" onClick={handleCloseModal}>
-            Aceptar
-          </button>
-        </div>
-      </Modal>
+      <Modal
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        redirect={{ function: setForgetPassword, rute: false }}
+        modalContent={{
+          title: "Mail enviado correctamente",
+          description:
+            "Mira en tu casilla de correo para recuperar la contraseña",
+          button: "Aceptar",
+          icon: <BsCheckSquare className="icon" />,
+        }}
+      ></Modal>
     </>
   );
 };
