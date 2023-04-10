@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 
-export default function FormReserva({ branches }) {
+export default function FormReserva({ branches, user }) {
   const [tiempoRestante, setTiempoRestante] = useState(300);
   const [datesAvailable, setDatesAvailable] = useState([]);
+  const [selectedDay, setSelectedDay] = useState("");
+  const [selectedHour, setSelectedHour] = useState("");
   const [show, setShow] = useState(false);
   const [hoursAvailable, setHoursAvailable] = useState([]);
   const [horarios, setHorarios] = useState([]);
@@ -110,15 +112,21 @@ export default function FormReserva({ branches }) {
     }
   };
 
-   const handleChange = async (e) => {
+  const handleChange = async (e) => {
     if (e.target.value !== "Selecciona una opcion") {
-      setVio({ ...vio, color: "green", value: "✓", lineColor: "greenLine", className:"fontGreen" });
+      setVio({
+        ...vio,
+        color: "green",
+        value: "✓",
+        lineColor: "greenLine",
+        className: "fontGreen",
+      });
       setGra({
         ...gra,
         color: "violet",
         lineColor: "violetLine",
         className: "fontViolet",
-        value: 2
+        value: 2,
       });
     }
 
@@ -181,7 +189,13 @@ export default function FormReserva({ branches }) {
   };
 
   const handleClick = async (e) => {
-    setGra({ ...gra, color: "green", value: "✓", lineColor: "greenLine",className:"fontGreen" });
+    setGra({
+      ...gra,
+      color: "green",
+      value: "✓",
+      lineColor: "greenLine",
+      className: "fontGreen",
+    });
     setGra2({
       ...gra2,
       color: "violet",
@@ -228,6 +242,18 @@ export default function FormReserva({ branches }) {
     className: "fontGray",
   });
 
+  /* const handleSubmit = () =>{
+    axios.post("http://localhost:3001/api/appointments/add",{
+      branch:selectedBranch,
+      name: user.name
+      email: 
+      phoneNew:
+      day:
+      time: selectedHour
+    })
+    
+  } */
+  
   return (
     <div className="content-container">
       <h1 className="reserva-title">Hacer una reserva</h1>
@@ -271,7 +297,7 @@ export default function FormReserva({ branches }) {
             <select
               className="input-primary w100"
               onChange={(e) => {
-                console.log(e.target.value);
+                setSelectedHour(e.target.value);
               }}
             >
               <option value="Selecciona una opcion">
@@ -299,19 +325,21 @@ export default function FormReserva({ branches }) {
               <h3 className="reserva-title-3">Mail</h3>
               <input className="input-primary w100" type="text" />
               <button
+                className="btn-primary"
                 type="submit"
                 onClick={(e) => {
+                  /* handleSubmit */
                   e.preventDefault();
                   setGra2({
                     ...gra2,
                     color: "green",
                     value: "✓",
                     lineColor: "greenLine",
-                    className: "fontGreen"
+                    className: "fontGreen",
                   });
                 }}
               >
-                PRUEBA DE FINALIZAR
+                Confirmar reserva
               </button>
             </form>
           </>
