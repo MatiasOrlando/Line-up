@@ -13,7 +13,7 @@ export async function getServerSideProps(context) {
     };
   } else {
     const response = await fetch(
-      `http://localhost:3001/api/appointments/ultimoTurno/token?token=${token.user}`
+      `http://localhost:3001/api/appointments/lastAppointment/token?token=${token.user}`
     );
 
     const data = await response.json();

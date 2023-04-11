@@ -393,8 +393,8 @@ const sucursal = [
     name: "Villa Lynch",
     location: "Buenos Aires",
     openingHour: "12:00",
-    closingHour: "18:00",
-    allowedClients: 5,
+    closingHour: "13:00",
+    allowedClients: 1,
     user: {
       name: "pepe",
       email: "operator5@example.com",
@@ -404,15 +404,7 @@ const sucursal = [
   },
 ];
 
-const turnos = [
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-]
+const turnos = [{}, {}, {}, {}, {}, {}, {}];
 
 // date: { type: String, required: true },
 // timeOfAppontment: { type: String, required: true },
@@ -441,7 +433,6 @@ const turnos = [
 //   hourRange: { type: String, required: true },
 // },
 // });
-
 
 const CreateUsers = async () => {
   try {

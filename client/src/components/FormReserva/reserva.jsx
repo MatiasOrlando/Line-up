@@ -1,13 +1,15 @@
 import { DateTime } from "luxon";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Modal from "@/commons/Modal";
+import { BsCheckSquare } from "react-icons/bs";
 
 export default function FormReserva({ branches, user }) {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [tiempoRestante, setTiempoRestante] = useState(300);
   const [datesAvailable, setDatesAvailable] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState("");
-  let selectedBranchAux = "";
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedHour, setSelectedHour] = useState("");
   const [show, setShow] = useState(false);
@@ -17,8 +19,8 @@ export default function FormReserva({ branches, user }) {
   const router = useRouter();
   const pathname = router.pathname;
   const [test, setTest] = useState("");
-
-  /* let selectedBranch = ""; */
+  const rute = useRouter();
+  const dayRef = useRef();
   let horario = [];
 
   const today = DateTime.local();
@@ -118,6 +120,7 @@ export default function FormReserva({ branches, user }) {
     loadingData.forEach((date, i) => {
       const test = document.getElementById(i);
       test.disabled = true;
+      test.classList.remove("dayPicked");
     });
 
     if (e.target.value !== "Selecciona una opcion") {
@@ -164,7 +167,6 @@ export default function FormReserva({ branches, user }) {
     setShow(false);
     const branch = e.target.value;
     if (branch !== "Selecciona una opcion") {
-      selectedBranchAux = branch;
       setSelectedBranch(branch);
       const datesAvailables = await axios.post(
         "http://localhost:3001/api/appointments/daysavailable",
@@ -191,7 +193,6 @@ export default function FormReserva({ branches, user }) {
         });
       });
     } else {
-      selectedBranchAux = "";
       setSelectedBranch("");
       loadingData.forEach((fecha, i) => {
         fecha.toFormat("dd-MM-yyyy");
@@ -202,6 +203,15 @@ export default function FormReserva({ branches, user }) {
   };
 
   const handleClick = async (e) => {
+    const dayValue = dayRef.current.value;
+
+    loadingData.forEach((date, i) => {
+      const test = document.getElementById(i);
+      test.classList.remove("dayPicked");
+    });
+
+    e.target.classList.add("dayPicked");
+
     setGra({
       ...gra,
       color: "green",
@@ -223,7 +233,7 @@ export default function FormReserva({ branches, user }) {
     const hours = await axios.post(
       "http://localhost:3001/api/appointments/hoursavailable",
       {
-        branch: selectedBranchAux,
+        branch: dayValue,
         day: selectedDate,
       }
     );
@@ -266,153 +276,172 @@ export default function FormReserva({ branches, user }) {
       lineColor: "greenLine",
       className: "fontGreen",
     });
-    axios.post("http://localhost:3001/api/appointments/add", {
-      branch: selectedBranch,
-      name: user.name,
-      email: user.email,
-      phoneNew: user.phone,
-      day: selectedDay,
-      time: selectedHour,
-    });
+    axios
+      .post("http://localhost:3001/api/appointments/add", {
+        branch: selectedBranch,
+        name: user.name,
+        email: user.email,
+        phoneNew: user.phone,
+        day: selectedDay,
+        time: selectedHour,
+      })
+      .then(() => setModalIsOpen(true));
   };
 
   return (
-    <div className="content-container">
-      <h1 className="reserva-title">Hacer una reserva</h1>
-      <div className="reserva-form-container">
-        <h2>Reserva</h2>
-        <div className="containerMother">
-          <div className="checkboxContainer">
-            <input type="button" className={vio.color} value={vio.value} />
-            <hr className={vio.lineColor} />
-            <div className={vio.className}>{vio.text}</div>
+    <>
+      <div className="content-container">
+        <h1 className="reserva-title">Hacer una reserva</h1>
+        <div className="reserva-form-container">
+          <h2>Reserva</h2>
+          <div className="containerMother">
+            <div className="checkboxContainer">
+              <input type="button" className={vio.color} value={vio.value} />
+              <hr className={vio.lineColor} />
+              <div className={vio.className}>{vio.text}</div>
+            </div>
+
+            <div className="checkboxContainer">
+              <input type="button" className={gra.color} value={gra.value} />
+              <hr className={gra.lineColor} />
+              <div className={gra.className}>{gra.text}</div>
+            </div>
+
+            <div className="checkboxContainer">
+              <input type="button" className={gra2.color} value={gra2.value} />
+              <hr className={gra2.lineColor} />
+              <div className={gra2.className}>{gra2.text}</div>
+            </div>
           </div>
+          <h3 className="reserva-title-3">Sucursal</h3>
+          <select
+            className="input-primary w100"
+            onChange={handleChange}
+            ref={dayRef}
+          >
+            <option value="Selecciona una opcion">Selecciona una opción</option>
+            {branches.map((name) => {
+              return (
+                <option value={name} key={name}>
+                  {name}
+                </option>
+              );
+            })}
+          </select>
 
-          <div className="checkboxContainer">
-            <input type="button" className={gra.color} value={gra.value} />
-            <hr className={gra.lineColor} />
-            <div className={gra.className}>{gra.text}</div>
-          </div>
-
-          <div className="checkboxContainer">
-            <input type="button" className={gra2.color} value={gra2.value} />
-            <hr className={gra2.lineColor} />
-            <div className={gra2.className}>{gra2.text}</div>
-          </div>
-        </div>
-        <h3 className="reserva-title-3">Sucursal</h3>
-        <select className="input-primary w100" onChange={handleChange}>
-          <option value="Selecciona una opcion">Selecciona una opción</option>
-          {branches.map((name) => {
-            return (
-              <option value={name} key={name}>
-                {name}
-              </option>
-            );
-          })}
-        </select>
-
-        {show && (
-          <>
-            <h3 className="reserva-title-3">Horario</h3>
-            <select
-              className="input-primary w100"
-              onChange={(e) => {
-                setSelectedHour(e.target.value);
-              }}
-            >
-              <option value="Selecciona una opcion">
-                Selecciona una opción
-              </option>
-
-              {horarios.map((hora) => {
-                return (
-                  <option value={hora} key={hora}>
-                    {hora}
-                  </option>
-                );
-              })}
-            </select>
-            {/* A ESTE FORM SE LE COLOCA LA CLASE:  formReserva !!!!!!!!!!!!!!!!!!!!!!!!! */}
-            <form className="formReserva w100" action="">
-              <div className="w50">
-                <h3 className="reserva-title-3">Nombre y Apellido</h3>
-                <input
-                  disabled={true}
-                  defaultValue={user.name}
-                  className="input-primary w95"
-                  type="text"
-                />
-              </div>
-              <div style={{ justifyContent: "center" }} className="w50">
-                <h3 className="reserva-title-3">Telefono</h3>
-                <input
-                  defaultValue={user.phone}
-                  className="input-primary w95"
-                  type="text"
-                />
-              </div>
-              <h3 className="reserva-title-3">Mail</h3>
-              <input
-                disabled={true}
-                defaultValue={user.email}
+          {show && (
+            <>
+              <h3 className="reserva-title-3">Horario</h3>
+              <select
                 className="input-primary w100"
-                type="text"
-              />
-              <button
-                className="btn-primary"
-                type="submit"
-                onClick={(e) => {
-                  handleSubmit(e);
-                  e.preventDefault();
-                  setGra2({
-                    ...gra2,
-                    color: "green",
-                    value: "✓",
-                    lineColor: "greenLine",
-                    className: "fontGreen",
-                  });
+                onChange={(e) => {
+                  setSelectedHour(e.target.value);
                 }}
               >
-                Confirmar reserva
-              </button>
-            </form>
-          </>
-        )}
-      </div>
-      <div className="calendar-container color-grey4">
-        <h2>
-          {monthDay} {year}
-        </h2>
-        <div className="grid-container">
-          <div className="day-name color-grey4">Do</div>
-          <div className="day-name color-grey4">Lu</div>
-          <div className="day-name color-grey4">Ma</div>
-          <div className="day-name color-grey4">Mi</div>
-          <div className="day-name color-grey4">Ju</div>
-          <div className="day-name color-grey4">Vi</div>
-          <div className="day-name color-grey4">Sa</div>
-          {loadingData.map((day, i) => {
-            return (
-              <button
-                disabled={true}
-                className="calendary-days button-day"
-                onClick={() => handleClick()}
-                key={i}
-                id={i}
-                value={day.toFormat("dd-MM-yyyy")}
-              >
-                {day.day}
-              </button>
-            );
-          })}
+                <option value="Selecciona una opcion">
+                  Selecciona una opción
+                </option>
+
+                {horarios.map((hora) => {
+                  return (
+                    <option value={hora} key={hora}>
+                      {hora}
+                    </option>
+                  );
+                })}
+              </select>
+              {/* A ESTE FORM SE LE COLOCA LA CLASE:  formReserva !!!!!!!!!!!!!!!!!!!!!!!!! */}
+              <form className="formReserva w100" action="">
+                <div className="w50">
+                  <h3 className="reserva-title-3">Nombre y Apellido</h3>
+                  <input
+                    disabled={true}
+                    defaultValue={user.name}
+                    className="input-primary w95"
+                    type="text"
+                  />
+                </div>
+                <div style={{ justifyContent: "center" }} className="w50">
+                  <h3 className="reserva-title-3">Telefono</h3>
+                  <input
+                    defaultValue={user.phone}
+                    className="input-primary w95"
+                    type="text"
+                  />
+                </div>
+                <h3 className="reserva-title-3">Mail</h3>
+                <input
+                  disabled={true}
+                  defaultValue={user.email}
+                  className="input-primary w100"
+                  type="text"
+                />
+                <button
+                  className="btn-primary"
+                  type="submit"
+                  onClick={(e) => {
+                    handleSubmit(e);
+                    e.preventDefault();
+                    setGra2({
+                      ...gra2,
+                      color: "green",
+                      value: "✓",
+                      lineColor: "greenLine",
+                      className: "fontGreen",
+                    });
+                  }}
+                >
+                  Confirmar reserva
+                </button>
+              </form>
+            </>
+          )}
+        </div>
+        <div className="calendar-container color-grey4">
+          <h2>
+            {monthDay} {year}
+          </h2>
+          <div className="grid-container">
+            <div className="day-name color-grey4">Do</div>
+            <div className="day-name color-grey4">Lu</div>
+            <div className="day-name color-grey4">Ma</div>
+            <div className="day-name color-grey4">Mi</div>
+            <div className="day-name color-grey4">Ju</div>
+            <div className="day-name color-grey4">Vi</div>
+            <div className="day-name color-grey4">Sa</div>
+            {loadingData.map((day, i) => {
+              return (
+                <button
+                  disabled={true}
+                  className="calendary-days button-day"
+                  onClick={() => handleClick()}
+                  key={i}
+                  id={i}
+                  value={day.toFormat("dd-MM-yyyy")}
+                >
+                  {day.day}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        <div className="countdown-container">
+          <button className="btn-primary sc">
+            Quedan {formatearTiempo(tiempoRestante)}
+          </button>
         </div>
       </div>
-      <div className="countdown-container">
-        <button className="btn-primary sc">
-          Quedan {formatearTiempo(tiempoRestante)}
-        </button>
-      </div>
-    </div>
+      <Modal
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        redirect={{ function: router.push, rute: "/reserva/confirmacion" }}
+        modalContent={{
+          title: "Turno reservado con éxito",
+          description: "Gracias por confiar en nuestro servicio",
+          button: "Aceptar",
+          icon: <BsCheckSquare className="icon" />,
+        }}
+      ></Modal>
+    </>
   );
 }
