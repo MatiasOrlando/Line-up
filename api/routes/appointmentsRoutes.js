@@ -5,6 +5,7 @@ const Appointment = require("../models/appointment");
 const { DateTime } = require("luxon");
 const moment = require("moment");
 const { appointmentConfirmation } = require("../config/emailConfirmation");
+const { validateToken } = require("../config/token");
 
 router.post("/add", async (req, res) => {
   const { branch, name, email, phoneNew, day, time } = req.body;
