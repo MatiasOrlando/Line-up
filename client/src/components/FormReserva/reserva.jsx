@@ -10,8 +10,9 @@ export default function FormReserva({ branches, user }) {
   const [tiempoRestante, setTiempoRestante] = useState(300);
   const [datesAvailable, setDatesAvailable] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState("");
+  const [invalidHour, setInvalidHour] = useState(false)
   const [selectedDay, setSelectedDay] = useState("");
-  const [selectedHour, setSelectedHour] = useState("");
+  const [selectedHour, setSelectedHour] = useState("Selecciona una opción");
   const [show, setShow] = useState(false);
   const [hoursAvailable, setHoursAvailable] = useState([]);
   const [horarios, setHorarios] = useState([]);
@@ -269,6 +270,13 @@ export default function FormReserva({ branches, user }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (selectedHour == "Selecciona una opcion"){
+      return setInvalidHour(true)
+    }
+
+    console.log(selectedHour);
+
     setGra2({
       ...gra2,
       color: "green",
@@ -319,7 +327,7 @@ export default function FormReserva({ branches, user }) {
             onChange={handleChange}
             ref={dayRef}
           >
-            <option value="Selecciona una opcion">Selecciona una opción</option>
+            <option value="Selecciona una opcion">Selecciona una opcion</option>
             {branches.map((name) => {
               return (
                 <option value={name} key={name}>
@@ -335,11 +343,14 @@ export default function FormReserva({ branches, user }) {
               <select
                 className="input-primary w100"
                 onChange={(e) => {
+                  if(e.target.value != "Selecciona una opcion"){
+                  setInvalidHour(false)
+                }
                   setSelectedHour(e.target.value);
                 }}
               >
                 <option value="Selecciona una opcion">
-                  Selecciona una opción
+                  Selecciona una opcion
                 </option>
 
                 {horarios.map((hora) => {
@@ -350,6 +361,7 @@ export default function FormReserva({ branches, user }) {
                   );
                 })}
               </select>
+              {invalidHour && <span style={{color:"red"}}>Por favor, seleccioná un horario válido</span> }
               {/* A ESTE FORM SE LE COLOCA LA CLASE:  formReserva !!!!!!!!!!!!!!!!!!!!!!!!! */}
               <form className="formReserva w100" action="">
                 <div className="w50">
