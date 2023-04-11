@@ -6,6 +6,7 @@ const { DateTime } = require("luxon");
 const moment = require("moment");
 const { appointmentConfirmation } = require("../config/emailConfirmation");
 const { validateToken } = require("../config/token");
+const randomNum = require("../config/randomNum");
 
 router.post("/add", async (req, res) => {
   const { branch, name, email, phoneNew, day, time } = req.body;
@@ -23,6 +24,7 @@ router.post("/add", async (req, res) => {
       let turno = {
         date: day,
         timeOfAppoinment: time,
+        idApp: randomNum(),
         user: {
           id: user._id,
           name: name,
@@ -42,6 +44,7 @@ router.post("/add", async (req, res) => {
         if (user.phone !== phoneNew) {
           await User.updateOne({ email: email }, { phone: phoneNew });
         }
+        console.log(turno);
         res.status(201).send(turno);
       }
     } else {

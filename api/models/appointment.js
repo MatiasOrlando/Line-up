@@ -9,6 +9,7 @@ const AppointmentSchema = new mongoose.Schema({
   status: { type: String, enum: state, required: true, default: "pending" },
   cancelReason: { type: String, default: null },
   createdAt: { type: Date, default: Date.now() },
+  idApp: { type: Number, default: null },
   user: {
     id: { type: mongoose.Schema.Types.ObjectId, required: true },
     name: { type: String, required: true },

@@ -22,10 +22,6 @@
   line-height: 24px;
   color: $nonaryGrey;
   background: none;
-  &:focus {
-    color: white;
-    background-color: $primaryColor;
-  }
   &:hover {
     background-color: $tertiaryGrey;
     color: $primaryColor;
@@ -34,4 +30,10 @@
     background-color: $secondaryGrey;
     color: $quinaryGrey;
   }
+}
+
+
+.dayPicked {
+   color: white;
+    background-color: $primaryColor;
 }

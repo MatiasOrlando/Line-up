@@ -112,7 +112,7 @@ export default function Confirmation({ appointments }) {
         <BsCheckSquare className="icon" />
         <h1>¡Gracias por tu reserva!</h1>
         <p>
-          En hasta 4 minutos, recibiras un correo electronico en{" "}
+          Dentro de los siguientes minutos, recibiras un correo electronico en
           <b>{user.email} </b>
           con todos los detalles de tu reservacion.
           <br />
@@ -127,7 +127,7 @@ export default function Confirmation({ appointments }) {
         <div className="container-confirmation-flex ">
           <div className="margin">
             <div className="number">
-              <h2>Reserva {branch.id}</h2>
+              <h2>Reserva {appointments[0].idApp}</h2>
             </div>
             <p>
               Hecho el {day} a las {hour} para el {appointments[0].date} a las
