@@ -13,21 +13,23 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
+    if (session.user){
       const res = await fetch(`http://localhost:3001/api/user/validate/token?token=${session.user}`)
       const data= await res.json()
-
-    const response = await fetch(
-      "http://localhost:3001/api/appointments/branches"
-    );
-    const branchData = await response.json();
       
-
-    return {
-      props: {
-        branches: branchData,
-        user:data
-      },
-    };
+      const response = await fetch(
+        "http://localhost:3001/api/appointments/branches"
+        );
+        const branchData = await response.json();
+        
+        
+        return {
+          props: {
+            branches: branchData,
+            user:data
+          },
+        };
+    } 
   }
 }
 
