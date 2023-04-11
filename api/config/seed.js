@@ -528,10 +528,36 @@ const CreateBranches = async () => {
 //   }
 // };
 
+const CreateAppoitments = async () => {
+  const appointmentAdm = await Appointment.findOne({
+    "user.email": "admin@example.com",
+  });
+  if (!appointmentAdm) {
+    await Appointment.create({
+      date: "1990-05-10",
+      timeOfAppoinment: "12:00",
+      status: "pending",
+      cancelReason: null,
+      idApp: 12223300000,
+      user: {
+        name: "admin",
+        email: "admin@example.com",
+        phone: 1155069647,
+      },
+      sucursal: {
+        name: "Villa Lynch",
+        allowedClients: 1,
+        openingHour: "12:00",
+        closingHour: "13:00",
+      },
+    });
+  }
+};
+
 const executor = async () => {
   await CreateUsers();
   await CreateBranches();
-  // await CreateAppoitments();
+  await CreateAppoitments();
   // await CreateUsers2();
 };
 

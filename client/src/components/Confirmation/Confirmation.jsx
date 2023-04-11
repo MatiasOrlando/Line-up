@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function Confirmation({ appointments }) {
   const appUrl = "http://localhost:3000/reserva/confirmacion";
-  const branch = appointments[0].sucursal;
+  const branch = appointments[0]?.sucursal;
   const user = appointments[0].user;
   const createdAt = new Date(appointments[0].createdAt);
   const day = `${createdAt.getDate()}/${
@@ -140,7 +140,10 @@ export default function Confirmation({ appointments }) {
             </button>
             <button className="button btn-quaternary">
               <AiOutlineClose className="icon" />
-              <Link href={"/cancelar"} className="link">
+              <Link
+                href={`/cancelar/${appointments[0].idApp}`}
+                className="link"
+              >
                 Cancelar reserva
               </Link>
             </button>
