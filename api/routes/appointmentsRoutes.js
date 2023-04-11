@@ -5,16 +5,14 @@ const Appointment = require("../models/appointment");
 const { DateTime } = require("luxon");
 const moment = require("moment");
 
-
 router.post("/add", async (req, res) => {
   const { branch, name, email, phoneNew, day, time } = req.body;
   try {
     const selectedBranch = await Branch.find({ name: branch });
-    const allowedClients = selectedBranch[0].allowedClients
-    const openingHour = selectedBranch[0].openingHour
-    const closingHour = selectedBranch[0].closingHour
+    const allowedClients = selectedBranch[0].allowedClients;
+    const openingHour = selectedBranch[0].openingHour;
+    const closingHour = selectedBranch[0].closingHour;
     const user = await User.findOne({ email });
-    console.log("USER",user);
     const fullAppoinment = await Appointment.find({
       day: day,
       timeOfAppoinment: time,
@@ -39,7 +37,7 @@ router.post("/add", async (req, res) => {
       };
       await Appointment.create(turno);
       if (user?.phone) {
-        if (user.phone !== phoneNew ) {
+        if (user.phone !== phoneNew) {
           await User.updateOne({ email: email }, { phone: phoneNew });
         }
         res.status(201).send(turno);
@@ -67,31 +65,32 @@ router.get("/branches", async (req, res) => {
 
 router.post("/daysavailable", async (req, res) => {
   const { days, branch, email } = req.body;
-  
   const userAppointments = await Appointment.find({
-    "user.email" : email
+    "user.email": email,
   });
-  
-
-
-  const turnos = userAppointments.map(turno=>{
-    return turno.date
-  })
-  
-  console.log(turnos);
+  const turnos = userAppointments.map((turno) => {
+    return turno.date;
+  });
 
   try {
     const selectedBranch = await Branch.find({ name: branch });
     const { openingHour, closingHour, allowedClients } = selectedBranch[0];
+    const timeNow = DateTime.local();
     const openingTime = DateTime.fromFormat(openingHour, "HH:mm");
     const closingTime = DateTime.fromFormat(closingHour, "HH:mm");
     const hoursOpen = closingTime.diff(openingTime, "hours").hours;
+    const twoHoursWindow = closingTime.diff(timeNow, "hours").hours;
+
+    const formattedDayNow = timeNow.toFormat("dd-MM-yyyy");
     const appoinmentsPerDay = hoursOpen * 4 * allowedClients;
     const arrayToSend = [];
+
     const promises = days.map(async (day) => {
       const availableAppoinments = await Appointment.find({ date: day });
-      if (availableAppoinments.length < appoinmentsPerDay) {
-        arrayToSend.push(day);
+      if (day !== formattedDayNow || twoHoursWindow > 2) {
+        if (availableAppoinments.length < appoinmentsPerDay) {
+          return arrayToSend.push(day);
+        }
       }
     });
 
@@ -99,7 +98,7 @@ router.post("/daysavailable", async (req, res) => {
 
     return res.status(200).send({
       arrayToSend,
-      turnos
+      turnos,
     });
   } catch (error) {
     console.log(error);
@@ -111,14 +110,14 @@ router.post("/hoursavailable", async (req, res) => {
   try {
     const fechaSeleccionada = day;
     const selectedBranch = await Branch.find({ name: branch });
-    const allowedClients = selectedBranch[0].allowedClients
-    const openingHour = selectedBranch[0].openingHour
-    const closingHour = selectedBranch[0].closingHour
+    const allowedClients = selectedBranch[0].allowedClients;
+    const openingHour = selectedBranch[0].openingHour;
+    const closingHour = selectedBranch[0].closingHour;
     const openingTime = moment(openingHour, "HH:mm");
     const closingTime = moment(closingHour, "HH:mm");
     const duration = moment.duration(closingTime.diff(openingTime));
     const numIntervals = Math.ceil(duration.asMinutes() / 15);
-
+    const timeNow = DateTime.local();
     const horarios = {};
     for (let i = 0; i < numIntervals; i++) {
       const start = openingTime.clone().add(i * 15, "minutes");
@@ -147,13 +146,26 @@ router.post("/hoursavailable", async (req, res) => {
     });
 
     const resultados = Object.values(horarios);
-    const horariosDisponibles = [];
+    const horariosFiltrados = [];
     resultados.map((resultado) => {
       if (resultado.count < allowedClients) {
-        horariosDisponibles.push(resultado.horario);
+        horariosFiltrados.push(resultado.horario);
       }
     });
-    res.status(200).send(horariosDisponibles);
+    const horariosDisponibles = [];
+    horariosFiltrados.forEach((horario) => {
+      const horarioFormat = DateTime.fromFormat(horario, "HH:mm");
+      if (
+        fechaSeleccionada === timeNow.toFormat("dd-MM-yyyy") &&
+        horarioFormat.diff(timeNow, "hours").hours > 2
+      ) {
+        return horariosDisponibles.push(horario);
+      }
+      if (fechaSeleccionada !== timeNow.toFormat("dd-MM-yyyy")) {
+        return horariosDisponibles.push(horario);
+      }
+    });
+    return res.status(200).send(horariosDisponibles);
   } catch (error) {
     console.log(error);
   }

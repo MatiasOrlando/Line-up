@@ -16,6 +16,7 @@ export default function FormReserva({ branches, user }) {
   const [monthDay, setMonthDay] = useState("");
   const router = useRouter();
   const pathname = router.pathname;
+  const [test, setTest] = useState("");
 
   /* let selectedBranch = ""; */
   let horario = [];
@@ -114,6 +115,11 @@ export default function FormReserva({ branches, user }) {
   };
 
   const handleChange = async (e) => {
+    loadingData.forEach((date, i) => {
+      const test = document.getElementById(i);
+      test.disabled = true;
+    });
+
     if (e.target.value !== "Selecciona una opcion") {
       setVio({
         ...vio,
@@ -160,7 +166,6 @@ export default function FormReserva({ branches, user }) {
     if (branch !== "Selecciona una opcion") {
       selectedBranchAux = branch;
       setSelectedBranch(branch);
-      console.log(selectedBranchAux);
       const datesAvailables = await axios.post(
         "http://localhost:3001/api/appointments/daysavailable",
         {
@@ -171,14 +176,12 @@ export default function FormReserva({ branches, user }) {
       );
       loadingData.forEach((fecha, i) => {
         datesAvailables.data.arrayToSend;
-
         const filteredArray = datesAvailables.data.arrayToSend.filter(
           (element) => !datesAvailables.data.turnos.includes(element)
         );
         filteredArray.forEach((date) => {
           if (fecha.toFormat("dd-MM-yyyy") === date) {
             const element = document.getElementById(i);
-
             /* const activar = document.getElementsByClassName("color-grey4");
             activar.classList.remove("color.grey4");
             */
@@ -199,7 +202,6 @@ export default function FormReserva({ branches, user }) {
   };
 
   const handleClick = async (e) => {
-    console.log(e.target.value);
     setGra({
       ...gra,
       color: "green",
@@ -216,7 +218,8 @@ export default function FormReserva({ branches, user }) {
 
     const selectedDate = e.target.value;
     setSelectedDay(selectedDate);
-
+    // console.log(selectedBranchAux, "SELECTED BRANCH variable");
+    // console.log(selectedBranch, "branch estado");
     const hours = await axios.post(
       "http://localhost:3001/api/appointments/hoursavailable",
       {
