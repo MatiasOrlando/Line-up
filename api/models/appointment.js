@@ -5,7 +5,7 @@ const state = ["pending", "completed", "Cancel"];
 
 const AppointmentSchema = new mongoose.Schema({
   date: { type: String, required: true },
-  timeOfAppontment: { type: String, required: true },
+  timeOfAppoinment: { type: String, required: true },
   status: { type: String, enum: state, required: true, default: "pending" },
   cancelReason: { type: String, default: null },
   createdAt: { type: Date, default: Date.now() },
