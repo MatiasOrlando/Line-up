@@ -10,6 +10,7 @@ const randomNum = require("../config/randomNum");
 
 router.post("/add", async (req, res) => {
   const { branch, name, email, phoneNew, day, time } = req.body;
+  const lastAppointment = await Appointment.findOne().sort({ _id: -1 });
   try {
     const selectedBranch = await Branch.find({ name: branch });
     const allowedClients = selectedBranch[0].allowedClients;
@@ -24,7 +25,7 @@ router.post("/add", async (req, res) => {
       let turno = {
         date: day,
         timeOfAppoinment: time,
-        idApp: randomNum(),
+        idApp: lastAppointment.idApp + 1,
         user: {
           id: user._id,
           name: name,
@@ -44,7 +45,7 @@ router.post("/add", async (req, res) => {
         if (user.phone !== phoneNew) {
           await User.updateOne({ email: email }, { phone: phoneNew });
         }
-        console.log(turno);
+
         res.status(201).send(turno);
       }
     } else {
@@ -100,7 +101,6 @@ router.post("/daysavailable", async (req, res) => {
     });
 
     await Promise.all(promises);
-
     return res.status(200).send({
       arrayToSend,
       turnos,
@@ -239,7 +239,9 @@ router.get("/lastAppointment/token", async (req, res) => {
       })
         .sort({ _id: -1 })
         .limit(1);
+
       appointmentConfirmation(userAppointment);
+
       return res.status(200).send(userAppointment);
     } else {
       return res.status(400).send(`Invalid credentials`);
