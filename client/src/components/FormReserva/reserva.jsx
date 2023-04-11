@@ -321,7 +321,7 @@ export default function FormReserva({ branches, user }) {
               <div className={gra2.className}>{gra2.text}</div>
             </div>
           </div>
-          <h3 className="reserva-title-3">Sucursal</h3>
+          <h3 style={{marginTop:"5rem"}} className="reserva-title-3">Sucursal</h3>
           <select
             className="input-primary w100"
             onChange={handleChange}
