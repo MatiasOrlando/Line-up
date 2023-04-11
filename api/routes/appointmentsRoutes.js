@@ -240,7 +240,7 @@ router.get("/lastAppointment/token", async (req, res) => {
         .sort({ _id: -1 })
         .limit(1);
 
-      appointmentConfirmation(userAppointment);
+      //appointmentConfirmation(userAppointment);
 
       return res.status(200).send(userAppointment);
     } else {

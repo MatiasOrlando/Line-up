@@ -12,7 +12,7 @@ export default function FormReserva({ branches, user }) {
   const [selectedBranch, setSelectedBranch] = useState("");
   const [invalidHour, setInvalidHour] = useState(false)
   const [selectedDay, setSelectedDay] = useState("");
-  const [selectedHour, setSelectedHour] = useState("Selecciona una opción");
+  const [selectedHour, setSelectedHour] = useState("Selecciona una opcion");
   const [show, setShow] = useState(false);
   const [hoursAvailable, setHoursAvailable] = useState([]);
   const [horarios, setHorarios] = useState([]);
