@@ -6,13 +6,16 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import Link from "next/link";
 
-const Confirmation = () => {
-  const num = "#1043812955480-01";
-  const email = "asdasd@gmail.com";
+export default function Confirmation({ appointments }) {
   const appUrl = "http://localhost:3000/reserva/confirmacion";
-
+  const branch = appointments[0].sucursal;
+  const user = appointments[0].user;
+  const createdAt = new Date(appointments[0].createdAt);
+  const day = `${createdAt.getDate()}/${
+    createdAt.getMonth() + 1
+  }/${createdAt.getFullYear()}`;
+  const hour = `${createdAt.getHours()}:${createdAt.getMinutes()}`;
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
   const handlePdf = () => {
     pdfMake.createPdf(docDefinition).download("archivo.pdf");
   };
@@ -22,16 +25,16 @@ const Confirmation = () => {
     pageOrientation: "portrait",
     content: [
       {
-        text: `TURNO CONFIRMADO`,
+        text: `TURNO RESERVADO CON EXITO`,
         style: "header",
       },
       {
         text: `
-      RESERVA: ${num}`,
+      RESERVA: ${branch.id}`,
         style: "title",
       },
       {
-        text: `Hecho el 10/10/2022 a las 11:35 para el 12/10/2022 a las 13:00 hs
+        text: `Hecho el ${day} a las ${hour} para el ${appointments[0].date} a las ${appointments[0].timeOfAppontment} hs
                Si deseas cancelar el turno entra a la app o escanea el siguiente codigo
                
                `,
@@ -46,9 +49,9 @@ const Confirmation = () => {
       {
         text: `
 
-        Nombre: Ivan Cruce
-        Sucursal: Villa Crespo
-        Horario: 13:00 hs
+        Nombre: ${user.name}
+        Sucursal: ${branch.name}
+        Horario: ${hour}
         `,
         style: "title",
       },
@@ -57,15 +60,15 @@ const Confirmation = () => {
         style: "text",
       },
       {
-        text: "¡MUCHAS GRACIAS POR CONFIAR EN NOSOTROS!",
+        text: "¡MUCHAS GRACIAS POR CONFIAR EN NUESTRO SERVICIO!",
         style: "header",
-        fontSize: 16,
+        fontSize: 14,
       },
     ],
 
     styles: {
       header: {
-        fontSize: 22,
+        fontSize: 20,
         bold: true,
         color: "#a442f1",
         italics: true,
@@ -109,8 +112,9 @@ const Confirmation = () => {
         <BsCheckSquare className="icon" />
         <h1>¡Gracias por tu reserva!</h1>
         <p>
-          En hasta 4 minutos, recibiras un correo electronico en {email} con
-          todos los detalles de tu reservacion.
+          En hasta 4 minutos, recibiras un correo electronico en{" "}
+          <b>{user.email} </b>
+          con todos los detalles de tu reservacion.
           <br />
           Recorda revisar tu buzon de correo no deseado o promociones
         </p>
@@ -123,11 +127,11 @@ const Confirmation = () => {
         <div className="container-confirmation-flex ">
           <div className="margin">
             <div className="number">
-              <h2>Reserva</h2>
-              <h2>{num}</h2>
+              <h2>Reserva {branch.id}</h2>
             </div>
             <p>
-              Hecho el 10/10/2022 a las 11:35 para el 12/10/2022 a las 13:00 hs
+              Hecho el {day} a las {hour} para el {appointments[0].date} a las
+              {appointments[0].timeOfAppontment} hs
             </p>
           </div>
           <div>
@@ -147,19 +151,17 @@ const Confirmation = () => {
             className="data
             "
           >
-            <h3>Ivan Cruce</h3>
-            <p>Mail: ivancruce@gmail.com</p>
-            <p>Telefono: 21321348</p>
+            <h3>{user.name}</h3>
+            <p>Mail: {user.email}</p>
+            <p>Telefono: {user.phone}</p>
           </div>
           <div className="data ">
             <h3>Reserva</h3>
-            <p>Sucursal: Villa Crespo</p>
-            <p>Horario: 13:00 hs</p>
+            <p>Sucursal: {branch.name} </p>
+            <p>Horario: {hour}</p>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default Confirmation;
+}
