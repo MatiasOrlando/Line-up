@@ -1,34 +1,5 @@
 const nodemailer = require("nodemailer");
 
-async function emailConfirmation() {
-  let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: "lineupwebapp@gmail.com",
-      pass: "lqiywvjkcppiukcd",
-      // passWindows: hofkzguloatrkcyr,
-      // passLinux: plbenacmbfzrqpej
-      // ⚠️ For better security, use environment variables set on the server for these values when deploying
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
-
-  let info = await transporter.sendMail({
-    from: '"You" <lineupwebapp@gmail.com>',
-    to: "matiassorlando@gmail.com",
-    subject: "Testing, testing, 123",
-    html: `<h1>Hello there</h1>
-    <p>Isn't NodeMailer useful?</p>
-    `,
-  });
-
-  console.log(info.messageId); // Random ID generated after successful send (optional)
-}
-
 async function passwordUpdate(email, token) {
   let transporter = nodemailer.createTransport({
     service: "hotmail",
@@ -49,5 +20,35 @@ async function passwordUpdate(email, token) {
 
   console.log(info.messageId); // Random ID generated after successful send (optional)
 }
+async function appointmentConfirmation(appointment) {
+  const branch = appointment[0].sucursal;
+  const user = appointment[0].user;
+  const createdAt = new Date(appointment[0].createdAt);
+  const day = `${createdAt.getDate()}/${
+    createdAt.getMonth() + 1
+  }/${createdAt.getFullYear()}`;
+  const hour = `${createdAt.getHours()}:${createdAt.getMinutes()}`;
 
-module.exports = { emailConfirmation, passwordUpdate };
+  let transporter = nodemailer.createTransport({
+    service: "hotmail",
+    auth: {
+      user: "lineupapp@hotmail.com",
+      pass: "Lineup2023",
+    },
+  });
+
+  let info = await transporter.sendMail({
+    from: `lineupapp@hotmail.com`,
+    to: `${user.email}`,
+    subject: `Confirmacion de turno`,
+    html: `
+    <h2>Turno Confirmado<h2>
+    <h2>Reserva ${branch.id}
+    <p>Hecho el ${day} a las ${hour} para el ${appointment[0].date} a las ${appointment[0].timeOfAppontment} hs</p>
+    <p>Nombre: ${user.name}</p>
+    <p>Sucursal: ${branch.name}</p>
+    <p>Horario: ${hour}</p>`,
+  });
+}
+
+module.exports = { passwordUpdate, appointmentConfirmation };
