@@ -4,6 +4,7 @@ const Branch = require("../models/branch");
 const Appointment = require("../models/appointment");
 const { DateTime } = require("luxon");
 const moment = require("moment");
+const { appointmentConfirmation } = require("../config/emailConfirmation");
 
 router.post("/add", async (req, res) => {
   const { branch, name, email, phoneNew, day, time } = req.body;
@@ -220,6 +221,27 @@ router.put("/cancelar/:reservaId", async (req, res) => {
     return res.send(canceledAppointment);
   } catch (error) {
     console.error(error);
+  }
+});
+
+// buscar el ultimo turno
+router.get("/lastAppointment/token", async (req, res) => {
+  try {
+    const { token } = req.query;
+    const decodedUser = validateToken(token);
+    if (decodedUser) {
+      const userAppointment = await Appointment.find({
+        "user.id": decodedUser._id,
+      })
+        .sort({ _id: -1 })
+        .limit(1);
+      appointmentConfirmation(userAppointment);
+      return res.status(200).send(userAppointment);
+    } else {
+      return res.status(400).send(`Invalid credentials`);
+    }
+  } catch (error) {
+    return res.status(500).send(`Server error`);
   }
 });
 
