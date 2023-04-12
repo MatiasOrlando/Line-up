@@ -41,7 +41,7 @@ export default function FormReserva({ branches, user }) {
       today.get("monthLong").slice(1);
     setMonthDay(nombreMes);
   }, []);
-/* 
+  /* 
   useEffect(() => {
     if (pathname === "/reserva") document.body.classList.add("bg-grey2");
   }, [pathname]); */
@@ -72,13 +72,13 @@ export default function FormReserva({ branches, user }) {
     }
   }
 
-  /* useEffect(() => {
-    const intervalo = setInterval(() => {
-      setTiempoRestante((tiempoRestante) => tiempoRestante - 1);
-    }, 1000);
+  // useEffect(() => {
+  //   const intervalo = setInterval(() => {
+  //     setTiempoRestante((tiempoRestante) => tiempoRestante - 1);
+  //   }, 1000);
 
-    return () => clearInterval(intervalo);
-  }, []); */
+  //   return () => clearInterval(intervalo);
+  // }, []);
 
   function formatearTiempo(tiempo) {
     const minutos = Math.floor(tiempo / 60);
@@ -124,7 +124,6 @@ export default function FormReserva({ branches, user }) {
       test.classList.remove("dayPicked");
     });
 
-    console.log(e.target.value);
     if (e.target.value !== "Selecciona una opcion") {
       setVio({
         ...vio,
@@ -142,9 +141,16 @@ export default function FormReserva({ branches, user }) {
       });
       setGra2({
         ...gra2,
-        color: gra.color === "green" ? "gray" : "violet",
-        lineColor: gra.color === "green" ? "greyLine" : "violetLine",
-        className: gra.color === "green" ? "fontGray" : "fontViolet",
+        color:
+          gra.color === "green" || vio.color === "violet" ? "gray" : "violet",
+        lineColor:
+          gra.color === "green" || vio.color === "violet"
+            ? "greyLine"
+            : "violetLine",
+        className:
+          gra.color === "green" || vio.color === "violet"
+            ? "fontGray"
+            : "fontViolet",
         value: 3,
       });
     }
