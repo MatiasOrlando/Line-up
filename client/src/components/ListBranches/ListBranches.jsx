@@ -2,6 +2,7 @@ import * as React from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function ListBranches({ branches, length }) {
   const router = useRouter();
@@ -15,14 +16,15 @@ export default function ListBranches({ branches, length }) {
       <main className="container-appointments">
         <div className="container-appointments_box">
           <div className="box-title">
-            <h2>Reservas</h2>
+            <h2>Sucursales</h2>
           </div>
           <div className="container-list">
             {branches.map((branch, index) => {
+              console.log("A", branch);
               return (
                 <div className="item-list" key={index}>
                   <div className="item-section">
-                    <div className="item-title">Nombre y Apellido</div>
+                    <div className="item-title">Nombre</div>
                     <div className="item-description">{branch.name}</div>
                   </div>
                   <div className="item-section">
@@ -36,16 +38,19 @@ export default function ListBranches({ branches, length }) {
                     </div>
                   </div>
                   <div className="item-section">
-                    <div className="item-title">
-                      Horarios de Inicio y Cierre
-                    </div>
+                    <div className="item-title">Horario de Inicio y Cierre</div>
                     <div className="item-description">
-                      {branch.openingHour} - {branch.closingHour}
+                      {branch.openingHour} - {branch.closingHour} hs
                     </div>
                   </div>
                   <div className="item-section">
                     <button className="btn-secondary" name="" id="">
-                      Editar
+                      <Link
+                        href={`/sucursales/editar/${branch.id}`}
+                        className="link"
+                      >
+                        Editar
+                      </Link>
                     </button>
                   </div>
                 </div>
