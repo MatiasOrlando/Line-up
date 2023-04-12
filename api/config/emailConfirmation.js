@@ -51,4 +51,25 @@ async function appointmentConfirmation(appointment) {
   });
 }
 
-module.exports = { passwordUpdate, appointmentConfirmation };
+async function EmailVerification(email) {
+  console.log("NODEMAILER", email)
+  let transporter = nodemailer.createTransport({
+    service: "hotmail",
+    auth: {
+      user: "lineupapp@hotmail.com",
+      pass: "Lineup2023",
+    },
+  });
+
+  let info = await transporter.sendMail({
+    from: `lineupapp@hotmail.com`,
+    to: `${email}`,
+    subject: `Actualiza tu contraseña`,
+    html: `<p><b></b><a> Haz click aqui para cambiar tu contraseña</a></p>
+                <p>Sus datos estan protegidos. Muchas gracias por confiar en nosotros.</p>
+                <img src=""/>`,
+  });
+  console.log(info.messageId); // Random ID generated after successful send (optional)
+}
+
+module.exports = { passwordUpdate, appointmentConfirmation, EmailVerification };
