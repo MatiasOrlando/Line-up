@@ -138,7 +138,7 @@ router.post("/hoursavailable", async (req, res) => {
         $match: { date: fechaSeleccionada, "sucursal.name": branch },
       },
       {
-        $match: { status: { $ne: "Cancel" } }
+        $match: { status: { $ne: "Cancel" } },
       },
       {
         $group: {
@@ -147,7 +147,7 @@ router.post("/hoursavailable", async (req, res) => {
         },
       },
     ]);
-    
+
     appointments.forEach((appointment) => {
       const horario = appointment._id;
       const count = appointment.count;
@@ -252,8 +252,10 @@ router.get("/lastAppointment/token", async (req, res) => {
         .sort({ _id: -1 })
         .limit(1);
 
-      //appointmentConfirmation(userAppointment);
-
+      const testEmailUser = await appointmentConfirmation(userAppointment);
+      if (testEmailUser) {
+        return res.status(401).send(`Invalid email`);
+      }
       return res.status(200).send(userAppointment);
     } else {
       return res.status(400).send(`Invalid credentials`);
