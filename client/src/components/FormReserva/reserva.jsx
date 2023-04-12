@@ -10,16 +10,16 @@ export default function FormReserva({ branches, user }) {
   const [tiempoRestante, setTiempoRestante] = useState(300);
   const [datesAvailable, setDatesAvailable] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState("");
-  const [invalidHour, setInvalidHour] = useState(false)
+  const [invalidHour, setInvalidHour] = useState(false);
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedHour, setSelectedHour] = useState("Selecciona una opcion");
   const [show, setShow] = useState(false);
   const [hoursAvailable, setHoursAvailable] = useState([]);
   const [horarios, setHorarios] = useState([]);
   const [monthDay, setMonthDay] = useState("");
+  const [newPhone, setNewPhone] = useState("");
   const router = useRouter();
   const pathname = router.pathname;
-  const [test, setTest] = useState("");
   const rute = useRouter();
   const dayRef = useRef();
   let horario = [];
@@ -124,20 +124,28 @@ export default function FormReserva({ branches, user }) {
       test.classList.remove("dayPicked");
     });
 
+    console.log(e.target.value);
     if (e.target.value !== "Selecciona una opcion") {
       setVio({
         ...vio,
-        color: "green",
+        color: vio.color === "green" ? "violet" : "green",
         value: "✓",
-        lineColor: "greenLine",
-        className: "fontGreen",
+        lineColor: vio.color === "green" ? "violetLine" : "greenLine",
+        className: vio.color === "green" ? "fontViolet" : "fontGreen",
       });
       setGra({
         ...gra,
-        color: "violet",
-        lineColor: "violetLine",
-        className: "fontViolet",
+        color: gra.color === "green" ? "gray" : "violet",
+        lineColor: gra.color === "green" ? "greyLine" : "violetLine",
+        className: gra.color === "green" ? "fontGray" : "fontViolet",
         value: 2,
+      });
+      setGra2({
+        ...gra2,
+        color: gra.color === "green" ? "gray" : "violet",
+        lineColor: gra.color === "green" ? "greyLine" : "violetLine",
+        className: gra.color === "green" ? "fontGray" : "fontViolet",
+        value: 3,
       });
     }
 
@@ -226,11 +234,8 @@ export default function FormReserva({ branches, user }) {
       lineColor: "violetLine",
       className: "fontViolet",
     });
-
     const selectedDate = e.target.value;
     setSelectedDay(selectedDate);
-    // console.log(selectedBranchAux, "SELECTED BRANCH variable");
-    // console.log(selectedBranch, "branch estado");
     const hours = await axios.post(
       "http://localhost:3001/api/appointments/hoursavailable",
       {
@@ -271,11 +276,9 @@ export default function FormReserva({ branches, user }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (selectedHour == "Selecciona una opcion"){
-      return setInvalidHour(true)
+    if (selectedHour == "Selecciona una opcion") {
+      return setInvalidHour(true);
     }
-
-    console.log(selectedHour);
 
     setGra2({
       ...gra2,
@@ -289,7 +292,7 @@ export default function FormReserva({ branches, user }) {
         branch: selectedBranch,
         name: user.name,
         email: user.email,
-        phoneNew: user.phone,
+        phoneNew: newPhone || user.phone,
         day: selectedDay,
         time: selectedHour,
       })
@@ -321,7 +324,9 @@ export default function FormReserva({ branches, user }) {
               <div className={gra2.className}>{gra2.text}</div>
             </div>
           </div>
-          <h3 style={{marginTop:"5rem"}} className="reserva-title-3">Sucursal</h3>
+          <h3 style={{ marginTop: "5rem" }} className="reserva-title-3">
+            Sucursal
+          </h3>
           <select
             className="input-primary w100"
             onChange={handleChange}
@@ -343,9 +348,9 @@ export default function FormReserva({ branches, user }) {
               <select
                 className="input-primary w100"
                 onChange={(e) => {
-                  if(e.target.value != "Selecciona una opcion"){
-                  setInvalidHour(false)
-                }
+                  if (e.target.value != "Selecciona una opcion") {
+                    setInvalidHour(false);
+                  }
                   setSelectedHour(e.target.value);
                 }}
               >
@@ -361,7 +366,11 @@ export default function FormReserva({ branches, user }) {
                   );
                 })}
               </select>
-              {invalidHour && <span style={{color:"red"}}>Por favor, seleccioná un horario válido</span> }
+              {invalidHour && (
+                <span style={{ color: "red" }}>
+                  Por favor, seleccioná un horario válido
+                </span>
+              )}
               {/* A ESTE FORM SE LE COLOCA LA CLASE:  formReserva !!!!!!!!!!!!!!!!!!!!!!!!! */}
               <form className="formReserva w100" action="">
                 <div className="w50">
@@ -379,6 +388,9 @@ export default function FormReserva({ branches, user }) {
                     defaultValue={user.phone}
                     className="input-primary w95"
                     type="text"
+                    onChange={(e) => {
+                      setNewPhone(e.target.value);
+                    }}
                   />
                 </div>
                 <h3 className="reserva-title-3">Mail</h3>
