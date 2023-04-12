@@ -39,7 +39,9 @@ export default function Appoinments({ branches }) {
                   <select
                     onChange={(e) => {
                       if (e.target.value === "Cancelar") {
-                        route.push(`/cancelar/${app.idApp}`);
+                        route.push(`/reserva/cancelar/${app.idApp}`);
+                      } else if (e.target.value === "Editar") {
+                        route.push(`/reserva/editar/${app.idApp}`);
                       }
                     }}
                     className="btn-secondary"

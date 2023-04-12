@@ -110,7 +110,10 @@ class admin_services {
 
   static async deleteBranch(branchId) {
     try {
-      const deletedBranch = await Branch.findByIdAndRemove(branchId);
+      const deletedBranch = await Branch.deleteOne({_id: branchId});
+      if(deletedBranch.deletedCount === 0){
+        return{error: true, data: null}
+      }
       return { error: false, data: deletedBranch };
     } catch (err) {
       return { error: true, data: err };
@@ -119,7 +122,10 @@ class admin_services {
 
   static async deleteUser(userId) {
     try {
-      const deletedUser = await User.findByIdAndRemove(userId);
+      const deletedUser = await User.deleteOne({_id: userId});
+      if(deletedUser.deletedCount === 0){
+        return{error: true, data: null}
+      }
       return { error: false, data: deletedUser };
     } catch (err) {
       return { error: true, data: err };

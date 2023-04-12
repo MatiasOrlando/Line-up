@@ -49,6 +49,8 @@ export default function FormNewOperator() {
           setError("error-input-email");
         } else if (message.includes("dni")) {
           setError("error-input-dni");
+        } else if (message.includes("operator")) {
+          setError("error-input-operator");
         } else {
           setError("error-input-location");
         }
@@ -157,6 +159,13 @@ export default function FormNewOperator() {
                   {error === "error-input-location" ? (
                     <span className="email-span">
                       Esta sucursal no se encuentra registrada
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                  {error === "error-input-operator" ? (
+                    <span className="email-span">
+                      Esta sucursal ya tiene un operador
                     </span>
                   ) : (
                     ""

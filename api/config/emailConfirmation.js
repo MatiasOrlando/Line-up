@@ -54,31 +54,7 @@ async function appointmentConfirmation(appointment) {
   }
 }
 
-async function EmailVerification(email) {
-  console.log("NODEMAILER", email);
 
-  let transporter = nodemailer.createTransport({
-    service: "hotmail",
-    auth: {
-      user: "lineuptest2023@hotmail.com",
-      pass: "Koala1234",
-    },
-  });
-  try {
-    // Enviar el mensaje de correo electrónico
-    let info = await transporter.sendMail({
-      from: `lineuptest2023@hotmail.com`,
-      to: `${email}`,
-      subject: `Actualiza tu contraseña`,
-      html: `<p><b></b><a> Haz click aqui para cambiar tu contraseña</a></p>
-                <p>Sus datos estan protegidos. Muchas gracias por confiar en nosotros.</p>
-                <img src=""/>`,
-    });
-    console.log(info.messageId); // Random ID generated after successful send (optional)
-  } catch (error) {
-    console.error("Error al enviar el mensaje: %s", error);
-    // Manejar el error aquí
-  }
-}
 
-module.exports = { passwordUpdate, appointmentConfirmation, EmailVerification };
+
+module.exports = { passwordUpdate, appointmentConfirmation };
