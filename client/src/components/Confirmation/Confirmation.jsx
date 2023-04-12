@@ -149,7 +149,7 @@ export default function Confirmation({ appointments }) {
             >
               <AiOutlineClose className="icon" />
               <Link
-                href={`/cancelar/${appointments[0].idApp}`}
+                href={`/reserva/cancelar/${appointments[0].idApp}`}
                 className="link"
               >
                 Cancelar reserva
