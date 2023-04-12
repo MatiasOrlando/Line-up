@@ -16,11 +16,13 @@ class operator_services {
       const dataForOperator = appointmentsOfBranchArray.map((item) => {
         return {
           date: item.date,
-          timeOfAppontment: item.timeOfAppontment,
+          timeOfAppontment: item.timeOfAppoinment,
           status: item.status,
-          sucursal: item.sucursal.location,
+          sucursal: item.sucursal.name,
           user: item.user.name,
           id: item.id,
+          idApp: item.idApp,
+          createdAt: item.createdAt,
         };
       });
       const page = dataForOperator.splice(limit - 7, limit);

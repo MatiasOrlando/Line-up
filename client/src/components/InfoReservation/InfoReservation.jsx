@@ -1,16 +1,20 @@
-const InfoReservation = () => {
+const InfoReservation = ({ user, appointment }) => {
+  console.log(appointment);
   return (
     <div className="box-reservation-data">
       <p className="info-reservation">Información de la reserva</p>
-      <p className="name-reservation">Ivan Cruce</p>
+      <p className="name-reservation">{user.name}</p>
       <p className="date-reservation">
-        <span className="span-reservation">Día </span>12/10/2022
+        <span className="span-reservation">Día </span>
+        {appointment.date}
       </p>
       <p className="date-reservation">
-        <span className="span-reservation">Horario:</span> 13:00 hs
+        <span className="span-reservation">Horario:</span>{" "}
+        {appointment.timeOfAppoinment} hs
       </p>
       <p className="date-reservation">
-        <span className="span-reservation">Sucursal:</span> Villa Crespo
+        <span className="span-reservation">Sucursal:</span>{" "}
+        {appointment.sucursal.name}
       </p>
       <hr
         style={{

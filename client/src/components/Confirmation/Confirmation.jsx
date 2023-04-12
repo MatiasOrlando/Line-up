@@ -19,7 +19,6 @@ export default function Confirmation({ appointments }) {
   const handlePdf = () => {
     pdfMake.createPdf(docDefinition).download("archivo.pdf");
   };
-
   const docDefinition = {
     pageSize: "A4",
     pageOrientation: "portrait",
@@ -100,7 +99,7 @@ export default function Confirmation({ appointments }) {
           w: 400,
           h: 475,
           lineWidth: 1,
-          lineColor: "#000000",
+          lineColor: "#f0f0f0",
           color: "#f0f0f0",
         },
       ],
@@ -112,7 +111,7 @@ export default function Confirmation({ appointments }) {
         <BsCheckSquare className="icon" />
         <h1>¡Gracias por tu reserva!</h1>
         <p>
-          Dentro de los siguientes minutos, recibiras un correo electronico en
+          Dentro de los siguientes minutos, recibiras un correo electronico en{" "}
           <b>{user.email} </b>
           con todos los detalles de tu reservacion.
           <br />
@@ -130,8 +129,8 @@ export default function Confirmation({ appointments }) {
               <h2>Reserva {appointments[0].idApp}</h2>
             </div>
             <p>
-              Hecho el {day} a las {hour} para el {appointments[0].date} a las
-              {appointments[0].timeOfAppontment} hs
+              Hecho el {day} a las {hour} para el {appointments[0].date} a las{" "}
+              {appointments[0].timeOfAppoinment} hs
             </p>
           </div>
           <div>
@@ -170,7 +169,7 @@ export default function Confirmation({ appointments }) {
           <div className="data ">
             <h3>Reserva</h3>
             <p>Sucursal: {branch.name} </p>
-            <p>Horario: {hour}</p>
+            <p>Horario: {appointments[0].timeOfAppoinment}</p>
           </div>
         </div>
       </div>
