@@ -18,6 +18,7 @@
   padding: 24px;
   border-radius: 12px;
   .item-section {
+    width: 170px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,6 +35,12 @@
     font-style: 14px;
     font-weight: 600;
     line-height: 16px;
+  }
+  select{
+    text-align: center;
+  }
+  option{
+    cursor: pointer;
   }
 
   /*  select {

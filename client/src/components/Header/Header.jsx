@@ -28,7 +28,7 @@ export default function Header({ hide }) {
           </Link>
         </div>
         <div className="options-item">
-          <Link href="/operadores" className="link-text">
+          <Link href="/operadores/1" className="link-text">
             <span>Operadores</span>
             <Image src={operate} alt="operadores" className="link-icon" />
           </Link>

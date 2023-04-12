@@ -151,12 +151,12 @@ class admin_services {
           email: item.email,
           salt: item.salt,
           sucursal: allBranches.filter((branchItem) => {
-            return branchItem.user.id.toString() === item.id;
-          })[0].location,
+            return branchItem.user.email === item.email;
+          })
         };
       });
       const page = operatorsMapper.splice(limit - 7, limit);
-      return { error: false, data: page };
+      return { error: false, data: page, length: allUsers.length };
     } catch (err) {
       return { error: true, data: err };
     }

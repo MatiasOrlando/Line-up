@@ -40,10 +40,10 @@ export default function FormReserva({ branches, user }) {
       today.get("monthLong").slice(1);
     setMonthDay(nombreMes);
   }, []);
-
+/* 
   useEffect(() => {
     if (pathname === "/reserva") document.body.classList.add("bg-grey2");
-  }, [pathname]);
+  }, [pathname]); */
 
   for (let i = 0; i < lastDayOfMonth.day; i++) {
     currentMonthDates.push(firstDayOfMonth.plus({ days: i }));

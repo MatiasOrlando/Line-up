@@ -1,4 +1,10 @@
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 export default function Appoinments({ branches }) {
+  const route = useRouter();
+  const [valor, setValor] = useState();
+
   return (
     <main className="container-appointments">
       <div className="container-appointments_box">
@@ -30,12 +36,24 @@ export default function Appoinments({ branches }) {
                   <div className="item-description">{app.user.id}</div>
                 </div>
                 <div className="item-section">
-                  <select className="btn-secondary" name="" id="">
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value === "Cancelar") {
+                        route.push(`/cancelar/${app.idApp}`);
+                      }
+                    }}
+                    className="btn-secondary"
+                    name=""
+                    id=""
+                  >
                     <option className="btn-secondary" value="none">
+                      Opciones
+                    </option>
+                    <option className="btn-secondary" value="Editar">
                       Editar
                     </option>
-                    <option className="btn-secondary" value="none">
-                      Ejemplo1
+                    <option className="btn-secondary" value="Cancelar">
+                      Cancelar
                     </option>
                   </select>
                 </div>
