@@ -11,7 +11,7 @@ exports.create_operator_post = async (req, res, next) => {
     if (typeof (operatorInfo.phone) !== "number" || typeof (operatorInfo.email) !== "string" || (operatorInfo.operator) !== true || typeof (operatorInfo.name) !== "string" || typeof (operatorInfo.password) !== "string" || typeof (operatorInfo.dni) !== "number" || typeof (location) !== "string") {
       return res.status(400).send({message: "invalid data types"});
   }
-    const operatorResult = await admin_services.create_operator(operatorInfo, location);
+    const operatorResult = await admin_services.create_opexrator(operatorInfo, location);
     if(!operatorResult.error){
       return res.status(201).send({message: "operator created succesfully in the database"});
     }

@@ -336,6 +336,49 @@ const users = [
   },
 ];
 
+const tsUsers = [
+  {
+    name: "Administrador General",
+    email: "admin@example.com",
+    phone: 1112345678,
+    password: "testing",
+    
+  },
+  {
+  
+    name: "Operador Sitio",
+    email: "operador@example.com",
+    phone: 1112345678,
+    password: "testing",
+
+  },
+  {
+    
+    name: "Matias Orlando",
+    email: "matias@example.com",
+    phone: 1112345678,
+    password: "Testing",
+
+  },
+  {
+ 
+    name: "Tomas Camacho",
+    email: "tomas@example.com",
+    phone: 1112345678,
+    password: "Testing123",
+ 
+  },
+  {
+    
+    name: "Pedro Ragni",
+    email: "pedro@example.com",
+    phone: 1112345678,
+    password: "Testing123!",
+
+  },
+];
+
+
 const sucursal = [
   {
     name: "Palermo",
@@ -471,6 +514,9 @@ const CreateBranches = async () => {
   }
 };
 
+
+
+
 // const CreateBranches = async () => {
 //   try {
 //     const branches = await Branch.find().exec();
@@ -538,6 +584,7 @@ const CreateBranches = async () => {
 // };
 
 const executor = async () => {
+
   await CreateUsers();
   await CreateBranches();
   // await CreateAppoitments();

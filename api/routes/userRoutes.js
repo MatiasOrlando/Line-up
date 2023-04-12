@@ -290,4 +290,4 @@ router.post("/appointmentBooked", async (req, res) => {
   emailConfirmation();
 });
 
-module.exports = router;
+export default router;
