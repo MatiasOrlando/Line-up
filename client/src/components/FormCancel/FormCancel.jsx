@@ -4,8 +4,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { BsCheckSquare } from "react-icons/bs";
 
-const FormCancel = ({ user, token }) => {
-  const idApp = "1141472790001";
+const FormCancel = ({ user, token, idApp }) => {
   const router = useRouter();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [checkboxes, setCheckboxes] = useState([

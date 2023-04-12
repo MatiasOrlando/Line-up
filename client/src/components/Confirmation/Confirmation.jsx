@@ -129,7 +129,7 @@ export default function Confirmation({ appointments }) {
               <h2>Reserva {appointments[0].idApp}</h2>
             </div>
             <p>
-              Hecho el {day} a las {hour} para el {appointments[0].date} a las
+              Hecho el {day} a las {hour} para el {appointments[0].date} a las{" "}
               {appointments[0].timeOfAppoinment} hs
             </p>
           </div>

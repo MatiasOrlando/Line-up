@@ -258,4 +258,17 @@ router.get("/lastAppointment/token", async (req, res) => {
   }
 });
 
+router.get("/:idApp/token", async (req, res) => {
+  try {
+    const idApp = req.params.idApp;
+    const { token } = req.query;
+    const decodedUser = validateToken(token);
+    if (decodedUser) {
+      const userAppointment = await Appointment.find({ idApp: idApp });
+      return res.status(200).send(userAppointment);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
 module.exports = router;

@@ -7,8 +7,6 @@ import axios from "axios";
 export default function ListAppoinments({ branches, length, token }) {
   const router = useRouter();
 
-  console.log(branches);
-
   const handleChange = (event, value) => {
     router.push(`/operadorReservas/${value}`);
   };
@@ -19,7 +17,6 @@ export default function ListAppoinments({ branches, length, token }) {
       `http://localhost:3001/api/operator/appointment/${id}/token?token=${token.user}`,
       { status }
     );
-    console.log(cancel);
   };
 
   return (
@@ -31,6 +28,10 @@ export default function ListAppoinments({ branches, length, token }) {
           </div>
           <div className="container-list">
             {branches.map((app) => {
+              const createdAt = new Date(app.createdAt);
+              const day = `${createdAt.getDate()}/${
+                createdAt.getMonth() + 1
+              }/${createdAt.getFullYear()}`;
               return (
                 <div className="item-list" key={app._id}>
                   <div className="item-section">
@@ -45,13 +46,11 @@ export default function ListAppoinments({ branches, length, token }) {
                   </div>
                   <div className="item-section">
                     <div className="item-title">Dia de la reserva</div>
-                    <div className="item-description">
-                      {/*app.createAt*/} 10/10/2022
-                    </div>
+                    <div className="item-description">{day}</div>
                   </div>
                   <div className="item-section">
                     <div className="item-title">N° de la reserva</div>
-                    <div className="item-description">{app.id}</div>
+                    <div className="item-description">{app.idApp}</div>
                   </div>
                   <div className="item-section">
                     {app.status === "Cancel" ? (
