@@ -1,8 +1,8 @@
-const InfoReservation = () => {
+const InfoReservation = ({ user }) => {
   return (
     <div className="box-reservation-data">
       <p className="info-reservation">Información de la reserva</p>
-      <p className="name-reservation">Ivan Cruce</p>
+      <p className="name-reservation">{user.name}</p>
       <p className="date-reservation">
         <span className="span-reservation">Día </span>12/10/2022
       </p>
