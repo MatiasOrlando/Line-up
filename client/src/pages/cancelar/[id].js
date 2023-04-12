@@ -3,8 +3,11 @@ import Link from "next/link";
 import FormCancel from "@/components/FormCancel/FormCancel";
 import InfoReservation from "@/components/InfoReservation/InfoReservation";
 import { getSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
+  const { id } = context.query;
+  console.log(id);
   const token = await getSession(context);
 
   if (!token.user) {
@@ -19,16 +22,24 @@ export async function getServerSideProps(context) {
       `http://localhost:3001/api/user/validate/token?token=${token.user}`
     );
     const data = await response.json();
+
+    const appointments = await fetch(
+      `http://localhost:3001/api/appointments/${id}/token?token=${token.user}`
+    );
+    const userAppointment = await appointments.json();
+
     return {
       props: {
         user: data,
         token: token,
+        appointment: userAppointment[0],
+        id: id,
       },
     };
   }
 }
 
-const cancel = ({ user, token }) => {
+const cancel = ({ user, token, id, appointment }) => {
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -41,10 +52,10 @@ const cancel = ({ user, token }) => {
           <div className="container-title">
             <p>Cancelar reserva</p>
           </div>
-          <FormCancel user={user} token={token} />
+          <FormCancel user={user} token={token} idApp={id} />
         </div>
         <div>
-          <InfoReservation user={user} />
+          <InfoReservation user={user} appointment={appointment} />
         </div>
       </div>
     </>
