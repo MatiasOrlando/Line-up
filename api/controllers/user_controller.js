@@ -2,7 +2,8 @@ const mapUser = require("../config/userMapped");
 const UsersService = require("../services/user_services");
 const emailValidator = require('deep-email-validator');
 const { validateToken, generateToken } = require("../config/token");
-const { passwordUpdate, EmailVerification } = require("../config/emailConfirmation");
+const { passwordUpdate } = require("../config/emailConfirmation");
+
 
 const registerUser = async (req, res) => {
   try {
@@ -19,7 +20,7 @@ const registerUser = async (req, res) => {
     }
     return res.status(400).send(newUser.data.message);
   } catch {
-    return res.status(500).send(`ERROR proceso de registro`);
+    return res.status(500).send({ message: `Debe ser un email valido` });
   }
 };
 
@@ -102,10 +103,9 @@ const passwordEmailUpdate = async (req, res) => {
 
 const validateUserdata = async (req, res) => {
   const { token } = req.query;
-  
+
   try {
     const decodeUser = await UsersService.validateUserdata(token);
-  
     if (decodeUser.error) {
       return res.status(400).send("Invalid token");
     }
