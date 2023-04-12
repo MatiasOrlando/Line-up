@@ -1,4 +1,4 @@
-import FormReserva from "@/components/FormReserva/reserva";
+import FormReservaEdit from "@/components/FormReservaEdit/FormReservaEdit";
 import { getSession } from "next-auth/react";
 
 export async function getServerSideProps(context) {
@@ -34,5 +34,5 @@ export async function getServerSideProps(context) {
 }
 
 export default function Reserva({ branches, user }) {
-  return <FormReserva branches={branches} user={user} />;
+  return <FormReservaEdit branches={branches} user={user} />;
 }
