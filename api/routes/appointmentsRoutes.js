@@ -18,8 +18,9 @@ router.post("/add", async (req, res) => {
     const closingHour = selectedBranch[0].closingHour;
     const user = await User.findOne({ email });
     const fullAppoinment = await Appointment.find({
-      day: day,
+      date: day,
       timeOfAppoinment: time,
+      "sucursal.name": branch,
     });
     if (fullAppoinment.length < allowedClients) {
       let turno = {
@@ -132,7 +133,10 @@ router.post("/hoursavailable", async (req, res) => {
 
     const appointments = await Appointment.aggregate([
       {
-        $match: { date: fechaSeleccionada },
+        $match: { date: fechaSeleccionada, "sucursal.name": branch },
+      },
+      {
+        $match: { status: { $ne: "Cancel" } }
       },
       {
         $group: {
@@ -141,7 +145,7 @@ router.post("/hoursavailable", async (req, res) => {
         },
       },
     ]);
-
+    
     appointments.forEach((appointment) => {
       const horario = appointment._id;
       const count = appointment.count;
