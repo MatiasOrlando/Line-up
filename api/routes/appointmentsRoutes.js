@@ -98,7 +98,10 @@ router.post("/daysavailable", async (req, res) => {
       const availableAppoinments = await Appointment.find({ date: day });
       if (day !== formattedDayNow || twoHoursWindow > 2) {
         if (availableAppoinments.length < appoinmentsPerDay) {
-          return arrayToSend.push(day);
+          return arrayToSend.push({
+            day,
+            availables: appoinmentsPerDay - availableAppoinments.length
+          });
         }
       }
     });
