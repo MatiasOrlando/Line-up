@@ -6,55 +6,9 @@ const { DateTime } = require("luxon");
 const moment = require("moment");
 const { appointmentConfirmation } = require("../config/emailConfirmation");
 const { validateToken } = require("../config/token");
-const randomNum = require("../config/randomNum");
+const appointmentsController = require("../controllers/appointments_controller");
 
-router.post("/add", async (req, res) => {
-  const { branch, name, email, phoneNew, day, time } = req.body;
-  const lastAppointment = await Appointment.findOne().sort({ _id: -1 });
-  try {
-    const selectedBranch = await Branch.find({ name: branch });
-    const allowedClients = selectedBranch[0].allowedClients;
-    const openingHour = selectedBranch[0].openingHour;
-    const closingHour = selectedBranch[0].closingHour;
-    const user = await User.findOne({ email });
-    const fullAppoinment = await Appointment.find({
-      day: day,
-      timeOfAppoinment: time,
-    });
-    if (fullAppoinment.length < allowedClients) {
-      let turno = {
-        date: day,
-        timeOfAppoinment: time,
-        idApp: lastAppointment.idApp + 1,
-        user: {
-          id: user._id,
-          name: name,
-          email: email,
-          phone: phoneNew,
-        },
-        sucursal: {
-          id: selectedBranch[0]._id,
-          name: branch,
-          allowedClients: allowedClients,
-          openingHour: openingHour,
-          closingHour: closingHour,
-        },
-      };
-      await Appointment.create(turno);
-      if (user?.phone) {
-        if (user.phone !== phoneNew) {
-          await User.updateOne({ email: email }, { phone: phoneNew });
-        }
-
-        res.status(201).send(turno);
-      }
-    } else {
-      res.send("Turnos completos en el horario solicitado");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
+router.post("/add", appointmentsController.createAppointment);
 
 router.get("/branches", async (req, res) => {
   try {
