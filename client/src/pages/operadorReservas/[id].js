@@ -31,11 +31,12 @@ export async function getServerSideProps(context) {
         branches: data.data,
         length: data.length,
         pagination: pagination,
+        token: token,
       },
     };
   }
 }
 
-export default function Register({ branches, length }) {
-  return <ListAppoinments branches={branches} length={length} />;
+export default function Register({ branches, length, token }) {
+  return <ListAppoinments token={token} branches={branches} length={length} />;
 }

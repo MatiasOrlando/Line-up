@@ -213,16 +213,23 @@ router.put("/", async (req, res) => {
   }
 });
 
-router.put("/cancelar/:reservaId", async (req, res) => {
-  // Recibimos por params id Appointment y por body la reason de la cancelacion. Actualizamos status..
-  const id = "6421daa154ed9950496a6933";
-  const cancelReason = "Me quede dormido";
+// cancelar
+router.put("/cancel/:idApp/token", async (req, res) => {
+  // Recibimos por params idApp y por body la razon de la cancelacion. Actualizamos status..
+  const { token } = req.query;
+  const decodedUser = validateToken(token);
+  const idApp = req.params.idApp;
+  const cancelReason = req.body.cancelReason;
   try {
-    const canceledAppointment = await Appointment.findById(id);
-    canceledAppointment.cancelReason = cancelReason;
-    canceledAppointment.status = "Cancel";
-    canceledAppointment.save();
-    return res.send(canceledAppointment);
+    if (decodedUser) {
+      const canceledAppointment = await Appointment.findOne({ idApp: idApp });
+      canceledAppointment.cancelReason = cancelReason;
+      canceledAppointment.status = "Cancel";
+      await canceledAppointment.save();
+      return res.status(200).send(canceledAppointment);
+    } else {
+      return res.status(400).send("Usuario no encontrado");
+    }
   } catch (error) {
     console.error(error);
   }

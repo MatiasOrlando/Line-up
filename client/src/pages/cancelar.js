@@ -2,21 +2,33 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import Link from "next/link";
 import FormCancel from "@/components/FormCancel/FormCancel";
 import InfoReservation from "@/components/InfoReservation/InfoReservation";
+import { getSession } from "next-auth/react";
 
 export async function getServerSideProps(context) {
-  const sessionToken = context.req.cookies["next-auth.session-token"];
-  if (!sessionToken) {
+  const token = await getSession(context);
+
+  if (!token.user) {
     return {
       redirect: {
         destination: "/",
         permanent: false,
       },
     };
+  } else {
+    const response = await fetch(
+      `http://localhost:3001/api/user/validate/token?token=${token.user}`
+    );
+    const data = await response.json();
+    return {
+      props: {
+        user: data,
+        token: token,
+      },
+    };
   }
-  return { props: {} };
 }
 
-const cancel = () => {
+const cancel = ({ user, token }) => {
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -29,10 +41,10 @@ const cancel = () => {
           <div className="container-title">
             <p>Cancelar reserva</p>
           </div>
-          <FormCancel />
+          <FormCancel user={user} token={token} />
         </div>
         <div>
-          <InfoReservation />
+          <InfoReservation user={user} />
         </div>
       </div>
     </>

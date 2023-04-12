@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 export default function ListBranches({ branches, length }) {
   const router = useRouter();
-
+  console.log(branches);
   const handleChange = (event, value) => {
     router.push(`/sucursales/${value}`);
   };

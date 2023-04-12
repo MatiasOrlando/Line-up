@@ -1,6 +1,13 @@
+import Modal from "@/commons/Modal";
+import axios from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import { BsCheckSquare } from "react-icons/bs";
 
-const FormCancel = () => {
+const FormCancel = ({ user, token }) => {
+  const idApp = "1141472790001";
+  const router = useRouter();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [checkboxes, setCheckboxes] = useState([
     { id: 1, isChecked: false, text: "Ya no quiero ir" },
     { id: 2, isChecked: false, text: "Encontré un lugar mejor" },
@@ -22,10 +29,17 @@ const FormCancel = () => {
     setCheckboxes(newCheckboxes);
   };
 
+  const handleCancel = async (cancelReason) => {
+    const cancel = await axios.put(
+      `http://localhost:3001/api/appointments/cancel/${idApp}/token?token=${token.user}`,
+      { cancelReason }
+    );
+    setModalIsOpen(true);
+  };
   return (
     <>
       <div className="container-reason">
-        <div className="hi-name">Hola Ivan</div>
+        <div className="hi-name">Hola {user.name}</div>
         <div className="explanation-cancel">
           ¿Por qué desea cancelar su reserva?
         </div>
@@ -55,6 +69,10 @@ const FormCancel = () => {
                   <button
                     className="btn-primary"
                     style={{ backgroundColor: "#E53939" }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleCancel(checkbox.text);
+                    }}
                   >
                     <span className="button-cancel-text">
                       Confirmar cancelación
@@ -66,6 +84,17 @@ const FormCancel = () => {
           );
         })}
       </div>
+      <Modal
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        redirect={{ function: router.push, rute: "/reservas" }}
+        modalContent={{
+          title: "Turno cancelado con éxito",
+          description: "Muchas gracias por no confiar en nosotros",
+          button: "Aceptar",
+          icon: <BsCheckSquare className="icon" />,
+        }}
+      ></Modal>
     </>
   );
 };
