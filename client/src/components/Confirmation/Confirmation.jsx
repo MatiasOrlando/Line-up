@@ -135,10 +135,19 @@ export default function Confirmation({ appointments }) {
             </p>
           </div>
           <div>
-            <button className="button btn-secondary">
-              <AiOutlineTool className="icon" /> Editar reserva
+            <button className="button btn-secondary a">
+              <AiOutlineTool className="icon" />
+              <Link
+                href={`/reserva/editar/${appointments[0].idApp}`}
+                className="a"
+              >
+                Editar reserva
+              </Link>
             </button>
-            <button className="button btn-quaternary">
+            <button
+              className="button btn-quaternary"
+              style={{ textDecoration: "none", color: "#e53939" }}
+            >
               <AiOutlineClose className="icon" />
               <Link
                 href={`/cancelar/${appointments[0].idApp}`}

@@ -8,7 +8,55 @@ const { appointmentConfirmation } = require("../config/emailConfirmation");
 const { validateToken } = require("../config/token");
 const appointmentsController = require("../controllers/appointments_controller");
 
-router.post("/add", appointmentsController.createAppointment);
+// router.post("/add", appointmentsController.createAppointment);
+
+router.post("/add", async (req, res) => {
+  const { branch, name, email, phoneNew, day, time } = req.body;
+  const lastAppointment = await Appointment.findOne().sort({ _id: -1 });
+  try {
+    const selectedBranch = await Branch.find({ name: branch });
+    const allowedClients = selectedBranch[0].allowedClients;
+    const openingHour = selectedBranch[0].openingHour;
+    const closingHour = selectedBranch[0].closingHour;
+    const user = await User.findOne({ email });
+    const fullAppoinment = await Appointment.find({
+      day: day,
+      timeOfAppoinment: time,
+    });
+    if (fullAppoinment.length < allowedClients) {
+      let turno = {
+        date: day,
+        timeOfAppoinment: time,
+        idApp: lastAppointment.idApp + 1,
+        user: {
+          id: user._id,
+          name: name,
+          email: email,
+          phone: phoneNew,
+        },
+        sucursal: {
+          id: selectedBranch[0]._id,
+          name: branch,
+          allowedClients: allowedClients,
+          openingHour: openingHour,
+          closingHour: closingHour,
+        },
+      };
+      await Appointment.create(turno);
+      if (user?.phone) {
+        if (user.phone !== phoneNew) {
+          await User.updateOne({ email: email }, { phone: phoneNew });
+        }
+
+        res.status(201).send(turno);
+      }
+    } else {
+      res.send("Turnos completos en el horario solicitado");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 router.get("/branches", async (req, res) => {
   try {
@@ -143,22 +191,21 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/", async (req, res) => {
-  // Recibo por body/params idAppointment, newDate, newTime,y Name de la newBranch y updateo en coleccion apppointments con el id correspondiente
-  const idAppointment = "6421daa154ed9950496a692f";
-  const date = "2024-02-67742";
-  const timeOfAppoinment = "09:58";
-  const branchData = await Branch.find({ name: "Sydney SUCURSAL" });
+router.put("/edit", async (req, res) => {
+  const { idApp, day, time, branch, phoneNew } = req.body;
+  const branchData = await Branch.find({ name: branch });
   const sucursal = {
     id: branchData[0].id,
-    location: branchData[0].location,
-    hourRange: branchData[0].hourRange,
+    name: branchData[0].name,
+    location: branchData[0].name,
+    openingHour: branchData[0].openingHour,
+    closingHour: branchData[0].closingHour,
     allowedClients: branchData[0].allowedClients,
   };
   try {
-    const appointmentUpdate = await Appointment.findById(idAppointment);
-    appointmentUpdate.date = date;
-    appointmentUpdate.timeOfAppoinment = timeOfAppoinment;
+    const appointmentUpdate = await Appointment.findOne({ idApp });
+    appointmentUpdate.date = day;
+    appointmentUpdate.timeOfAppoinment = time;
     appointmentUpdate.sucursal = sucursal;
     appointmentUpdate.save();
     return res.send(appointmentUpdate);

@@ -19,6 +19,7 @@ export default function FormReserva({ branches, user }) {
   const [monthDay, setMonthDay] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const router = useRouter();
+  const { id } = router.query;
   const pathname = router.pathname;
   const rute = useRouter();
   const dayRef = useRef();
@@ -288,7 +289,8 @@ export default function FormReserva({ branches, user }) {
       className: "fontGreen",
     });
     axios
-      .post("http://localhost:3001/api/appointments/add", {
+      .put("http://localhost:3001/api/appointments/edit", {
+        idApp: id,
         branch: selectedBranch,
         name: user.name,
         email: user.email,
@@ -296,7 +298,10 @@ export default function FormReserva({ branches, user }) {
         day: selectedDay,
         time: selectedHour,
       })
-      .then(() => setModalIsOpen(true));
+      .then((res) => {
+        setModalIsOpen(true);
+        console.log(res);
+      });
   };
 
   return (
@@ -457,7 +462,7 @@ export default function FormReserva({ branches, user }) {
                     });
                   }}
                 >
-                  Confirmar reserva
+                  Confirmar edición
                 </button>
               </form>
             </>
@@ -502,7 +507,7 @@ export default function FormReserva({ branches, user }) {
         setModalIsOpen={setModalIsOpen}
         redirect={{ function: router.push, rute: "/reserva/confirmacion" }}
         modalContent={{
-          title: "Turno reservado con éxito",
+          title: "Turno modificado con éxito",
           description: "Gracias por confiar en nuestro servicio",
           button: "Aceptar",
           icon: <BsCheckSquare className="icon" />,
