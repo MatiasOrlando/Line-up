@@ -174,17 +174,17 @@ class admin_services {
     }
   }
 
-  static async getAllBraches() {
-    try {
-      const allBranches = await Branch.find({ enabled: false });
-      if (!allBranches) {
-        return { error: true, data: err };
-      }
-      return { error: false, data: allBranches };
-    } catch (err) {
-      return { error: true, data: err };
-    }
-  }
+  /*  static async getAllBraches() {
+     try {
+       const allBranches = await Branch.find({ enabled: false });
+       if (!allBranches) {
+         return { error: true, data: err };
+       }
+       return { error: false, data: allBranches };
+     } catch (err) {
+       return { error: true, data: err };
+     }
+   } */
 
   static async getOneBrache(id) {
     try {
@@ -216,6 +216,37 @@ class admin_services {
       return { error: false, data: "Se cambiaron los datos del operador" };
     } catch (err) {
       return { error: false, data: err.message };
+    }
+  }
+  static async getAllBrachesEnabled() {
+    try {
+      const allBranches = await Branch.find({ enabled: false });
+      if (!allBranches) {
+        return { error: true, data: err };
+      }
+      return { error: false, data: allBranches };
+    } catch (err) {
+      return { error: true, data: err };
+    }
+  }
+
+  static async getAllBraches(limit) {
+    try {
+      const allBranches = await Branch.find();
+      const branchesData = allBranches.map((item) => {
+        return {
+          email: item.user.email,
+          name: item.location,
+          allowedClients: item.allowedClients,
+          openingHour: item.openingHour,
+          closingHour: item.closingHour,
+          id: item.id,
+        };
+      });
+      const page = branchesData.splice(limit - 7, limit);
+      return { error: false, data: page, length: allBranches.length };
+    } catch (err) {
+      return { error: true, data: err };
     }
   }
 }
