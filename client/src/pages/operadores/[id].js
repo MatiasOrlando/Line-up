@@ -18,7 +18,6 @@ export async function getServerSideProps(context) {
         );
 
         const data = await response.json();
-        console.log(`data============>`, data);
 
 
         if (pagination > Math.ceil(data.length / 7)) {

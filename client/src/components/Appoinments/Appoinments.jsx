@@ -13,6 +13,7 @@ export default function Appoinments({ branches }) {
         </div>
         <div className="container-list">
           {branches.map((app) => {
+            console.log(branches);
             return (
               <div className="item-list" key={app._id}>
                 <div className="item-section">
@@ -22,42 +23,51 @@ export default function Appoinments({ branches }) {
                 <div className="item-section">
                   <div className="item-title">Reserva</div>
                   <div className="item-description">
-                    {app.date}-{app.timeOfAppontment}
+                    {app.date} {app.timeOfAppoinment}
                   </div>
                 </div>
                 <div className="item-section">
                   <div className="item-title">Sucursal</div>
-                  <div className="item-description">
-                    {app.sucursal.location}
-                  </div>
+                  <div className="item-description">{app.sucursal.name}</div>
                 </div>
                 <div className="item-section">
                   <div className="item-title">N° de la reserva</div>
-                  <div className="item-description">{app.user.id}</div>
+                  <div className="item-description">{app.idApp}</div>
                 </div>
                 <div className="item-section">
-                  <select
-                    onChange={(e) => {
-                      if (e.target.value === "Cancelar") {
-                        route.push(`/reserva/cancelar/${app.idApp}`);
-                      } else if (e.target.value === "Editar") {
-                        route.push(`/reserva/editar/${app.idApp}`);
-                      }
-                    }}
-                    className="btn-secondary"
-                    name=""
-                    id=""
-                  >
-                    <option className="btn-secondary" value="none">
-                      Opciones
-                    </option>
-                    <option className="btn-secondary" value="Editar">
-                      Editar
-                    </option>
-                    <option className="btn-secondary" value="Cancelar">
-                      Cancelar
-                    </option>
-                  </select>
+                  {app.status === "Cancel" ? (
+                    <button className="btn-secondary" disabled>
+                      Cancelado
+                    </button>
+                  ) : app.status === "completed" ? (
+                    <button className="btn-secondary border-asis-ok" disabled>
+                      Completado
+                    </button>
+                  ) : (
+                    <select
+                      onChange={(e) => {
+                        if (e.target.value === "Cancelar") {
+                          route.push(`/reserva/cancelar/${app.idApp}`);
+                        }
+                        if (e.target.value === "Editar") {
+                          route.push(`/reserva/editar/${app.idApp}`);
+                        }
+                      }}
+                      className="btn-secondary"
+                      name=""
+                      id=""
+                    >
+                      <option className="btn-secondary" value="none">
+                        Opciones
+                      </option>
+                      <option className="btn-secondary" value="Editar">
+                        Editar
+                      </option>
+                      <option className="btn-secondary" value="Cancelar">
+                        Cancelar
+                      </option>
+                    </select>
+                  )}
                 </div>
               </div>
             );
