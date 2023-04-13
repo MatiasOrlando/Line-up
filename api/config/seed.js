@@ -297,6 +297,7 @@ const users = [
     admin: true,
     operator: false,
     dni: 2345333339,
+    status: "enabled",
   },
   {
     dni: 23456789,
@@ -306,6 +307,7 @@ const users = [
     password: "testing",
     admin: false,
     operator: true,
+    status: "enabled",
   },
   {
     dni: 34567891,
@@ -315,6 +317,7 @@ const users = [
     password: "Testing",
     admin: false,
     operator: false,
+    status: "enabled",
   },
   {
     dni: 45678912,
@@ -324,6 +327,7 @@ const users = [
     password: "Testing123",
     admin: false,
     operator: false,
+    status: "enabled",
   },
   {
     dni: 56789123,
@@ -333,6 +337,7 @@ const users = [
     password: "Testing123!",
     admin: false,
     operator: false,
+    status: "enabled",
   },
 ];
 
