@@ -1,5 +1,4 @@
 const InfoReservation = ({ user, appointment }) => {
-  console.log(appointment);
   return (
     <div className="box-reservation-data">
       <p className="info-reservation">Información de la reserva</p>

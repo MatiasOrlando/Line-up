@@ -20,7 +20,6 @@ export default function ListOperators({ dataOperadores, length }) {
           </div>
           <div className="container-list">
             {dataOperadores.map((operador, index) => {
-              console.log(operador);
               return (
                 <div className="item-list" key={index}>
                   <div className="item-section">

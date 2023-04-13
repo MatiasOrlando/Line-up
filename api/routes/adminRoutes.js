@@ -566,7 +566,6 @@ router.get(
   adminController.get_all_branches_get
 );
 
-
 router.get(
   "/get-one-operator/:number/token",
   validateMiddleware.isAdmin,
@@ -575,7 +574,6 @@ router.get(
     let opFind = await User.findById(id);
     let suc = await Branch.findOne({ "user.email": opFind.email });
     let idLocation = suc._id.toString();
-    console.log(idLocation);
     let nameLocation = suc?.location || "";
     res.send({
       user: opFind,
@@ -584,17 +582,6 @@ router.get(
     });
   }
 );
-
-//router.get("/get-one-operator/:number/token", validateMiddleware.isAdmin, async (req, res) => {
-// let id = req.params.number;
-// let opFind = await User.findById(id)
-// let suc = await Branch.findOne({ "user.email": opFind.email })
-//let idLocation = suc._id.toString();
-//console.log(idLocation);
-//let nameLocation = suc?.location || "";
-//res.send({ user: opFind, branchName: nameLocation, idLocation: idLocation });
-//})
-
 
 router.get(
   "/get-enabled-branches/token",
@@ -608,7 +595,10 @@ router.get(
   adminController.get_one_branche_get
 );
 
-
-router.put("/edit-one-operator/:idUser/token", validateMiddleware.isAdmin, adminController.edit_one_operator)
+router.put(
+  "/edit-one-operator/:idUser/token",
+  validateMiddleware.isAdmin,
+  adminController.edit_one_operator
+);
 
 module.exports = router;
