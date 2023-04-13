@@ -1,18 +1,22 @@
 const mapUser = require("../config/userMapped");
 const UsersService = require("../services/user_services");
-const emailValidator = require('deep-email-validator');
+const emailValidator = require("deep-email-validator");
 const { validateToken, generateToken } = require("../config/token");
-const { passwordUpdate } = require("../config/emailConfirmation");
-
+const {
+  passwordUpdate,
+  accountActivation,
+} = require("../config/emailConfirmation");
+const User = require("../models/user");
 
 const registerUser = async (req, res) => {
   try {
-    /*  const {email} = req.body
-     const response = await emailValidator.validate(email)
-     console.log(response);
-     if(!response.valid){
-       return res.status(400).send({message: "Not a valid email"});
-     } */
+    const { email } = req.body;
+    // const response = await emailValidator.validate(email);
+    // if (!response.valid) {
+    //   return res.status(400).send({ message: "Not a valid email" });
+    // }
+    const userToken = generateToken(req.body);
+    // accountActivation(email, userToken);
 
     const newUser = await UsersService.userRegister(req.body);
     if (!newUser.error) {
@@ -37,16 +41,23 @@ const getAllUsers = async (req, res) => {
 };
 
 const logIn = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const userLogged = await UsersService.userLogIn(email);
-    if (!userLogged) return res.status(404).send(`User not found`);
+  const { email, password, secret } = req.body;
+  if (secret) {
+    const validUser = validateToken(secret);
+    if (validUser) {
+      const status = "enabled";
+      await UsersService.activateUserAccount(email, status);
+    }
+  }
+  const userLogged = await UsersService.userLogIn(email);
+  if (userLogged.data.status === "enabled") {
+    if (!userLogged.data) return res.status(404).send(`User not found`);
     const validatedUser = await userLogged.data.validatePassword(password);
     if (!validatedUser)
       return res.status(401).send(`No authorization, Invalid credentials`);
     return res.status(200).send(mapUser([userLogged.data])[0]);
-  } catch {
-    return res.status(500).send("Server error");
+  } else {
+    return res.status(400).send(`Please activate your account before Log in`);
   }
 };
 

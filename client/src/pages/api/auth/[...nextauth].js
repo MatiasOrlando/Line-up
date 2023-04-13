@@ -10,6 +10,7 @@ export default NextAuth({
       name: "line-up",
       async authorize(credentials, req) {
         const payload = {
+          secret: credentials.secret,
           email: credentials.email,
           password: credentials.password,
         };
@@ -19,9 +20,10 @@ export default NextAuth({
             payload
           );
           const user = res.data;
+
           return user;
-        } catch {
-          return null;
+        } catch (error) {
+          return error;
         }
       },
     }),

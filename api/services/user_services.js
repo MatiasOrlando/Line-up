@@ -89,6 +89,18 @@ class UsersService {
       return { error: true, data: error };
     }
   }
+  static async activateUserAccount(email, status) {
+    try {
+      const activeUser = await User.findOneAndUpdate(
+        { email },
+        { status },
+        { new: true }
+      );
+      return { error: false, data: activeUser };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
 }
 
 module.exports = UsersService;
