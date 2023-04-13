@@ -13,6 +13,8 @@ class admin_services {
         operator: newOperator.operator,
       };
       const branch = await Branch.findOne({ location });
+      branch.enabled = true;
+      branch.save();
       if (!branch.user.email) {
         const updatedBranch = await Branch.findOneAndUpdate(
           { location: location },
@@ -110,9 +112,9 @@ class admin_services {
 
   static async deleteBranch(branchId) {
     try {
-      const deletedBranch = await Branch.deleteOne({_id: branchId});
-      if(deletedBranch.deletedCount === 0){
-        return{error: true, data: null}
+      const deletedBranch = await Branch.deleteOne({ _id: branchId });
+      if (deletedBranch.deletedCount === 0) {
+        return { error: true, data: null };
       }
       return { error: false, data: deletedBranch };
     } catch (err) {
@@ -122,9 +124,9 @@ class admin_services {
 
   static async deleteUser(userId) {
     try {
-      const deletedUser = await User.deleteOne({_id: userId});
-      if(deletedUser.deletedCount === 0){
-        return{error: true, data: null}
+      const deletedUser = await User.deleteOne({ _id: userId });
+      if (deletedUser.deletedCount === 0) {
+        return { error: true, data: null };
       }
       return { error: false, data: deletedUser };
     } catch (err) {
@@ -172,29 +174,21 @@ class admin_services {
     }
   }
 
-  static async getAllBraches(limit) {
+  static async getAllBraches() {
     try {
-      const allBranches = await Branch.find();
-      const branchesData = allBranches.map((item) => {
-        return {
-          email: item.user.email,
-          name: item.location,
-          allowedClients: item.allowedClients,
-          openingHour: item.openingHour,
-          closingHour: item.closingHour,
-          id: item.id,
-        };
-      });
-      const page = branchesData.splice(limit - 7, limit);
-      return { error: false, data: page, length: allBranches.length };
+      const allBranches = await Branch.find({ enabled: false });
+      if (!allBranches) {
+        return { error: true, data: err };
+      }
+      return { error: false, data: allBranches };
     } catch (err) {
       return { error: true, data: err };
     }
   }
+
   static async getOneBrache(id) {
     try {
       const branche = await Branch.findById(id);
-      console.log("aaaaaaaaaa", branche);
       if (!branche) {
         return { error: true, data: err };
       }
