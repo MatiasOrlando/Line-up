@@ -88,7 +88,7 @@ const getDaysAvailable = async (req, res) => {
       return res.status(400).send({ message: selectedBranch.data.message });
     }
     const { openingHour, closingHour, allowedClients } = selectedBranch.data[0];
-    const timeNow = DateTime.local();
+    const timeNow = DateTime.utc().setZone('America/Argentina/Buenos_Aires');
     const openingTime = DateTime.fromFormat(openingHour, "HH:mm");
     const closingTime = DateTime.fromFormat(closingHour, "HH:mm");
     const hoursOpen = closingTime.diff(openingTime, "hours").hours;
@@ -130,7 +130,7 @@ const getHoursAvailable = async (req, res) => {
     const closingTime = moment(closingHour, "HH:mm");
     const duration = moment.duration(closingTime.diff(openingTime));
     const numIntervals = Math.ceil(duration.asMinutes() / 15);
-    const timeNow = DateTime.local();
+    const timeNow = DateTime.utc().setZone('America/Argentina/Buenos_Aires');
     const horarios = {};
     for (let i = 0; i < numIntervals; i++) {
       const start = openingTime.clone().add(i * 15, "minutes");

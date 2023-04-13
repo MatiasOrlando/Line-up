@@ -7,6 +7,7 @@ const BranchSchema = new mongoose.Schema({
   openingHour: { type: String, required: true },
   closingHour: { type: String, required: true },
   allowedClients: { type: Number, required: true },
+  enabled: {type: Boolean, default: false},
   user: {
     id: { type: mongoose.Schema.Types.ObjectId, default: null },
     email: {
