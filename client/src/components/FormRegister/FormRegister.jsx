@@ -326,7 +326,8 @@ export default function FormRegister() {
           redirect={{ function: router.push, rute: "/" }}
           modalContent={{
             title: "Usuario creado correctamente",
-            description: "Iniciá sesion para continuar",
+            description:
+              "Recuerda activar tu cuenta desde tu correo para iniciar sesión",
             button: "Aceptar",
             icon: <BsCheckSquare className="icon" />,
           }}
