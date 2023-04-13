@@ -1,4 +1,8 @@
-const { appointmentConfirmation } = require("../config/emailConfirmation");
+const {
+  appointmentConfirmation,
+  cancelAppointmentEmail,
+  editAppointmentEmail,
+} = require("../config/emailConfirmation");
 const { validateToken } = require("../config/token");
 const AppointmentsService = require("../services/appointment_services");
 const BranchsService = require("../services/branch_services");
@@ -218,6 +222,7 @@ const editAppointment = async (req, res) => {
         await UsersService.updateUserPhone(email, phoneNew);
       }
     }
+    // editAppointmentEmail(appointmentUpdate.data);
     return res.status(200).send(appointmentUpdate.data);
   } catch (error) {
     return res
@@ -243,6 +248,7 @@ const cancelAppointment = async (req, res) => {
           .status(401)
           .send({ message: canceledAppointment.data.message });
       }
+      // cancelAppointmentEmail(canceledAppointment.data);
       return res.status(200).send(canceledAppointment.data);
     } else {
       return res.status(400).send("Usuario no encontrado");
