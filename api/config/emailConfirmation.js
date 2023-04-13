@@ -32,23 +32,29 @@ async function appointmentConfirmation(appointment) {
   let transporter = nodemailer.createTransport({
     service: "hotmail",
     auth: {
-      user: "lineupapp@hotmail.com",
-      pass: "Lineup2023",
+      user: "testlineup@hotmail.com",
+      pass: "Holamundo123",
     },
   });
-
-  let info = await transporter.sendMail({
-    from: `lineupapp@hotmail.com`,
-    to: `${user.email}`,
-    subject: `Confirmacion de turno`,
-    html: `
+  try {
+    let info = await transporter.sendMail({
+      from: `testlineup@hotmail.com`,
+      to: `${user.email}`,
+      subject: `Confirmacion de turno`,
+      html: `
     <h2>Turno Confirmado<h2>
     <h2>Reserva ${branch.id}
-    <p>Hecho el ${day} a las ${hour} para el ${appointment[0].date} a las ${appointment[0].timeOfAppontment} hs</p>
+    <p>Hecho el ${day} a las ${hour} para el ${appointment[0].date} a las ${appointment[0].timeOfAppoinment} hs</p>
     <p>Nombre: ${user.name}</p>
     <p>Sucursal: ${branch.name}</p>
     <p>Horario: ${hour}</p>`,
-  });
+    });
+  } catch {
+    return;
+  }
 }
+
+
+
 
 module.exports = { passwordUpdate, appointmentConfirmation };

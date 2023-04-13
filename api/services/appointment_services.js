@@ -1,4 +1,5 @@
 const Appointment = require("../models/appointment");
+const Branch = require("../models/branch");
 
 class AppointmentsService {
   static async findLastAppointment() {
@@ -24,6 +25,88 @@ class AppointmentsService {
     try {
       const newAppointment = await Appointment.create(appointment);
       return { error: false, data: newAppointment };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+  static async getAllUserAppointments(email) {
+    try {
+      const userAppointments = await Appointment.find({
+        "user.email": email,
+      });
+      return { error: false, data: userAppointments };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+  static async getAvailableAppointments(day) {
+    try {
+      const checkAvailableAppointment = await Appointment.find({ date: day });
+      return { error: false, data: checkAvailableAppointment };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+  static async appointmentCounterSelectedDayInBranch(selectedDate, branchName) {
+    try {
+      const appointments = await Appointment.aggregate([
+        {
+          $match: { date: selectedDate, "sucursal.name": branchName },
+        },
+        {
+          $match: { status: { $ne: "Cancel" } },
+        },
+        {
+          $group: {
+            _id: "$timeOfAppoinment",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+      return { error: false, data: appointments };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+  static async findOneAndEditAppointment(idApp, day, time, sucursal) {
+    try {
+      const appointmentByIdApp = await Appointment.findOne({ idApp });
+      appointmentByIdApp.date = day;
+      appointmentByIdApp.timeOfAppoinment = time;
+      appointmentByIdApp.sucursal = sucursal;
+      appointmentByIdApp.save();
+      return { error: false, data: appointmentByIdApp };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+  static async findOneAndCancelAppointment(idApp, cancelReason) {
+    try {
+      const canceledAppointment = await Appointment.findOne({ idApp });
+      canceledAppointment.cancelReason = cancelReason;
+      canceledAppointment.status = "Cancel";
+      await canceledAppointment.save();
+      return { error: false, data: canceledAppointment };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+  static async getUserLastAppointment(id) {
+    try {
+      const userLastAppointment = await Appointment.find({
+        "user.id": id,
+      })
+        .sort({ _id: -1 })
+        .limit(1);
+      return { error: false, data: userLastAppointment };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+  static async getUserAppointmentById(idApp) {
+    try {
+      const userAppointmentById = await Appointment.find({ idApp });
+      return { error: false, data: userAppointmentById };
     } catch (error) {
       return { error: true, data: error };
     }

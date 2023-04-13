@@ -3,8 +3,6 @@
 LINE-UP, es una aplicacion web que le permite a sus usuarios poder reservar turnos online en distintas sucursales.
 Ofrece comodidad y flexibilidad para el usuario, permitiéndole reservar y administrar sus turnos de manera rápida y fácil. Tambien le permite a los operadores de dichas sucursales poder gestionar el flujo de reservas de manera eficiente y controlada.
 
-Futuras features:
-
 Usuario/cliente: Visualizar la disponibilidad de turnos en determinada sucursal, reservar un turno, cancelarlo y tambien modificarlo de ser necesario. Adicionalmente contara con recordatorios que lo mantendran al usuario atento para que no se olvide de sus turnos reservados.
 
 Operadores de sucursal: Pueden ver y administrar la lista de turnos en su sucursal, como tambien pueden modificar el estado de los reservas de turnos realizadas.
@@ -17,9 +15,9 @@ Si desea correr este proyecto en un etorno de desarollo, simplemente clone este 
 <br>
 Git clone: https://github.com/MatiasOrlando/line-up.git
 
-| /api           | /client     |
-| -------------- | ----------- |
-| npm run server | npm run dev |
+| /api      | /client   |
+| --------- | --------- |
+| npm start | npm start |
 
 <br>
 Abra http://localhost:3000 para verlo en su navegador.
@@ -34,8 +32,7 @@ Front-end:
 
 <ul>
 <li>Next JS</li>
-<li>Redux</li>
-<li>Material-UI</li>
+<li>SASS</li>
 </ul>
 
 Back-end:

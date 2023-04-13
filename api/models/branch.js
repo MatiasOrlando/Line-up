@@ -24,6 +24,20 @@ const BranchSchema = new mongoose.Schema({
   },
 });
 
+BranchSchema.pre("save", function (next) {
+  const name = this.name;
+  this.name = name
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .replace(/\s+/g, " ");
+  const location = this.location;
+  this.location = location
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .replace(/\s+/g, " ");
+  next();
+});
+
 const Branch = mongoose.model("branch", BranchSchema);
 
 module.exports = Branch;

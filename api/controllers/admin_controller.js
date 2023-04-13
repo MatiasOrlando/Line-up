@@ -3,7 +3,6 @@ const Branch = require("../models/branch");
 const { admin_services } = require("../services/admin_services");
 
 exports.create_operator_post = async (req, res, next) => {
-  console.log(req.body);
   const operatorInfo = {
     name: req.body.name,
     email: req.body.email,
@@ -255,6 +254,21 @@ exports.get_all_branches_get = async (req, res, next) => {
     return res.status(400).send({
       message:
         "failed to get all branches in page " + number + " from the database",
+    });
+  }
+};
+
+exports.get_one_branche_get = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const branche = await admin_services.getOneBrache(id);
+    if (!branche.error) {
+      return res.status(200).send(branche);
+    }
+    return res.status(400).send({ message: allBranches.data.message });
+  } catch (err) {
+    return res.status(400).send({
+      message: "failed to get one branches whit this id from the database",
     });
   }
 };

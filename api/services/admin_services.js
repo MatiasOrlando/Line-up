@@ -12,13 +12,17 @@ class admin_services {
         phone: newOperator.phone,
         operator: newOperator.operator,
       };
-      const updatedBranch = await Branch.findOneAndUpdate(
-        { location: location },
-        { $set: { user: user } },
-        { new: true }
-      );
-      updatedBranch.save();
-      return { error: false, data: updatedBranch };
+      const branch = await Branch.findOne({ location });
+      if (!branch.user.email) {
+        const updatedBranch = await Branch.findOneAndUpdate(
+          { location: location },
+          { $set: { user: user } },
+          { new: true }
+        );
+        updatedBranch.save();
+        return { error: false, data: updatedBranch };
+      }
+      return { error: true, message: "This location already has an operator" };
     } catch (err) {
       return { error: true, data: err };
     }
@@ -106,7 +110,10 @@ class admin_services {
 
   static async deleteBranch(branchId) {
     try {
-      const deletedBranch = await Branch.findByIdAndRemove(branchId);
+      const deletedBranch = await Branch.deleteOne({_id: branchId});
+      if(deletedBranch.deletedCount === 0){
+        return{error: true, data: null}
+      }
       return { error: false, data: deletedBranch };
     } catch (err) {
       return { error: true, data: err };
@@ -115,7 +122,10 @@ class admin_services {
 
   static async deleteUser(userId) {
     try {
-      const deletedUser = await User.findByIdAndRemove(userId);
+      const deletedUser = await User.deleteOne({_id: userId});
+      if(deletedUser.deletedCount === 0){
+        return{error: true, data: null}
+      }
       return { error: false, data: deletedUser };
     } catch (err) {
       return { error: true, data: err };
@@ -152,7 +162,7 @@ class admin_services {
           salt: item.salt,
           sucursal: allBranches.filter((branchItem) => {
             return branchItem.user.email === item.email;
-          })
+          }),
         };
       });
       const page = operatorsMapper.splice(limit - 7, limit);
@@ -177,6 +187,18 @@ class admin_services {
       });
       const page = branchesData.splice(limit - 7, limit);
       return { error: false, data: page, length: allBranches.length };
+    } catch (err) {
+      return { error: true, data: err };
+    }
+  }
+  static async getOneBrache(id) {
+    try {
+      const branche = await Branch.findById(id);
+      console.log("aaaaaaaaaa", branche);
+      if (!branche) {
+        return { error: true, data: err };
+      }
+      return { error: false, data: branche };
     } catch (err) {
       return { error: true, data: err };
     }

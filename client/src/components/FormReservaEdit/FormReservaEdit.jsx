@@ -12,17 +12,19 @@ export default function FormReserva({ branches, user }) {
   const [selectedBranch, setSelectedBranch] = useState("");
   const [invalidHour, setInvalidHour] = useState(false);
   const [selectedDay, setSelectedDay] = useState("");
+  const [message, setMessage] = useState("");
   const [selectedHour, setSelectedHour] = useState("Selecciona una opcion");
+  const [dia, setDia] = useState("");
   const [show, setShow] = useState(false);
-  const [hoursAvailable, setHoursAvailable] = useState([]);
+  const [auxEffect, setAuxEffect] = useState(false);
   const [horarios, setHorarios] = useState([]);
   const [monthDay, setMonthDay] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const router = useRouter();
   const { id } = router.query;
-  const pathname = router.pathname;
   const rute = useRouter();
   const dayRef = useRef();
+  let count = 1;
   let horario = [];
 
   const today = DateTime.local();
@@ -42,10 +44,6 @@ export default function FormReserva({ branches, user }) {
       today.get("monthLong").slice(1);
     setMonthDay(nombreMes);
   }, []);
-
-  useEffect(() => {
-    if (pathname === "/reserva") document.body.classList.add("bg-grey2");
-  }, [pathname]);
 
   for (let i = 0; i < lastDayOfMonth.day; i++) {
     currentMonthDates.push(firstDayOfMonth.plus({ days: i }));
@@ -73,13 +71,13 @@ export default function FormReserva({ branches, user }) {
     }
   }
 
-  /* useEffect(() => {
-    const intervalo = setInterval(() => {
-      setTiempoRestante((tiempoRestante) => tiempoRestante - 1);
-    }, 1000);
+  // useEffect(() => {
+  //   const intervalo = setInterval(() => {
+  //     setTiempoRestante((tiempoRestante) => tiempoRestante - 1);
+  //   }, 1000);
 
-    return () => clearInterval(intervalo);
-  }, []); */
+  //   return () => clearInterval(intervalo);
+  // }, []);
 
   function formatearTiempo(tiempo) {
     const minutos = Math.floor(tiempo / 60);
@@ -108,7 +106,7 @@ export default function FormReserva({ branches, user }) {
     return fechaComparar >= today;
   });
 
-  fechasFiltradas.unshift(today.toFormat("dd-MM-yyyy")); //enviar al back
+  fechasFiltradas.unshift(today.toFormat("dd-MM-yyyy"));
   const toggleEnabled = function (element, enable) {
     if (!enable) {
       element.disabled = false;
@@ -119,13 +117,13 @@ export default function FormReserva({ branches, user }) {
   };
 
   const handleChange = async (e) => {
+    setMessage("");
     loadingData.forEach((date, i) => {
       const test = document.getElementById(i);
       test.disabled = true;
       test.classList.remove("dayPicked");
     });
 
-    console.log(e.target.value);
     if (e.target.value !== "Selecciona una opcion") {
       setVio({
         ...vio,
@@ -143,9 +141,16 @@ export default function FormReserva({ branches, user }) {
       });
       setGra2({
         ...gra2,
-        color: gra.color === "green" ? "gray" : "violet",
-        lineColor: gra.color === "green" ? "greyLine" : "violetLine",
-        className: gra.color === "green" ? "fontGray" : "fontViolet",
+        color:
+          gra.color === "green" || vio.color === "violet" ? "gray" : "violet",
+        lineColor:
+          gra.color === "green" || vio.color === "violet"
+            ? "greyLine"
+            : "violetLine",
+        className:
+          gra.color === "green" || vio.color === "violet"
+            ? "fontGray"
+            : "fontViolet",
         value: 3,
       });
     }
@@ -187,18 +192,22 @@ export default function FormReserva({ branches, user }) {
         }
       );
       loadingData.forEach((fecha, i) => {
-        datesAvailables.data.arrayToSend;
+        datesAvailables.data.arrayToSend.day;
         const filteredArray = datesAvailables.data.arrayToSend.filter(
-          (element) => !datesAvailables.data.turnos.includes(element)
+          (element) => !datesAvailables.data.turnos.includes(element.day)
         );
         filteredArray.forEach((date) => {
-          if (fecha.toFormat("dd-MM-yyyy") === date) {
+          if (fecha.toFormat("dd-MM-yyyy") === date.day) {
             const element = document.getElementById(i);
-            /* const activar = document.getElementsByClassName("color-grey4");
-            activar.classList.remove("color.grey4");
-            */
+            const h2 = document.getElementsByClassName("changecolortoblack");
+            h2[0].style.color = "black";
+            const dayName = document.getElementsByClassName("day-name");
+            Array.from(dayName).map((element) => {
+              element.classList.remove("color-grey4");
+              element.style.color = "#6e6e6e";
+            });
             toggleEnabled(element);
-            setDatesAvailable(datesAvailables);
+            setDatesAvailable(datesAvailables.data.arrayToSend);
           }
         });
       });
@@ -212,8 +221,24 @@ export default function FormReserva({ branches, user }) {
     }
   };
 
+  useEffect(() => {
+    if (datesAvailable.length > 0 && dia !== "") {
+      datesAvailable.forEach((elementObj) => {
+        if (elementObj.day === dia) {
+          if (elementObj.availables < 10)
+            setMessage(
+              `Quedan solo ${elementObj.availables} turnos disponibles 🔥`
+            );
+        }
+      });
+    }
+  }, [auxEffect]);
+
   const handleClick = async (e) => {
+    setMessage("");
     const dayValue = dayRef.current.value;
+    setDia(e.target.value);
+    setAuxEffect(count++);
 
     loadingData.forEach((date, i) => {
       const test = document.getElementById(i);
@@ -281,6 +306,8 @@ export default function FormReserva({ branches, user }) {
       return setInvalidHour(true);
     }
 
+    e.target.disabled = true;
+
     setGra2({
       ...gra2,
       color: "green",
@@ -298,9 +325,8 @@ export default function FormReserva({ branches, user }) {
         day: selectedDay,
         time: selectedHour,
       })
-      .then((res) => {
+      .then(() => {
         setModalIsOpen(true);
-        console.log(res);
       });
   };
 
@@ -469,7 +495,7 @@ export default function FormReserva({ branches, user }) {
           )}
         </div>
         <div className="calendar-container color-grey4">
-          <h2>
+          <h2 className="changecolortoblack">
             {monthDay} {year}
           </h2>
           <div className="grid-container">
@@ -495,6 +521,11 @@ export default function FormReserva({ branches, user }) {
               );
             })}
           </div>
+          {message && (
+            <span style={{ fontSize: "20px", color: "#e53939" }}>
+              {message}
+            </span>
+          )}
         </div>
         <div className="countdown-container">
           <button className="btn-primary sc">
@@ -513,6 +544,7 @@ export default function FormReserva({ branches, user }) {
           icon: <BsCheckSquare className="icon" />,
         }}
       ></Modal>
+      ;
     </>
   );
 }
