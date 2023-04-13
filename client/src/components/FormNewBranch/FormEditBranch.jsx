@@ -8,7 +8,6 @@ import validationNewBranch from "./validation/validationNewBranch";
 import { useRouter } from "next/router";
 
 export default function FormEditBranch({ branch }) {
-  console.log(branch);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { data } = useSession();
   const router = useRouter();

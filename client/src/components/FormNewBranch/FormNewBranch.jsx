@@ -52,9 +52,8 @@ export default function FormNewBranch() {
       const { name, location, closingHour, openingHour, allowedClients } = dat;
       const openingTime = DateTime.fromFormat(openingHour, "HH:mm");
       const closingTime = DateTime.fromFormat(closingHour, "HH:mm");
-
       const hoursOpen = closingTime.diff(openingTime, "hours").hours;
-      console.log(hoursOpen);
+
       if (hoursOpen < 0) {
         setNotHour("Horarios incorrectos");
         setTimeout(() => {
@@ -67,7 +66,6 @@ export default function FormNewBranch() {
         `http://localhost:3001/api/admin/create-branch/token?token=${data.user}`,
         { name, location, closingHour, openingHour, allowedClients }
       );
-      console.log(response);
       setModalIsOpen(true);
     },
     validationSchema: validationNewBranch.validationSchema,

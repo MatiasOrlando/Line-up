@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const Branch = require("../models/branch");
 const { admin_services } = require("../services/admin_services");
-const BranchsService = require("../services/branch_services")
+const BranchsService = require("../services/branch_services");
 
 exports.create_operator_post = async (req, res, next) => {
   const operatorInfo = {
@@ -120,24 +120,18 @@ exports.edit_operator_put = async (req, res, next) => {
   const branchId = req.params.branchId;
   const body = {
     email: req.body.email,
-    //phone: req.body.phone,
-    //operator: req.body.operator,
     name: req.body.name,
     password: req.body.password,
     dni: req.body.dni,
   };
   try {
-    /* if (
-      typeof body.phone !== "number" ||
+    if (
       typeof body.email !== "string" ||
-      typeof body.operator !== "boolean" ||
       typeof body.name !== "string" ||
       typeof body.password !== "string"
     ) {
-      console.log("entra en el if");
       return res.status(400).send({ message: "invalid data type" });
-    } */
-    console.log(`=====>`, branchId);
+    }
     const updateOperator = await admin_services.editOperator(branchId, body);
     if (!updateOperator.error) {
       return res.status(200).send({ message: "operator updated succesfully" });
@@ -293,11 +287,21 @@ exports.edit_one_operator = async (req, res, next) => {
     const idUser = req.params.idUser;
     const { name, email, password, dni, location, idLocation } = req.body;
 
-    const updateUser = await admin_services.editOneOperator(idUser, name, email, password, dni);
+    const updateUser = await admin_services.editOneOperator(
+      idUser,
+      name,
+      email,
+      password,
+      dni
+    );
     if (!updateUser.err) {
-      const updateBranch = await BranchsService.editOneBranch(idLocation, name, email)
+      const updateBranch = await BranchsService.editOneBranch(
+        idLocation,
+        name,
+        email
+      );
     }
   } catch (err) {
-    res.send(401).send("Error de errores")
+    res.send(401).send("Error de errores");
   }
-}
+};

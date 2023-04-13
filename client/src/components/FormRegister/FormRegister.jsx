@@ -60,7 +60,6 @@ export default function FormRegister() {
         });
         setModalIsOpen(true);
       } catch (err) {
-        console.log(err);
         if (err.response.data.includes("email")) {
           setError("error-input-email");
         } else if (err.response.data.includes("dni")) {
