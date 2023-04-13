@@ -1,5 +1,3 @@
-const User = require("../models/user");
-const Branch = require("../models/branch");
 const { admin_services } = require("../services/admin_services");
 const BranchsService = require("../services/branch_services");
 
