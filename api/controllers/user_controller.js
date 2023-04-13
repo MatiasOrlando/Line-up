@@ -7,13 +7,13 @@ const { passwordUpdate } = require("../config/emailConfirmation");
 
 const registerUser = async (req, res) => {
   try {
-    const {email} = req.body
-    const response = await emailValidator.validate(email)
-    console.log(response);
-    if(!response.valid){
-      return res.status(400).send({message: "Not a valid email"});
-    }
-   
+    /*  const {email} = req.body
+     const response = await emailValidator.validate(email)
+     console.log(response);
+     if(!response.valid){
+       return res.status(400).send({message: "Not a valid email"});
+     } */
+
     const newUser = await UsersService.userRegister(req.body);
     if (!newUser.error) {
       res.status(201).send(mapUser([newUser.data])[0]);
