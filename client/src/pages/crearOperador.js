@@ -24,6 +24,5 @@ export async function getServerSideProps(context) {
   }
 }
 export default function CrearSucursal({ branches }) {
-  console.log(branches);
   return <FormNewOperator branches={branches} />;
 }

@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
-const SECRET = "Matias";
+require("dotenv").config();
 
 function generateToken(payload) {
-  const token = jwt.sign({ payload }, SECRET, {
+  const token = jwt.sign({ payload }, process.env.SECRET, {
     expiresIn: "2d",
   });
 
@@ -10,7 +10,7 @@ function generateToken(payload) {
 }
 
 function validateToken(token) {
-  return jwt.verify(token, SECRET);
+  return jwt.verify(token, process.env.SECRET);
 }
 
 module.exports = { validateToken, generateToken };

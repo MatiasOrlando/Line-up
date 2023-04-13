@@ -4,13 +4,13 @@ async function passwordUpdate(email, token) {
   let transporter = nodemailer.createTransport({
     service: "hotmail",
     auth: {
-      user: "lineupapp@hotmail.com",
-      pass: "Lineup2023",
+      user: "lineupdemo@hotmail.com",
+      pass: "Testlinedemo3",
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupapp@hotmail.com`,
+    from: `lineupdemo@hotmail.com`,
     to: `${email}`,
     subject: `Actualiza tu contraseña`,
     html: `<p><b></b><a href="http://localhost:3000/password/${token}">Haz click aqui para cambiar tu contraseña</a></p>
@@ -32,13 +32,13 @@ async function appointmentConfirmation(appointment) {
   let transporter = nodemailer.createTransport({
     service: "hotmail",
     auth: {
-      user: "testlineup@hotmail.com",
-      pass: "Holamundo123",
+      user: "lineupdemo@hotmail.com",
+      pass: "Testlinedemo3",
     },
   });
   try {
     let info = await transporter.sendMail({
-      from: `testlineup@hotmail.com`,
+      from: `lineupdemo@hotmail.com`,
       to: `${user.email}`,
       subject: `Confirmacion de turno`,
       html: `
@@ -58,13 +58,13 @@ async function accountActivation(email, token) {
   let transporter = nodemailer.createTransport({
     service: "hotmail",
     auth: {
-      user: "testlineup@hotmail.com",
-      pass: "Holamundo123",
+      user: "lineupdemo@hotmail.com",
+      pass: "Testlinedemo3",
     },
   });
 
   let info = await transporter.sendMail({
-    from: `testlineup@hotmail.com`,
+    from: `lineupdemo@hotmail.com`,
     to: `${email}`,
     subject: `Activa tu cuenta`,
     html: `<p><b></b><a href="http://localhost:3000?secret=${token}">Haz click aqui en este link activar tu cuenta</a></p>
@@ -75,4 +75,64 @@ async function accountActivation(email, token) {
   console.log(info.messageId); // Random ID generated after successful send (optional)
 }
 
-module.exports = { passwordUpdate, appointmentConfirmation, accountActivation };
+async function cancelAppointmentEmail(appointment) {
+  const email = appointment.user.email;
+  const branchName = appointment.sucursal.name;
+  const timeOfAppoinment = appointment.timeOfAppoinment;
+  let transporter = nodemailer.createTransport({
+    service: "hotmail",
+    auth: {
+      user: "lineupdemo@hotmail.com",
+      pass: "Testlinedemo3",
+    },
+  });
+
+  let info = await transporter.sendMail({
+    from: `lineupdemo@hotmail.com`,
+    to: `${email}`,
+    subject: `Turno cancelado`,
+    html: `<p><b></b>Su reserva ha sido cancelada exitosamente. Le agradecemos por avisarnos.</></p>
+                <h2>Turno Cancelado</h2>
+                <h2>Reserva ${appointment.idApp}</h2>
+                <p>Nombre: ${appointment.user.name}</p>
+                <p>Sucursal: ${branchName}</p>
+                <p>Horario: ${timeOfAppoinment}</p>
+                <p>Esperamos que vuelva pronto. Muchas gracias por confiar en nosotros.</p>
+             `,
+  });
+}
+
+async function editAppointmentEmail(appointment) {
+  const email = appointment.user.email;
+  const branchName = appointment.sucursal.name;
+  const timeOfAppoinment = appointment.timeOfAppoinment;
+  let transporter = nodemailer.createTransport({
+    service: "hotmail",
+    auth: {
+      user: "lineupdemo@hotmail.com",
+      pass: "Testlinedemo3",
+    },
+  });
+
+  let info = await transporter.sendMail({
+    from: `lineupdemo@hotmail.com`,
+    to: `${email}`,
+    subject: `Turno editado`,
+    html: `<p><b></b>Su reserva ha sido editada exitosamente. Le agradecemos por avisarnos.</></p>
+                <h2>Turno Editado</h2>
+                <h2>Reserva ${appointment.idApp}</h2>
+                <p>Nombre: ${appointment.user.name}</p>
+                <p>Sucursal: ${branchName}</p>
+                <p>Horario: ${timeOfAppoinment}</p>
+                <p>Muchas gracias por confiar en nosotros. Esperamos que haya tenido una excelente experiencia con nuestro servicio</p>
+             `,
+  });
+}
+
+module.exports = {
+  passwordUpdate,
+  appointmentConfirmation,
+  accountActivation,
+  cancelAppointmentEmail,
+  editAppointmentEmail,
+};

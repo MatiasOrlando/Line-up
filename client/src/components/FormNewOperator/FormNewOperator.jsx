@@ -59,13 +59,12 @@ export default function FormNewOperator({ branches }) {
           }
         }
       } else {
-        console.log("holaaa");
         setError("error-input-location");
       }
     },
     validationSchema: validationNewOperator.validationSchema,
   });
-  console.log(error);
+
   const togglePasswordVisibility = (password) => {
     password === "password"
       ? setPasswordShown(!passwordShown)

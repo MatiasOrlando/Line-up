@@ -6,7 +6,6 @@ import Link from "next/link";
 
 export default function ListBranches({ branches, length }) {
   const router = useRouter();
-  console.log(branches);
   const handleChange = (event, value) => {
     router.push(`/sucursales/${value}`);
   };
@@ -20,7 +19,6 @@ export default function ListBranches({ branches, length }) {
           </div>
           <div className="container-list">
             {branches.map((branch, index) => {
-              console.log("A", branch);
               return (
                 <div className="item-list" key={index}>
                   <div className="item-section">

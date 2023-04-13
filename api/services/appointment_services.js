@@ -1,5 +1,4 @@
 const Appointment = require("../models/appointment");
-const Branch = require("../models/branch");
 
 class AppointmentsService {
   static async findLastAppointment() {

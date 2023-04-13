@@ -6,7 +6,6 @@ const {
   passwordUpdate,
   accountActivation,
 } = require("../config/emailConfirmation");
-const User = require("../models/user");
 
 const registerUser = async (req, res) => {
   try {
@@ -16,6 +15,7 @@ const registerUser = async (req, res) => {
       return res.status(400).send({ message: "Not a valid email" });
     } */
     const userToken = generateToken(req.body);
+
     //accountActivation(email, userToken);
 
     const newUser = await UsersService.userRegister(req.body);

@@ -1,4 +1,3 @@
-const User = require("../models/user");
 const Branch = require("../models/branch");
 const Appointment = require("../models/appointment");
 

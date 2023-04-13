@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import validationNewOperator from "../FormNewOperator/validation/validation.js";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-export default function FormEditOperator({ user, branchName,idLocation }) {
+export default function FormEditOperator({ user, branchName, idLocation }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
   const [repeatPasswordShown, setRepeatPasswordShown] = useState(false);
@@ -59,7 +59,7 @@ export default function FormEditOperator({ user, branchName,idLocation }) {
     },
     validationSchema: validationNewOperator.validationSchema,
   });
-  console.log(error);
+  console.error(error);
   const togglePasswordVisibility = (password) => {
     password === "password"
       ? setPasswordShown(!passwordShown)
