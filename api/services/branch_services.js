@@ -11,7 +11,7 @@ class BranchsService {
   }
   static async getAllBranchs() {
     try {
-      const branchesNames = await Branch.find({});
+      const branchesNames = await Branch.find({enabled: true});
       return { error: false, data: branchesNames };
     } catch (error) {
       return { error: true, data: error };

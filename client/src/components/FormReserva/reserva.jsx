@@ -26,7 +26,7 @@ export default function FormReserva({ branches, user }) {
   let count = 1;
   let horario = [];
 
-  const today = DateTime.local();
+  const today = DateTime.utc().setZone('America/Argentina/Buenos_Aires');
   const initialDayOfCurrentMonth = today.startOf("month").weekday;
   const year = today.year;
   const firstDayOfMonth = today.startOf("month");
