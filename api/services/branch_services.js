@@ -9,6 +9,14 @@ class BranchsService {
       return { error: true, data: error };
     }
   }
+  static async getAllBranchs() {
+    try {
+      const branchesNames = await Branch.find({});
+      return { error: false, data: branchesNames };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
 }
 
 module.exports = BranchsService;
