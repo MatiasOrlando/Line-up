@@ -9,6 +9,7 @@ exports.create_operator_post = async (req, res, next) => {
     operator: req.body.operator,
     password: req.body.password,
     dni: req.body.dni,
+    status: "enabled"
   };
   const { location } = req.body;
   try {
@@ -293,13 +294,11 @@ exports.edit_one_operator = async (req, res, next) => {
       dni
     );
     if (!updateUser.err) {
-      const updateBranch = await BranchsService.editOneBranch(
-        idLocation,
-        name,
-        email
-      );
+
+      const updateBranch = await BranchsService.editOneBranch(idLocation, name, email)
+      res.status(200).send("Change correct")
     }
   } catch (err) {
-    res.send(401).send("Error de errores");
+    res.send(401).send("Error")
   }
 };
