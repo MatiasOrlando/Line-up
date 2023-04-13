@@ -9,7 +9,7 @@ import ForgetPassword from "./ForgetPassword";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import googleIcon from "../../assets/google.png";
 
-export default function FormLogin() {
+export default function FormLogin({ secret }) {
   const [forgetPassword, setForgetPassword] = useState(false);
   const [credentials, setCredentials] = useState("");
   const [passwordShown, setPasswordShown] = useState(false);
@@ -32,6 +32,7 @@ export default function FormLogin() {
     onSubmit: async () => {
       formik.handleReset();
       const signInRes = await signIn("credentials", {
+        secret: secret || "",
         email: formik.values.user,
         password: formik.values.pass,
         redirect: false,

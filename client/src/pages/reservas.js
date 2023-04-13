@@ -12,7 +12,7 @@ export async function getServerSideProps(context) {
     };
   } else {
     const response = await fetch(
-      `http://localhost:3001/api/appointments/token?token=${token.user}`
+      `http://localhost:3001/api/appointments/user-appointments?token=${token.user}`
     );
     const data = await response.json();
     return {

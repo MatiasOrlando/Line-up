@@ -518,7 +518,7 @@ export default function FormReserva({ branches, user }) {
             })}
           </div>
           {message && (
-            <span style={{ fontSize: "20px", color: "#e53939" }}>
+            <span style={{ fontSize: "15px", color: "#e53939" }}>
               {message}
             </span>
           )}

@@ -3,7 +3,10 @@ const bcrypt = require("bcrypt");
 
 const { isEmail } = require("validator");
 
+const state = ["disabled", "enabled"];
+
 const userSchema = new mongoose.Schema({
+  status: { type: String, enum: state, default: "disabled" },
   dni: { type: Number, unique: true, required: true },
   name: { type: String, required: true },
   email: {

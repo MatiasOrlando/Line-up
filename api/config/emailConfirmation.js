@@ -54,7 +54,25 @@ async function appointmentConfirmation(appointment) {
   }
 }
 
+async function accountActivation(email, token) {
+  let transporter = nodemailer.createTransport({
+    service: "hotmail",
+    auth: {
+      user: "testlineup@hotmail.com",
+      pass: "Holamundo123",
+    },
+  });
 
+  let info = await transporter.sendMail({
+    from: `testlineup@hotmail.com`,
+    to: `${email}`,
+    subject: `Activa tu cuenta`,
+    html: `<p><b></b><a href="http://localhost:3000?secret=${token}">Haz click aqui en este link activar tu cuenta</a></p>
+                <p>Sus datos estan protegidos. Muchas gracias por confiar en nosotros.</p>
+                <img src=""/>`,
+  });
 
+  console.log(info.messageId); // Random ID generated after successful send (optional)
+}
 
-module.exports = { passwordUpdate, appointmentConfirmation };
+module.exports = { passwordUpdate, appointmentConfirmation, accountActivation };

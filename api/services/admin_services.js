@@ -114,7 +114,7 @@ class admin_services {
     try {
       const deletedBranch = await Branch.deleteOne({ _id: branchId });
       if (deletedBranch.deletedCount === 0) {
-        return { error: true, data: null };
+        return { error: true, data: null }
       }
       return { error: false, data: deletedBranch };
     } catch (err) {
@@ -126,7 +126,7 @@ class admin_services {
     try {
       const deletedUser = await User.deleteOne({ _id: userId });
       if (deletedUser.deletedCount === 0) {
-        return { error: true, data: null };
+        return { error: true, data: null }
       }
       return { error: false, data: deletedUser };
     } catch (err) {
@@ -195,6 +195,27 @@ class admin_services {
       return { error: false, data: branche };
     } catch (err) {
       return { error: true, data: err };
+    }
+  }
+  static async editOneOperator(idUser, name, email, password, dni) {
+    try {
+      const newUser = await User.findByIdAndUpdate({ _id: idUser },
+        {
+          $set: {
+            name,
+            email,
+            password,
+            dni
+          },
+        },
+        {
+          new: true
+        }
+      )
+      newUser.save();
+      return { error: false, data: "Se cambiaron los datos del operador" };
+    } catch (err) {
+      return { error: false, data: err.message };
     }
   }
 }

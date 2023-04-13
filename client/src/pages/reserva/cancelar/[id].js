@@ -45,7 +45,7 @@ const cancel = ({ user, token, id, appointment }) => {
       <div style={{ display: "flex" }}>
         <div>
           <div className="container-go-back">
-            <Link href="/" className="go-back">
+            <Link href="/reserva/confirmacion" className="go-back">
               <AiOutlineArrowLeft className="icon" /> Atrás
             </Link>
           </div>
