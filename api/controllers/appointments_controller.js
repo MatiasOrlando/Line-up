@@ -191,6 +191,7 @@ const getHoursAvailable = async (req, res) => {
 const editAppointment = async (req, res) => {
   try {
     const { idApp, day, time, branch, phoneNew, email } = req.body;
+    console.log("EDIT APPOINMENT", idApp, day, time, branch, phoneNew, email);
     const user = await UsersService.searchUserByEmail(email);
     if (user.error) {
       return res.status(401).send({ message: user.data.message });
@@ -262,6 +263,7 @@ const cancelAppointment = async (req, res) => {
 
 const getUserLastAppointment = async (req, res) => {
   try {
+    console.log(req.query)
     const { token } = req.query;
     const decodedUser = validateToken(token);
     if (decodedUser) {
