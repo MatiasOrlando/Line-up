@@ -2,6 +2,59 @@
  * @openapi
  * components:
  *   schemas:
+ *     CancelAppoinment:
+ *       type: object
+ *       properties:
+ *         cancelReason: 
+ *           type: string
+ *     EditAppoinment:
+ *       type: object
+ *       properties:
+ *         idApp: 
+ *           type: string
+ *         branch:
+ *           type: string
+ *         email:
+ *           type: string
+ *         phoneNew:
+ *           type: number
+ *         day: 
+ *          type: string
+ *         time: 
+ *          type: string
+ *     GetHoursAvailable:
+ *       type: object
+ *       properties:
+ *         day:
+ *           type: string
+ *         branch:
+ *           type: string
+ *     GetdayAvailable:
+ *       type: object
+ *       properties:
+ *         days:
+ *           type: array
+ *           items: 
+ *              type: string
+ *         branch:
+ *           type: string
+ *         email:
+ *           type: string
+ *     AddnewAppoinment:
+ *       type: object
+ *       properties:
+ *         branch:
+ *           type: string
+ *         name:
+ *           type: string
+ *         email:
+ *           type: string
+ *         phoneNew:
+ *           type: number
+ *         day: 
+ *          type: string
+ *         time: 
+ *          type: string
  *     userRegisterPost:
  *       type: object
  *       properties:
