@@ -6,11 +6,38 @@ import { BsCheckSquare } from "react-icons/bs";
 import Modal from "@/commons/Modal";
 import validationNewBranch from "./validation/validationNewBranch";
 import { useRouter } from "next/router";
+import { DateTime } from "luxon";
 
 export default function FormNewBranch() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [notHour, setNotHour] = useState("");
   const { data } = useSession();
   const router = useRouter();
+
+  function intervalosMediaHora(horaInicio, horaFin) {
+    const diff = DateTime.fromFormat(horaFin, "HH:mm").diff(
+      DateTime.fromFormat(horaInicio, "HH:mm"),
+      "minutes"
+    );
+    const numIntervalos = Math.ceil(diff.minutes / 30) + 1;
+    const intervalos = [...Array(numIntervalos)].map((_, i) => {
+      const fecha = DateTime.fromFormat(horaInicio, "HH:mm").plus({
+        minutes: i * 30,
+      });
+      return fecha.toLocaleString({
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      });
+    });
+
+    return intervalos;
+  }
+
+  const horaInicio = "07:00";
+  const horaFin = "23:00";
+
+  const intervalos = intervalosMediaHora(horaInicio, horaFin);
 
   const formik = useFormik({
     initialValues: {
@@ -22,8 +49,20 @@ export default function FormNewBranch() {
     },
 
     onSubmit: async (dat) => {
-      console.log(dat);
       const { name, location, closingHour, openingHour, allowedClients } = dat;
+      const openingTime = DateTime.fromFormat(openingHour, "HH:mm");
+      const closingTime = DateTime.fromFormat(closingHour, "HH:mm");
+
+      const hoursOpen = closingTime.diff(openingTime, "hours").hours;
+      console.log(hoursOpen);
+      if (hoursOpen < 0) {
+        setNotHour("Horarios incorrectos");
+        setTimeout(() => {
+          setNotHour("");
+        }, 2000);
+        return null;
+      }
+
       const response = await axios.post(
         `http://localhost:3001/api/admin/create-branch/token?token=${data.user}`,
         { name, location, closingHour, openingHour, allowedClients }
@@ -78,7 +117,7 @@ export default function FormNewBranch() {
             <div className="div-split-two">
               <div className="div-inter-50-left">
                 <label htmlFor="openingHour">Horario de incio</label>
-                <input
+                <select
                   className={`input-primary width-100 ${
                     formik.touched.openingHour && formik.errors.openingHour
                       ? "error-input"
@@ -88,11 +127,18 @@ export default function FormNewBranch() {
                   id="openingHour"
                   onChange={formik.handleChange}
                   value={formik.values.openingHour}
-                />
+                >
+                  {intervalos.map((int, idx) => {
+                    return <option key={idx}>{int}</option>;
+                  })}
+                </select>
+                <div className="box-not-hour">
+                  <span>{notHour}</span>
+                </div>
               </div>
               <div className="div-inter-50-right">
                 <label htmlFor="closingHour">Horario de cierre</label>
-                <input
+                <select
                   className={`input-primary width-100  ${
                     formik.touched.closingHour && formik.errors.closingHour
                       ? "error-input"
@@ -102,7 +148,11 @@ export default function FormNewBranch() {
                   id="closingHour"
                   onChange={formik.handleChange}
                   value={formik.values.closingHour}
-                />
+                >
+                  {intervalos.map((int, idx) => {
+                    return <option key={idx}>{int}</option>;
+                  })}
+                </select>
               </div>
             </div>
             <div className="login-form_box-input">

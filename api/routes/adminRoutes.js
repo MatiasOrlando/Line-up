@@ -586,18 +586,18 @@ router.get(
 );
 
 //router.get("/get-one-operator/:number/token", validateMiddleware.isAdmin, async (req, res) => {
- // let id = req.params.number;
- // let opFind = await User.findById(id)
- // let suc = await Branch.findOne({ "user.email": opFind.email })
-  //let idLocation = suc._id.toString();
-  //console.log(idLocation);
-  //let nameLocation = suc?.location || "";
-  //res.send({ user: opFind, branchName: nameLocation, idLocation: idLocation });
+// let id = req.params.number;
+// let opFind = await User.findById(id)
+// let suc = await Branch.findOne({ "user.email": opFind.email })
+//let idLocation = suc._id.toString();
+//console.log(idLocation);
+//let nameLocation = suc?.location || "";
+//res.send({ user: opFind, branchName: nameLocation, idLocation: idLocation });
 //})
 
 
 router.get(
-  "/get-all-branches/enabled/token",
+  "/get-enabled-branches/token",
   validateMiddleware.isAdmin,
   adminController.get_all_branches_enabled_get
 );
