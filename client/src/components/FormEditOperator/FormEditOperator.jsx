@@ -40,7 +40,7 @@ export default function FormEditOperator({ user, branchName,idLocation }) {
             idLocation: idLocation,
           }
         );
-        //setModalIsOpen(true);
+        setModalIsOpen(true);
       } catch (err) {
         const message = err.response.data.message;
         if (message.includes("email")) {
