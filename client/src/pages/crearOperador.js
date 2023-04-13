@@ -13,10 +13,9 @@ export async function getServerSideProps(context) {
     };
   } else {
     const response = await fetch(
-      `http://localhost:3001/api/admin/get-all-branches/enabled/token?token=${token?.user}`
+      `http://localhost:3001/api/admin/get-enabled-branches/token?token=${token?.user}`
     );
     const data = await response.json();
-
     return {
       props: {
         branches: data.data,
@@ -25,5 +24,6 @@ export async function getServerSideProps(context) {
   }
 }
 export default function CrearSucursal({ branches }) {
+  console.log(branches);
   return <FormNewOperator branches={branches} />;
 }
