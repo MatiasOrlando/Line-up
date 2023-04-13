@@ -188,7 +188,6 @@ const User = require("../models/user");
  *         description: Error en servidor
  */
 
-
 /**
  * @openapi
  * /api/admin/edit-branch-info/{branchId}/token:
@@ -532,7 +531,11 @@ router.put(
 );
 
 // BORRA UNA SUCURSAL QUE SE LE PASE POR PARAMS  const { branchId } = req.params
-router.delete("/delete-branch/:branchId/token", validateMiddleware.isAdmin, adminController.delete_branch_delete);
+router.delete(
+  "/delete-branch/:branchId/token",
+  validateMiddleware.isAdmin,
+  adminController.delete_branch_delete
+);
 
 // BORRA UN USUARIO QUE SE LE PASE POR PARAMS  const { userId } = req.params
 router.delete(
@@ -557,24 +560,54 @@ router.get(
 
 // TRAE TODOS LOS SUCURSALES DE LA PAGINA QUE LE PASES COMO PARAMS, SI EL NUMERO ES 1 TRAE LAS SUCURSALES DEL 1 AL 7, SI EL NUMERO ES 2 TRAE LAS SUCURSALES DEL 7 AL 14
 
-router.get("/get-all-branches/:number/token", validateMiddleware.isAdmin, adminController.get_all_branches_get);
+router.get(
+  "/get-all-branches/:number/token",
+  validateMiddleware.isAdmin,
+  adminController.get_all_branches_get
+);
 
-router.get("/get-one-operator/:number/token", validateMiddleware.isAdmin, async (req, res) => {
-  let id = req.params.number;
-  let opFind = await User.findById(id)
-  let suc = await Branch.findOne({ "user.email": opFind.email })
-  let idLocation = suc._id.toString();
-  console.log(idLocation);
-  let nameLocation = suc?.location || "";
-  res.send({ user: opFind, branchName: nameLocation, idLocation: idLocation });
-})
 
+router.get(
+  "/get-one-operator/:number/token",
+  validateMiddleware.isAdmin,
+  async (req, res) => {
+    let id = req.params.number;
+    let opFind = await User.findById(id);
+    let suc = await Branch.findOne({ "user.email": opFind.email });
+    let idLocation = suc._id.toString();
+    console.log(idLocation);
+    let nameLocation = suc?.location || "";
+    res.send({
+      user: opFind,
+      branchName: nameLocation,
+      idLocation: idLocation,
+    });
+  }
+);
+
+//router.get("/get-one-operator/:number/token", validateMiddleware.isAdmin, async (req, res) => {
+ // let id = req.params.number;
+ // let opFind = await User.findById(id)
+ // let suc = await Branch.findOne({ "user.email": opFind.email })
+  //let idLocation = suc._id.toString();
+  //console.log(idLocation);
+  //let nameLocation = suc?.location || "";
+  //res.send({ user: opFind, branchName: nameLocation, idLocation: idLocation });
+//})
+
+
+router.get(
+  "/get-all-branches/enabled/token",
+  validateMiddleware.isAdmin,
+  adminController.get_all_branches_enabled_get
+);
 
 router.get(
   "/get-one-branch/:id/token",
   validateMiddleware.isAdmin,
   adminController.get_one_branche_get
 );
+
 
 router.put("/edit-one-operator/:idUser/token", validateMiddleware.isAdmin, adminController.edit_one_operator)
 

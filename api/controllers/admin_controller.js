@@ -259,6 +259,20 @@ exports.get_all_branches_get = async (req, res, next) => {
   }
 };
 
+exports.get_all_branches_enabled_get = async (req, res, next) => {
+  try {
+    const allBranches = await admin_services.getAllBraches();
+    if (!allBranches.error) {
+      return res.status(200).send(allBranches);
+    }
+    return res.status(400).send({ message: allBranches.data.message });
+  } catch (err) {
+    return res.status(400).send({
+      message: "failed to get all enabled branches from the database",
+    });
+  }
+};
+
 exports.get_one_branche_get = async (req, res, next) => {
   try {
     const id = req.params.id;
