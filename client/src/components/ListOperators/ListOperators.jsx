@@ -2,6 +2,7 @@ import * as React from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function ListOperators({ dataOperadores, length }) {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function ListOperators({ dataOperadores, length }) {
 
   return (
     <>
-       <main className="container-appointments">
+      <main className="container-appointments">
         <div className="container-appointments_box">
           <div className="box-title">
             <h2>Reservas</h2>
@@ -37,17 +38,22 @@ export default function ListOperators({ dataOperadores, length }) {
                     </div>
                   </div>
                   <div className="item-section">
-                    <div className="item-title">
-                    Contraseña
-                    </div>
+                    <div className="item-title">Contraseña</div>
                     <div className="item-description">
-                      <input type="password" className="input-salt" value={operador.salt} />
+                      <input
+                        type="password"
+                        className="input-salt"
+                        disabled
+                        defaultValue={operador.salt || ""}
+                      />
                     </div>
                   </div>
                   <div className="item-section">
-                    <button className="btn-secondary" name="" id="">
-                      Editar
-                    </button>
+                    <Link href={`/operadores/editar/${operador.id}`}>
+                      <button className="btn-secondary" name="" id="">
+                        Editar
+                      </button>
+                    </Link>
                   </div>
                 </div>
               );

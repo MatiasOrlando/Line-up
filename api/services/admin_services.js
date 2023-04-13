@@ -63,11 +63,11 @@ class admin_services {
       const user = {
         id: operador.id,
         email: operador.email,
-        phone: operador.phone,
-        operator: operador.operator,
+        //phone: operador.phone,
+        //operator: operador.operator,
       };
       const updatedBranch = await Branch.findOneAndUpdate(
-        { _id: branchId },
+        { name: branchId },
         { $set: { user: user } },
         { new: true }
       );

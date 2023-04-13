@@ -120,22 +120,24 @@ exports.edit_operator_put = async (req, res, next) => {
   const branchId = req.params.branchId;
   const body = {
     email: req.body.email,
-    phone: req.body.phone,
-    operator: req.body.operator,
+    //phone: req.body.phone,
+    //operator: req.body.operator,
     name: req.body.name,
     password: req.body.password,
     dni: req.body.dni,
   };
   try {
-    if (
+    /* if (
       typeof body.phone !== "number" ||
       typeof body.email !== "string" ||
       typeof body.operator !== "boolean" ||
       typeof body.name !== "string" ||
       typeof body.password !== "string"
     ) {
+      console.log("entra en el if");
       return res.status(400).send({ message: "invalid data type" });
-    }
+    } */
+    console.log(`=====>`, branchId);
     const updateOperator = await admin_services.editOperator(branchId, body);
     if (!updateOperator.error) {
       return res.status(200).send({ message: "operator updated succesfully" });

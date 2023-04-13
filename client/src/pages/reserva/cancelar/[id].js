@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
-  console.log(id);
+
   const token = await getSession(context);
 
   if (!token.user) {

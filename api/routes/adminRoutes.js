@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const adminController = require("../controllers/admin_controller")
 const validateMiddleware = require("../middleWare/validateMiddleware");
+const Branch = require("../models/branch");
+const User = require("../models/user");
 
 /**
  * @openapi
@@ -191,7 +193,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *         description: (Bad Request) key data is missing
  *       ServerError:
  *         description: Error en servidor
- */  
+ */
 
 
 /**
@@ -527,7 +529,7 @@ router.put("/edit-branch-info/:branchId/token", validateMiddleware.isAdmin, admi
 
 
 // BORRA UNA SUCURSAL QUE SE LE PASE POR PARAMS  const { branchId } = req.params
-router.delete("/delete-branch/:branchId/token", validateMiddleware.isAdmin , adminController.delete_branch_delete);
+router.delete("/delete-branch/:branchId/token", validateMiddleware.isAdmin, adminController.delete_branch_delete);
 
 // BORRA UN USUARIO QUE SE LE PASE POR PARAMS  const { userId } = req.params
 router.delete("/delete-user/:userId/token", validateMiddleware.isAdmin, adminController.delete_user_delete);
@@ -540,6 +542,16 @@ router.get("/get-all-operators/:number/token", validateMiddleware.isAdmin, admin
 
 // TRAE TODOS LOS SUCURSALES DE LA PAGINA QUE LE PASES COMO PARAMS, SI EL NUMERO ES 1 TRAE LAS SUCURSALES DEL 1 AL 7, SI EL NUMERO ES 2 TRAE LAS SUCURSALES DEL 7 AL 14
 router.get("/get-all-branches/:number/token", validateMiddleware.isAdmin, adminController.get_all_branches_get);
- 
+
+router.get("/get-one-operator/:number/token", validateMiddleware.isAdmin, async (req, res) => {
+    let id = req.params.number;
+    let opFind = await User.findById(id)
+    let suc = await Branch.findOne({ "user.email": opFind.email })
+    let idLocation = suc._id.toString();
+    console.log(idLocation);
+    let nameLocation = suc?.location || "";
+    res.send({ user: opFind, branchName: nameLocation, idLocation: idLocation });
+})
+
 
 module.exports = router;
