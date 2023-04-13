@@ -111,6 +111,16 @@ class AppointmentsService {
       return { error: true, data: error };
     }
   }
+  static async getAllUserAppointmentsById(id) {
+    try {
+      const getAllUserAppointmentsById = await Appointment.find({
+        "user.id": id,
+      });
+      return { error: false, data: getAllUserAppointmentsById };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
 }
 
 module.exports = AppointmentsService;
