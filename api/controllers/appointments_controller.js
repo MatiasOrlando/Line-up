@@ -58,7 +58,7 @@ const getAllBranchs = async (req, res) => {
     const names = [];
     const branchesNames = await BranchsService.getAllBranchs();
     if (branchesNames.error) {
-      return res.status(400).send({ message: branchesNames.data.message });
+      return res.status(401).send({ message: branchesNames.data.message });
     }
     branchesNames.data.map((branch) => {
       return names.push(branch.name);
@@ -78,14 +78,14 @@ const getDaysAvailable = async (req, res) => {
       email
     );
     if (userAppointments.error) {
-      return res.status(400).send({ message: userAppointments.data.message });
+      return res.status(401).send({ message: userAppointments.data.message });
     }
     const turnos = userAppointments.data.map((turno) => {
       return turno.date;
     });
     const selectedBranch = await BranchsService.getSingleBranch(branch);
     if (selectedBranch.error) {
-      return res.status(400).send({ message: selectedBranch.data.message });
+      return res.status(401).send({ message: selectedBranch.data.message });
     }
     const { openingHour, closingHour, allowedClients } = selectedBranch.data[0];
     const timeNow = DateTime.utc().setZone('America/Argentina/Buenos_Aires');
@@ -103,11 +103,12 @@ const getDaysAvailable = async (req, res) => {
         if (availableAppoinments.data.length < appoinmentsPerDay) {
           return arrayToSend.push({
             day,
-            availables: appoinmentsPerDay - availableAppoinments.length,
+            availables: appoinmentsPerDay - availableAppoinments.data.length,
           });
         }
       }
     });
+
     await Promise.all(promises);
     return res.status(200).send({
       arrayToSend,
@@ -125,6 +126,9 @@ const getHoursAvailable = async (req, res) => {
   try {
     const fechaSeleccionada = day;
     const selectedBranch = await BranchsService.getSingleBranch(branch);
+    if (selectedBranch.error) {
+      return res.status(401).send({ message: selectedBranch.data.message });
+    }
     const { openingHour, closingHour, allowedClients } = selectedBranch.data[0];
     const openingTime = moment(openingHour, "HH:mm");
     const closingTime = moment(closingHour, "HH:mm");
@@ -142,6 +146,9 @@ const getHoursAvailable = async (req, res) => {
         fechaSeleccionada,
         branch
       );
+    if (appointments.error) {
+      return res.status(401).send({ message: appointments.data.message });
+    }
     appointments.data.forEach((appointment) => {
       const horario = appointment._id;
       const count = appointment.count;
@@ -181,7 +188,13 @@ const editAppointment = async (req, res) => {
   try {
     const { idApp, day, time, branch, phoneNew, email } = req.body;
     const user = await UsersService.searchUserByEmail(email);
+    if (user.error) {
+      return res.status(401).send({ message: user.data.message });
+    }
     const selectedBranch = await BranchsService.getSingleBranch(branch);
+    if (selectedBranch.error) {
+      return res.status(401).send({ message: selectedBranch.data.message });
+    }
     const { id, name, openingHour, closingHour, allowedClients } =
       selectedBranch.data[0];
     const sucursal = {
@@ -225,6 +238,11 @@ const cancelAppointment = async (req, res) => {
           idApp,
           cancelReason
         );
+      if (canceledAppointment.error) {
+        return res
+          .status(401)
+          .send({ message: canceledAppointment.data.message });
+      }
       return res.status(200).send(canceledAppointment.data);
     } else {
       return res.status(400).send("Usuario no encontrado");
@@ -244,6 +262,9 @@ const getUserLastAppointment = async (req, res) => {
       const userAppointment = await AppointmentsService.getUserLastAppointment(
         decodedUser._id
       );
+      if (userAppointment.error) {
+        return res.status(401).send({ message: userAppointment.data.message });
+      }
       // const testEmailUser = await appointmentConfirmation(userAppointment.data);
       // if (testEmailUser) {
       //   return res.status(401).send(`Mail invalido`);
@@ -268,7 +289,31 @@ const getUserAppointmentById = async (req, res) => {
       const userAppointment = await AppointmentsService.getUserAppointmentById(
         idApp
       );
+      if (userAppointment.error) {
+        return res.status(401).send({ message: userAppointment.data.message });
+      }
       return res.status(200).send(userAppointment.data);
+    } else {
+      return res.status(400).send(`Credenciales invalidas`);
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .send(`Error del servidor, vuelva a intentarlo mas tarde..`);
+  }
+};
+
+const getAllUserAppointmentsById = async (req, res) => {
+  try {
+    const { token } = req.query;
+    const decodedUser = validateToken(token);
+    if (decodedUser) {
+      const userAppointments =
+        await AppointmentsService.getAllUserAppointmentsById(decodedUser._id);
+      if (userAppointments.error) {
+        return res.status(401).send({ message: userAppointments.data.message });
+      }
+      return res.status(200).send(userAppointments.data);
     } else {
       return res.status(400).send(`Credenciales invalidas`);
     }
@@ -288,4 +333,5 @@ module.exports = {
   cancelAppointment,
   getUserLastAppointment,
   getUserAppointmentById,
+  getAllUserAppointmentsById,
 };

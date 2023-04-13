@@ -1,6 +1,4 @@
 const router = require("express").Router();
-const Appointment = require("../models/appointment");
-
 const appointmentsController = require("../controllers/appointments_controller");
 
 router.post("/add", appointmentsController.createAppointment);
@@ -14,17 +12,9 @@ router.get(
   appointmentsController.getUserLastAppointment
 );
 router.get("/:idApp/token", appointmentsController.getUserAppointmentById);
-router.get("/:id", async (req, res) => {
-  try {
-    const idUser = "6422b1e34da6f9b3f79ba531";
-    /* const userAppointments = await Appointment.find({
-      "user.id": idUser,
-    }); */
-    const userAppointments = await Appointment.find({});
-    return res.status(200).send(userAppointments);
-  } catch (error) {
-    console.error(error);
-  }
-});
+router.get(
+  "/user-appointments",
+  appointmentsController.getAllUserAppointmentsById
+);
 
 module.exports = router;

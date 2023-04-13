@@ -13,7 +13,6 @@ export default function Appoinments({ branches }) {
         </div>
         <div className="container-list">
           {branches.map((app) => {
-            console.log(branches);
             return (
               <div className="item-list" key={app._id}>
                 <div className="item-section">
