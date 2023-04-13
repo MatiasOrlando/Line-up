@@ -30,16 +30,17 @@ export default function FormEditOperator({ user, branchName,idLocation }) {
       const { name, email, password, dni, location } = dat;
       try {
         await axios.put(
-          `http://localhost:3001/api/admin/edit-operator/${idLocation}/token?token=${data.user}`,
+          `http://localhost:3001/api/admin/edit-one-operator/${user._id}/token?token=${data.user}`,
           {
             name,
             email,
             password,
             dni,
             location,
+            idLocation: idLocation,
           }
         );
-        setModalIsOpen(true);
+        //setModalIsOpen(true);
       } catch (err) {
         const message = err.response.data.message;
         if (message.includes("email")) {

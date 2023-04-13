@@ -17,6 +17,7 @@ const registerUser = async (req, res) => {
     // }
     const userToken = generateToken(req.body);
     // accountActivation(email, userToken);
+
     const newUser = await UsersService.userRegister(req.body);
     if (!newUser.error) {
       res.status(201).send(mapUser([newUser.data])[0]);

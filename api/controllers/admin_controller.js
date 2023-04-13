@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Branch = require("../models/branch");
 const { admin_services } = require("../services/admin_services");
+const BranchsService = require("../services/branch_services")
 
 exports.create_operator_post = async (req, res, next) => {
   const operatorInfo = {
@@ -272,3 +273,17 @@ exports.get_one_branche_get = async (req, res, next) => {
     });
   }
 };
+
+exports.edit_one_operator = async (req, res, next) => {
+  try {
+    const idUser = req.params.idUser;
+    const { name, email, password, dni, location, idLocation } = req.body;
+
+    const updateUser = await admin_services.editOneOperator(idUser, name, email, password, dni);
+    if (!updateUser.err) {
+      const updateBranch = await BranchsService.editOneBranch(idLocation, name, email)
+    }
+  } catch (err) {
+    res.send(401).send("Error de errores")
+  }
+}
