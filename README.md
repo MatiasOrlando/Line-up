@@ -32,8 +32,7 @@ Front-end:
 
 <ul>
 <li>Next JS</li>
-<li>Redux</li>
-<li>Material-UI</li>
+<li>SASS</li>
 </ul>
 
 Back-end:

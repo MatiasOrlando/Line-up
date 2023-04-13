@@ -244,10 +244,10 @@ const getUserLastAppointment = async (req, res) => {
       const userAppointment = await AppointmentsService.getUserLastAppointment(
         decodedUser._id
       );
-      const testEmailUser = await appointmentConfirmation(userAppointment.data);
-      if (testEmailUser) {
-        return res.status(401).send(`Mail invalido`);
-      }
+      // const testEmailUser = await appointmentConfirmation(userAppointment.data);
+      // if (testEmailUser) {
+      //   return res.status(401).send(`Mail invalido`);
+      // }
       return res.status(200).send(userAppointment.data);
     } else {
       return res.status(400).send(`Credenciales invalidas`);
