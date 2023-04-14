@@ -62,7 +62,7 @@ class UsersService {
     try {
       const decodeUser = validateToken(token);
       const userData = await User.findOne({ email: decodeUser.email });
-      return { error: false, data: userData };
+      return { error: false, data: userData || decodeUser };
     } catch (error) {
       return { error: true, data: error };
     }

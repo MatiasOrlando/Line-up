@@ -16,11 +16,11 @@ export async function getServerSideProps(context) {
       `http://localhost:3001/api/appointments/user-appointments/${pagination}?token=${token.user}`
     );
     const data = await response.json();
-    console.log(data);
+
     return {
       props: {
         branches: data.data,
-        length: data.length
+        length: data.length,
       },
     };
   }
@@ -29,4 +29,3 @@ export async function getServerSideProps(context) {
 export default function Register({ branches, length }) {
   return <Appoinments branches={branches} length={length} />;
 }
-

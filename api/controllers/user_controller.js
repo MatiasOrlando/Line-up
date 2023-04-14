@@ -15,9 +15,7 @@ const registerUser = async (req, res) => {
       return res.status(400).send({ message: "Not a valid email" });
     } */
     const userToken = generateToken(req.body);
-
-    //accountActivation(email, userToken);
-
+    accountActivation(email, userToken);
     const newUser = await UsersService.userRegister(req.body);
     if (!newUser.error) {
       res.status(201).send(mapUser([newUser.data])[0]);
@@ -114,7 +112,6 @@ const passwordEmailUpdate = async (req, res) => {
 
 const validateUserdata = async (req, res) => {
   const { token } = req.query;
-
   try {
     const decodeUser = await UsersService.validateUserdata(token);
     if (decodeUser.error) {

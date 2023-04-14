@@ -91,7 +91,7 @@ async function cancelAppointmentEmail(appointment) {
     from: `lineupdemo@hotmail.com`,
     to: `${email}`,
     subject: `Turno cancelado`,
-    html: `<p><b></b>Su reserva ha sido cancelada exitosamente. Le agradecemos por avisarnos.</></p>
+    html: `<p><b></b>Su reserva ha sido cancelada exitosamente. Le agradecemos por informarnos.</></p>
                 <h2>Turno Cancelado</h2>
                 <h2>Reserva ${appointment.idApp}</h2>
                 <p>Nombre: ${appointment.user.name}</p>
@@ -118,7 +118,7 @@ async function editAppointmentEmail(appointment) {
     from: `lineupdemo@hotmail.com`,
     to: `${email}`,
     subject: `Turno editado`,
-    html: `<p><b></b>Su reserva ha sido editada exitosamente. Le agradecemos por avisarnos.</></p>
+    html: `<p><b></b>Su reserva ha sido editada exitosamente. Le agradecemos por informarnos.</></p>
                 <h2>Turno Editado</h2>
                 <h2>Reserva ${appointment.idApp}</h2>
                 <p>Nombre: ${appointment.user.name}</p>

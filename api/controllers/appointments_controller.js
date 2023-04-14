@@ -191,7 +191,6 @@ const getHoursAvailable = async (req, res) => {
 const editAppointment = async (req, res) => {
   try {
     const { idApp, day, time, branch, phoneNew, email } = req.body;
-    console.log("EDIT APPOINMENT", idApp, day, time, branch, phoneNew, email);
     const user = await UsersService.searchUserByEmail(email);
     if (user.error) {
       return res.status(401).send({ message: user.data.message });
@@ -223,7 +222,7 @@ const editAppointment = async (req, res) => {
         await UsersService.updateUserPhone(email, phoneNew);
       }
     }
-    // editAppointmentEmail(appointmentUpdate.data);
+    editAppointmentEmail(appointmentUpdate.data);
     return res.status(200).send(appointmentUpdate.data);
   } catch (error) {
     return res
@@ -249,7 +248,7 @@ const cancelAppointment = async (req, res) => {
           .status(401)
           .send({ message: canceledAppointment.data.message });
       }
-      // cancelAppointmentEmail(canceledAppointment.data);
+      cancelAppointmentEmail(canceledAppointment.data);
       return res.status(200).send(canceledAppointment.data);
     } else {
       return res.status(400).send("Usuario no encontrado");
@@ -263,7 +262,6 @@ const cancelAppointment = async (req, res) => {
 
 const getUserLastAppointment = async (req, res) => {
   try {
-    console.log(req.query)
     const { token } = req.query;
     const decodedUser = validateToken(token);
     if (decodedUser) {
@@ -273,10 +271,10 @@ const getUserLastAppointment = async (req, res) => {
       if (userAppointment.error) {
         return res.status(401).send({ message: userAppointment.data.message });
       }
-      // const testEmailUser = await appointmentConfirmation(userAppointment.data);
-      // if (testEmailUser) {
-      //   return res.status(401).send(`Mail invalido`);
-      // }
+      const testEmailUser = await appointmentConfirmation(userAppointment.data);
+      if (testEmailUser) {
+        return res.status(401).send(`Mail invalido`);
+      }
       return res.status(200).send(userAppointment.data);
     } else {
       return res.status(400).send(`Credenciales invalidas`);
@@ -346,7 +344,9 @@ const getAllUserAppointmentsById = async (req, res) => {
         return res.status(401).send({ message: userAppointments.data.message });
       }
       const page = newerDates.splice(limit - 7, limit);
-      return res.status(200).send({ data: page, length: userAppointments.data.length });
+      return res
+        .status(200)
+        .send({ data: page, length: userAppointments.data.length });
     } else {
       return res.status(400).send(`Credenciales invalidas`);
     }

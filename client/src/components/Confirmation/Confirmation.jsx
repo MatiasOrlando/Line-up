@@ -7,7 +7,6 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import Link from "next/link";
 
 export default function Confirmation({ appointments }) {
-  console.log(appointments[0].idApp);
   const appUrl = `http://localhost:3000/reserva/cancelar/${appointments[0].idApp}`;
   const branch = appointments[0]?.sucursal;
   const user = appointments[0].user;
