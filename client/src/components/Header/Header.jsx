@@ -71,7 +71,7 @@ export default function Header({ hide }) {
             <>
               <div className="options-item">
                 <Link
-                  href={user?.operator ? "/operadorReservas/1" : "/reservas"}
+                  href={user?.operator ? "/operadorReservas/1" : "/reservas/1"}
                 >
                   <span>{user?.operator ? "Reservas" : "Mis Reservas"}</span>
                   <Image src={calendar} alt="reservas" />

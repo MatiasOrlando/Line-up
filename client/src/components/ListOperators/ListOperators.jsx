@@ -8,7 +8,7 @@ export default function ListOperators({ dataOperadores, length }) {
   const router = useRouter();
 
   const handleChange = (event, value) => {
-    router.push(`/operadores/${value}`);
+    router.push(`/sucursales/${value}`);
   };
 
   return (
@@ -48,30 +48,21 @@ export default function ListOperators({ dataOperadores, length }) {
                     </div>
                   </div>
                   <div className="item-section">
-                    <button className="btn-secondary" name="" id="">
-                      <Link
-                        href={`/operadores/editar/${operador.id}`}
-                        style={{ textDecoration: "none", color: "#a442f1" }}
-                      >
+                    <Link href={`/operadores/editar/${operador.id}`}>
+                      <button className="btn-secondary" name="" id="">
                         Editar
-                      </Link>
-                    </button>
+                      </button>
+                    </Link>
                   </div>
                 </div>
               );
             })}
           </div>
         </div>
-        <div className="pagination">
-          <Stack spacing={2}>
-            <Pagination
-              style={{ marginBottom: "10px" }}
-              count={Math.ceil(length / 7)}
-              onChange={handleChange}
-            />
-          </Stack>
-        </div>
       </main>
+      <Stack spacing={2} style={{ alignItems: "center" }}>
+        <Pagination count={Math.ceil(length / 7)} onChange={handleChange} />
+      </Stack>
     </>
   );
 }

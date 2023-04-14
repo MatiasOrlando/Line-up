@@ -86,7 +86,7 @@ const FormCancel = ({ user, token, idApp }) => {
       <Modal
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
-        redirect={{ function: router.push, rute: "/reservas" }}
+        redirect={{ function: router.push, rute: "/reservas/1" }}
         modalContent={{
           title: "Turno cancelado con éxito",
           description: "Muchas gracias por no confiar en nosotros",
