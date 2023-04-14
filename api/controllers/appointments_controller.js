@@ -313,6 +313,8 @@ const getUserAppointmentById = async (req, res) => {
 
 const getAllUserAppointmentsById = async (req, res) => {
   try {
+    const number = req.params.number;
+    const limit = number * 7;
     const { token } = req.query;
     const decodedUser = validateToken(token);
     const dateNow = DateTime.local().toJSDate();
@@ -343,7 +345,8 @@ const getAllUserAppointmentsById = async (req, res) => {
       if (userAppointments.error) {
         return res.status(401).send({ message: userAppointments.data.message });
       }
-      return res.status(200).send(newerDates);
+      const page = newerDates.splice(limit - 7, limit);
+      return res.status(200).send({ data: page, length: userAppointments.data.length });
     } else {
       return res.status(400).send(`Credenciales invalidas`);
     }

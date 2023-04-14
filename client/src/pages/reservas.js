@@ -12,12 +12,14 @@ export async function getServerSideProps(context) {
     };
   } else {
     const response = await fetch(
-      `http://localhost:3001/api/appointments/user-appointments?token=${token.user}`
+      `http://localhost:3001/api/appointments/user-appointments/1?token=${token.user}`
     );
     const data = await response.json();
+    console.log(data);
     return {
       props: {
-        branches: data,
+        branches: data.data,
+        length: data.length
       },
     };
   }
