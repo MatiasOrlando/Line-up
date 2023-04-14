@@ -7,7 +7,8 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import Link from "next/link";
 
 export default function Confirmation({ appointments }) {
-  const appUrl = "http://localhost:3000/reserva/confirmacion";
+  console.log(appointments[0].idApp);
+  const appUrl = `http://localhost:3000/reserva/cancelar/${appointments[0].idApp}`;
   const branch = appointments[0]?.sucursal;
   const user = appointments[0].user;
   const createdAt = new Date(appointments[0].createdAt);
@@ -29,11 +30,11 @@ export default function Confirmation({ appointments }) {
       },
       {
         text: `
-      RESERVA: ${branch.id}`,
+      RESERVA: ${appointments[0].idApp}`,
         style: "title",
       },
       {
-        text: `Hecho el ${day} a las ${hour} para el ${appointments[0].date} a las ${appointments[0].timeOfAppontment} hs
+        text: `Hecho el ${day} a las ${hour} para el ${appointments[0].date} a las ${appointments[0].timeOfAppoinment} hs
                Si deseas cancelar el turno entra a la app o escanea el siguiente codigo
                
                `,
@@ -50,7 +51,7 @@ export default function Confirmation({ appointments }) {
 
         Nombre: ${user.name}
         Sucursal: ${branch.name}
-        Horario: ${hour}
+        Horario: ${appointments[0].timeOfAppoinment}
         `,
         style: "title",
       },
