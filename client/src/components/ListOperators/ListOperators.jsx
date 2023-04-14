@@ -16,7 +16,7 @@ export default function ListOperators({ dataOperadores, length }) {
       <main className="container-appointments">
         <div className="container-appointments_box">
           <div className="box-title">
-            <h2>Reservas</h2>
+            <h2>Operadores</h2>
           </div>
           <div className="container-list">
             {dataOperadores.map((operador, index) => {

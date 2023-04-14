@@ -102,7 +102,7 @@ export default function FormNewOperator({ branches }) {
               <div className="box-span"></div>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="email">Correo electronico</label>
+              <label htmlFor="email">Correo electrónico</label>
               <input
                 className={`input-primary width-100 ${
                   formik.touched.email && formik.errors.email
@@ -117,7 +117,7 @@ export default function FormNewOperator({ branches }) {
               <div className="email-error">
                 {error === "error-input-email" ? (
                   <span className="email-span">
-                    Este mail ya se encuentra en uso
+                    Este correo ya se encuentra en uso
                   </span>
                 ) : (
                   ""
@@ -258,8 +258,7 @@ export default function FormNewOperator({ branches }) {
         redirect={{ function: router.push, rute: "/sucursales/1" }}
         modalContent={{
           title: "Operador creado correctamente",
-          description:
-            "El operador ya puede iniciar sesion con su nueva cuenta",
+          description: "El operador ya puede iniciar sesión con su cuenta",
           button: "Aceptar",
           icon: <BsCheckSquare className="icon" />,
         }}

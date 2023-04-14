@@ -1,9 +1,13 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 export default function Appoinments({ branches }) {
-  const route = useRouter();
+  const router = useRouter();
   const [valor, setValor] = useState();
+  const handleChange = (event, value) => {
+    router.push(`/sucursales/${value}`);
+  };
 
   return (
     <main className="container-appointments">
@@ -72,6 +76,15 @@ export default function Appoinments({ branches }) {
             );
           })}
         </div>
+      </div>
+      <div className="pagination">
+        <Stack spacing={2}>
+          <Pagination
+            style={{ marginBottom: "10px" }}
+            count={Math.ceil(length / 7)}
+            onChange={handleChange}
+          />
+        </Stack>
       </div>
     </main>
   );

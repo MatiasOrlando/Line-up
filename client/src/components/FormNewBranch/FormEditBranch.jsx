@@ -8,7 +8,6 @@ import validationNewBranch from "./validation/validationNewBranch";
 import { useRouter } from "next/router";
 import { DateTime } from "luxon";
 
-
 export default function FormEditBranch({ branch }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { data } = useSession();
@@ -191,9 +190,8 @@ export default function FormEditBranch({ branch }) {
         setModalIsOpen={setModalIsOpen}
         redirect={{ function: router.push, rute: "/sucursales/1" }}
         modalContent={{
-          title: "Sucursal actualizada correctamente",
-          description:
-            "Se han modificado los datos de la sucursal",
+          title: "Sucursal editada con éxito",
+          description: "Se han modificado los datos de la sucursal",
           button: "Aceptar",
           icon: <BsCheckSquare className="icon" />,
         }}
