@@ -48,11 +48,14 @@ export default function ListOperators({ dataOperadores, length }) {
                     </div>
                   </div>
                   <div className="item-section">
-                    <Link href={`/operadores/editar/${operador.id}`}>
-                      <button className="btn-secondary" name="" id="">
+                    <button className="btn-secondary" name="" id="">
+                      <Link
+                        href={`/operadores/editar/${operador.id}`}
+                        style={{ textDecoration: "none", color: "#a442f1" }}
+                      >
                         Editar
-                      </button>
-                    </Link>
+                      </Link>
+                    </button>
                   </div>
                 </div>
               );
@@ -60,9 +63,15 @@ export default function ListOperators({ dataOperadores, length }) {
           </div>
         </div>
       </main>
-      <Stack spacing={2} style={{ alignItems: "center" }}>
-        <Pagination count={Math.ceil(length / 7)} onChange={handleChange} />
-      </Stack>
+      <div className="pagination">
+        <Stack spacing={2}>
+          <Pagination
+            style={{ marginBottom: "10px" }}
+            count={Math.ceil(length / 7)}
+            onChange={handleChange}
+          />
+        </Stack>
+      </div>
     </>
   );
 }
