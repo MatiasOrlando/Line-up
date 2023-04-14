@@ -59,41 +59,34 @@ export default function ListAppoinments({ branches, length, token }) {
                       </button>
                     ) : (
                       <>
-                        <select
-                          className="btn-secondary"
-                          name=""
-                          id=""
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleEdit(e.target.value, app.id);
-                          }}
-                        >
-                          {app.status === "pending" ? (
-                            <>
-                              <option className="btn-secondary" value="pending">
-                                Confirmado
-                              </option>
-                              <option
-                                className="btn-secondary"
-                                value="completed"
-                              >
-                                Asistido
-                              </option>
-                            </>
-                          ) : (
-                            <>
-                              <option
-                                className="btn-secondary"
-                                value="completed"
-                              >
-                                Asistido
-                              </option>
-                              <option className="btn-secondary" value="pending">
-                                Confirmado
-                              </option>
-                            </>
-                          )}
-                        </select>
+                        {app.status === "pending" ? (
+                          <select
+                            className="btn-secondary"
+                            name=""
+                            id=""
+                            onChange={(e) => {
+                              e.preventDefault();
+                              handleEdit(e.target.value, app.id);
+                            }}
+                          >
+                            <option className="btn-secondary" value="pending">
+                              Confirmado
+                            </option>
+                            <option className="btn-secondary" value="completed">
+                              Completado
+                            </option>
+                          </select>
+                        ) : (
+                          <>
+                            <button
+                              className="btn-secondary border-asis-ok"
+                              disabled
+                              value="completed"
+                            >
+                              Completado
+                            </button>
+                          </>
+                        )}
                       </>
                     )}
                   </div>
@@ -102,10 +95,16 @@ export default function ListAppoinments({ branches, length, token }) {
             })}
           </div>
         </div>
+        <div className="pagination">
+          <Stack spacing={2}>
+            <Pagination
+              style={{ marginBottom: "10px" }}
+              count={Math.ceil(length / 7)}
+              onChange={handleChange}
+            />
+          </Stack>
+        </div>
       </main>
-      <Stack spacing={2} style={{ alignItems: "center" }}>
-        <Pagination count={Math.ceil(length / 7)} onChange={handleChange} />
-      </Stack>
     </>
   );
 }

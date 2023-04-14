@@ -81,12 +81,15 @@ export default function FormNewBranch() {
               formik.handleSubmit();
             }}
             className="login-form"
+            style={{ marginTop: "5px" }}
           >
             <div className="login-form_box-title">
               <h2>Crear una nueva sucursal</h2>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="name">Nombre</label>
+              <label htmlFor="name" style={{ marginTop: "5px" }}>
+                Nombre
+              </label>
               <input
                 className={`input-primary width-100 ${
                   formik.touched.name && formik.errors.name ? "error-input" : ""
@@ -168,7 +171,11 @@ export default function FormNewBranch() {
               />
             </div>
             <div>
-              <button className="btn-primary width-100" type="submit">
+              <button
+                className="btn-primary width-100"
+                type="submit"
+                style={{ marginTop: "15px" }}
+              >
                 Aceptar
               </button>
             </div>

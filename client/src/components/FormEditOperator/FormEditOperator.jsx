@@ -29,7 +29,7 @@ export default function FormEditOperator({ user, branchName, idLocation }) {
     onSubmit: async (dat) => {
       const { name, email, password, dni, location } = dat;
       try {
-        await axios.put(
+        const response = await axios.put(
           `http://localhost:3001/api/admin/edit-one-operator/${user._id}/token?token=${data.user}`,
           {
             name,
@@ -76,6 +76,7 @@ export default function FormEditOperator({ user, branchName, idLocation }) {
               formik.handleSubmit();
             }}
             className="login-form"
+            style={{ marginTop: "5px" }}
           >
             <div className="login-form_box-title">
               {router.pathname.includes("/editar") ? (
@@ -85,7 +86,9 @@ export default function FormEditOperator({ user, branchName, idLocation }) {
               )}
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="name">Nombre</label>
+              <label htmlFor="name" style={{ marginTop: "5px" }}>
+                Nombre
+              </label>
               <input
                 className={`input-primary width-100 ${
                   formik.touched.name && formik.errors.name ? "error-input" : ""
@@ -145,6 +148,7 @@ export default function FormEditOperator({ user, branchName, idLocation }) {
               <div className="div-inter-50-right">
                 <label htmlFor="location">Sucursal</label>
                 <input
+                  disabled
                   className={`input-primary width-100 ${
                     formik.touched.location && formik.errors.location
                       ? "error-input"
@@ -226,7 +230,11 @@ export default function FormEditOperator({ user, branchName, idLocation }) {
               </div>
             </div>
             <div>
-              <button className="btn-primary width-100" type="submit">
+              <button
+                className="btn-primary width-100"
+                type="submit"
+                style={{ marginTop: "10px" }}
+              >
                 Aceptar
               </button>
             </div>
@@ -236,7 +244,7 @@ export default function FormEditOperator({ user, branchName, idLocation }) {
       <Modal
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
-        redirect={{ function: router.push, rute: "/sucursales/1" }}
+        redirect={{ function: router.push, rute: "/operadores/1" }}
         modalContent={{
           title: "Operador creado correctamente",
           description:

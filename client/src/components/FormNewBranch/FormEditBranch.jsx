@@ -83,12 +83,15 @@ export default function FormEditBranch({ branch }) {
               formik.handleSubmit();
             }}
             className="login-form"
+            style={{ marginTop: "5px" }}
           >
             <div className="login-form_box-title">
               <h2>Editar datos de la sucursal</h2>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="name">Nombre</label>
+              <label htmlFor="name" style={{ marginTop: "5px" }}>
+                Nombre
+              </label>
               <input
                 disabled
                 className={`input-primary width-100 ${
@@ -172,7 +175,11 @@ export default function FormEditBranch({ branch }) {
               />
             </div>
             <div>
-              <button className="btn-primary width-100" type="submit">
+              <button
+                className="btn-primary width-100"
+                type="submit"
+                style={{ marginTop: "15px" }}
+              >
                 Aceptar
               </button>
             </div>
