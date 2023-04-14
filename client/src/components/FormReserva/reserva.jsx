@@ -26,7 +26,7 @@ export default function FormReserva({ branches, user }) {
   let count = 1;
   let horario = [];
 
-  const today = DateTime.utc().setZone('America/Argentina/Buenos_Aires');
+  const today = DateTime.utc().setZone("America/Argentina/Buenos_Aires");
   const initialDayOfCurrentMonth = today.startOf("month").weekday;
   const year = today.year;
   const firstDayOfMonth = today.startOf("month");
@@ -70,13 +70,13 @@ export default function FormReserva({ branches, user }) {
     }
   }
 
-  // useEffect(() => {
-  //   const intervalo = setInterval(() => {
-  //     setTiempoRestante((tiempoRestante) => tiempoRestante - 1);
-  //   }, 1000);
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      setTiempoRestante((tiempoRestante) => tiempoRestante - 1);
+    }, 1000);
 
-  //   return () => clearInterval(intervalo);
-  // }, []);
+    return () => clearInterval(intervalo);
+  }, []);
 
   function formatearTiempo(tiempo) {
     const minutos = Math.floor(tiempo / 60);

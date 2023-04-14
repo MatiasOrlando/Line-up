@@ -12,7 +12,7 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    if (session?.user) {
+    if (session.user) {
       const res = await fetch(
         `http://localhost:3001/api/user/validate/token?token=${session.user}`
       );

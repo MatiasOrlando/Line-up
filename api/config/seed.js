@@ -5,7 +5,7 @@ const Appointment = require("../models/appointment");
 const users = [
   {
     name: "Administrador General",
-    email: "admin@example.com",
+    email: "admin@lineup.com",
     phone: 1112345678,
     password: "testing",
     admin: true,
@@ -14,43 +14,73 @@ const users = [
     status: "enabled",
   },
   {
-    dni: 23456789,
-    name: "Operador Sitio",
-    email: "operador@example.com",
+    name: "Line up",
+    email: "lineup@example.com",
     phone: 1112345678,
     password: "testing",
     admin: false,
-    operator: true,
+    operator: false,
+    dni: 23453323,
     status: "enabled",
   },
   {
-    dni: 34567891,
-    name: "Matias Orlando",
+    name: "Matias",
     email: "matias@example.com",
     phone: 1112345678,
-    password: "Testing",
+    password: "testing",
     admin: false,
     operator: false,
+    dni: 23353323,
     status: "enabled",
   },
   {
-    dni: 45678912,
-    name: "Tomas Camacho",
-    email: "tomas@example.com",
+    name: "Mateo",
+    email: "mateo@example.com",
     phone: 1112345678,
-    password: "Testing123",
+    password: "testing",
     admin: false,
     operator: false,
+    dni: 24453323,
     status: "enabled",
   },
   {
-    dni: 56789123,
-    name: "Pedro Ragni",
+    name: "German",
+    email: "german@example.com",
+    phone: 1112345678,
+    password: "testing",
+    admin: false,
+    operator: false,
+    dni: 23458323,
+    status: "enabled",
+  },
+  {
+    name: "Pedro",
     email: "pedro@example.com",
     phone: 1112345678,
-    password: "Testing123!",
+    password: "testing",
     admin: false,
     operator: false,
+    dni: 23453023,
+    status: "enabled",
+  },
+  {
+    name: "Tomas",
+    email: "tomas@example.com",
+    phone: 1112345678,
+    password: "testing",
+    admin: false,
+    operator: false,
+    dni: 23653323,
+    status: "enabled",
+  },
+  {
+    name: "Nicholas",
+    email: "nicholas@example.com",
+    phone: 1112345678,
+    password: "testing",
+    admin: false,
+    operator: false,
+    dni: 23653923,
     status: "enabled",
   },
 ];
@@ -130,8 +160,6 @@ const sucursal = [
 
 const turnos = [{}, {}, {}, {}, {}, {}, {}];
 
-
-
 const CreateUsers = async () => {
   try {
     const userAdmin = await User.findOne({ email: "admin@example.com" });
@@ -159,7 +187,6 @@ const CreateBranches = async () => {
     console.error(error);
   }
 };
-
 
 const CreateAppoitments = async () => {
   const appointmentAdm = await Appointment.findOne({
