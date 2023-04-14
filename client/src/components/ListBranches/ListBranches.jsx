@@ -32,8 +32,13 @@ export default function ListBranches({ branches, length }) {
                     <div className="item-description">{branch.email}</div>
                   </div>
                   <div className="item-section">
-                    <div className="item-title">Capacidad maxima</div>
-                    <div className="item-description">
+                    <div style={{ textAlign: "center" }} className="item-title">
+                      Capacidad maxima
+                    </div>
+                    <div
+                      className="item-description"
+                      style={{ textAlign: "center" }}
+                    >
                       {branch.allowedClients}
                     </div>
                   </div>
@@ -48,6 +53,7 @@ export default function ListBranches({ branches, length }) {
                       <Link
                         href={`/sucursales/editar/${branch.id}`}
                         className="link"
+                        style={{ textDecoration: "none", color: "#a442f1" }}
                       >
                         Editar
                       </Link>
@@ -58,11 +64,16 @@ export default function ListBranches({ branches, length }) {
             })}
           </div>
         </div>
+        <div className="pagination">
+          <Stack spacing={2}>
+            <Pagination
+              style={{ marginBottom: "10px" }}
+              count={Math.ceil(length / 7)}
+              onChange={handleChange}
+            />
+          </Stack>
+        </div>
       </main>
-
-      <Stack spacing={2} style={{ alignItems: "center" }}>
-        <Pagination count={Math.ceil(length / 7)} onChange={handleChange} />
-      </Stack>
     </>
   );
 }

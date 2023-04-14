@@ -82,12 +82,15 @@ export default function FormNewOperator({ branches }) {
               formik.handleSubmit();
             }}
             className="login-form"
+            style={{ marginTop: "5px" }}
           >
             <div className="login-form_box-title">
               <h2>Crear una nuevo operador</h2>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="name">Nombre</label>
+              <label htmlFor="name" style={{ marginTop: "5px" }}>
+                Nombre
+              </label>
               <input
                 className={`input-primary width-100 ${
                   formik.touched.name && formik.errors.name ? "error-input" : ""
@@ -239,7 +242,11 @@ export default function FormNewOperator({ branches }) {
               </div>
             </div>
             <div>
-              <button className="btn-primary width-100" type="submit">
+              <button
+                className="btn-primary width-100"
+                type="submit"
+                style={{ marginTop: "10px" }}
+              >
                 Aceptar
               </button>
             </div>
