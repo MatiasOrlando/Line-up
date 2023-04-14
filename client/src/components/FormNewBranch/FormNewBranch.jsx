@@ -188,8 +188,7 @@ export default function FormNewBranch() {
         redirect={{ function: router.push, rute: "/crearOperador" }}
         modalContent={{
           title: "Sucursal creada correctamente",
-          description:
-            "Ya podes crear un operador y designarlo a esta sucursal",
+          description: "Ya podes designar un operador a esta sucursal",
           button: "Aceptar",
           icon: <BsCheckSquare className="icon" />,
         }}

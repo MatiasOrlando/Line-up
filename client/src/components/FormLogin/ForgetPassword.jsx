@@ -46,7 +46,7 @@ const ForgetPassword = ({ setForgetPassword }) => {
               </p>
             </div>
             <div className="login-form_box-input">
-              <label>Mail</label>
+              <label>Correo electrónico</label>
               <input
                 className={`input-primary width-100`}
                 type="text"
@@ -63,7 +63,7 @@ const ForgetPassword = ({ setForgetPassword }) => {
             </div>
             <div className="credentials-box">
               <span>
-                {!isValidEmail ? `El email ingresado no es válido` : ``}
+                {!isValidEmail ? `El correo ingresado no es válido` : ``}
               </span>
             </div>
             <div>

@@ -89,7 +89,7 @@ export default function FormUserData() {
               <div className="box-span"></div>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="pass">Mail</label>
+              <label htmlFor="pass">Correo electrónico</label>
               <input
                 disabled={true}
                 className={`input-primary width-100 `}

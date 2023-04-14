@@ -101,7 +101,7 @@ export default function FormEditOperator({ user, branchName, idLocation }) {
               <div className="box-span"></div>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="email">Correo electronico</label>
+              <label htmlFor="email">Correo electrónico</label>
               <input
                 className={`input-primary width-100 ${
                   formik.touched.email && formik.errors.email
@@ -116,7 +116,7 @@ export default function FormEditOperator({ user, branchName, idLocation }) {
               <div className="email-error">
                 {error === "error-input-email" ? (
                   <span className="email-span">
-                    Este mail ya se encuentra en uso
+                    Este correo ya se encuentra en uso
                   </span>
                 ) : (
                   ""
@@ -246,9 +246,8 @@ export default function FormEditOperator({ user, branchName, idLocation }) {
         setModalIsOpen={setModalIsOpen}
         redirect={{ function: router.push, rute: "/operadores/1" }}
         modalContent={{
-          title: "Operador creado correctamente",
-          description:
-            "El operador ya puede iniciar sesion con su nueva cuenta",
+          title: "Operador editado con éxito",
+          description: "El operador puede iniciar sesión con normalidad",
           button: "Aceptar",
           icon: <BsCheckSquare className="icon" />,
         }}

@@ -126,7 +126,11 @@ export default function Confirmation({ appointments }) {
         <div className="container-confirmation-flex ">
           <div className="margin">
             <div className="number">
-              <h2>Reserva {appointments[0].idApp}</h2>
+              <h2>Reserva</h2>
+              <h2 style={{ color: "#a442f1", marginLeft: "5px" }}>
+                {" "}
+                #{appointments[0].idApp}
+              </h2>
             </div>
             <p>
               Hecho el {day} a las {hour} para el {appointments[0].date} a las{" "}

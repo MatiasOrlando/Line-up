@@ -79,7 +79,7 @@ export default function FormLogin({ secret }) {
             <h2>Iniciar sesión</h2>
           </div>
           <div className="login-form_box-input">
-            <label htmlFor="user">Usuario</label>
+            <label htmlFor="user">Correo electrónico</label>
             <input
               className={`input-primary width-100 ${
                 formik.touched.user && formik.errors.user ? "error-input" : ""
