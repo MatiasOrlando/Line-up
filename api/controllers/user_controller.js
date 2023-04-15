@@ -48,7 +48,7 @@ const logIn = async (req, res) => {
     }
   }
   const userLogged = await UsersService.userLogIn(email);
-  if (userLogged.data.status === "enabled") {
+  if (userLogged?.data?.status === "enabled") {
     if (!userLogged.data) return res.status(404).send(`User not found`);
     const validatedUser = await userLogged.data.validatePassword(password);
     if (!validatedUser)
