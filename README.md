@@ -18,8 +18,8 @@ Git clone: https://github.com/MatiasOrlando/line-up.git
 | --------- | --------- |
 | npm start | npm start |
 
-<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+Open [http://localhost:3000](http://localhost:3000) to view it on your browser.
 <br>
 <br>
 
