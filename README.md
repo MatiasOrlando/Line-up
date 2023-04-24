@@ -1,41 +1,37 @@
 # LINE-UP APP :hourglass_flowing_sand:
 
-LINE-UP, es una aplicacion web que le permite a sus usuarios poder reservar turnos online en distintas sucursales.
-Ofrece comodidad y flexibilidad para el usuario, permitiéndole reservar y administrar sus turnos de manera rápida y fácil. Tambien le permite a los operadores de dichas sucursales poder gestionar el flujo de reservas de manera eficiente y controlada.
+LINE-UP is a web application that allows users to book appointments online at different locations. It provides convenience and flexibility, allowing users to quickly and easily reserve and manage their appointments. It also enables operators at these locations to efficiently and effectively manage the flow of appointments.
 
-Futuras features:
+User/Client: Users can view the availability of appointments at a particular location, reserve an appointment, cancel it, and modify it if necessary. Additionally, they will receive reminders to keep them informed about their scheduled appointments.
 
-Usuario/cliente: Visualizar la disponibilidad de turnos en determinada sucursal, reservar un turno, cancelarlo y tambien modificarlo de ser necesario. Adicionalmente contara con recordatorios que lo mantendran al usuario atento para que no se olvide de sus turnos reservados.
+Location Operators: Operators can view and manage the list of appointments at their location, as well as modify the status of appointments that have been made.
 
-Operadores de sucursal: Pueden ver y administrar la lista de turnos en su sucursal, como tambien pueden modificar el estado de los reservas de turnos realizadas.
+Admin User: Admin users can create, edit, and delete new locations, determine hours of operation for each location, have access to all appointments made at all locations, and have privileges to create new operators/branches.
 
-Usuario administrador: Creación, edición y eliminación de nuevas sucursales. Determina horarios de atencion para cada entidad. Cuenta con el acceso total las reservas realizadas en todas las sucursales y con privilegios para crear operadores y eliminar usuarios registrados.
+## Installation 🔧
 
-## Instalación 🔧
-
-Si desea correr este proyecto en un etorno de desarollo, simplemente clone este repositorio.
+To run this project in a development environment, simply clone this repository.
 <br>
 Git clone: https://github.com/MatiasOrlando/line-up.git
 
-| /api           | /client     |
-| -------------- | ----------- |
-| npm run server | npm run dev |
+| /api      | /client   |
+| --------- | --------- |
+| npm start | npm start |
 
-<br>
-Abra http://localhost:3000 para verlo en su navegador.
+
+Open [http://localhost:3000](http://localhost:3000) to view it on your browser.
 <br>
 <br>
 
-## Tecnologías 🛠️
+## Technologies 🛠️
 
-Este proyecto fue realizado con las siguientes tecnologías:
+This project was developed using the following technologies:
 
 Front-end:
 
 <ul>
 <li>Next JS</li>
-<li>Redux</li>
-<li>Material-UI</li>
+<li>SASS</li>
 </ul>
 
 Back-end:
@@ -45,15 +41,15 @@ Back-end:
 <li>MongoDB - Mongoose</li>
 </ul>
 
-## Versionado 📝
+## Version 📝
 
-v1.0.0 - 23 de Marzo, 2023
+v1.0.0 - March 23, 2023
 
 <ul>
-<li>Version inicial</li>
+<li>Initial version</li>
 </ul>
 
-## Autores: 🚀
+## Authors: 🚀
 
 <ul>
 <li>German Cuevas</li>

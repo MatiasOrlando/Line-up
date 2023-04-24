@@ -61,7 +61,42 @@ class UsersService {
   static async validateUserdata(token) {
     try {
       const decodeUser = validateToken(token);
-      return { error: false, data: decodeUser };
+      const userData = await User.findOne({ email: decodeUser.email });
+      return { error: false, data: userData || decodeUser };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+  static async searchUserByEmail(email) {
+    try {
+      const selectedUser = await User.findOne({ email });
+      return { error: false, data: selectedUser };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+
+  static async updateUserPhone(email, phone) {
+    try {
+      const updatedUser = await User.findOneAndUpdate(
+        { email },
+        { phone },
+        { new: true }
+      );
+      updatedUser.save();
+      return { error: false, data: updatedUser };
+    } catch (error) {
+      return { error: true, data: error };
+    }
+  }
+  static async activateUserAccount(email, status) {
+    try {
+      const activeUser = await User.findOneAndUpdate(
+        { email },
+        { status },
+        { new: true }
+      );
+      return { error: false, data: activeUser };
     } catch (error) {
       return { error: true, data: error };
     }

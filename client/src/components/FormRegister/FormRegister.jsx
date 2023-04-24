@@ -156,7 +156,7 @@ export default function FormRegister() {
               </div>
             </div>
             <div className="email margin">
-              <label htmlFor="email">Mail</label>
+              <label htmlFor="email">Correo electrónico</label>
               <input
                 className={`input-primary ten ${error} ${
                   formik.touched.email && formik.errors.email
@@ -171,7 +171,7 @@ export default function FormRegister() {
               <div className="email-error">
                 {error === "error-input-email" ? (
                   <span className="email-span">
-                    Este mail ya se encuentra en uso
+                    Este correo ya se encuentra en uso
                   </span>
                 ) : (
                   ""
@@ -326,7 +326,8 @@ export default function FormRegister() {
           redirect={{ function: router.push, rute: "/" }}
           modalContent={{
             title: "Usuario creado correctamente",
-            description: "Iniciá sesion para continuar",
+            description:
+              "Recuerda activar tu cuenta desde tu correo para iniciar sesión",
             button: "Aceptar",
             icon: <BsCheckSquare className="icon" />,
           }}

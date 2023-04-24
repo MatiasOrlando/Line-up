@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const userControllers = require("../controllers/user_controller");
-const { emailConfirmation } = require("../config/emailConfirmation");
 
 /**
  *  @openapi
@@ -285,9 +284,5 @@ router.put("/password-update-email", userControllers.passwordEmailUpdate);
  *
  */
 router.get("/validate/token", userControllers.validateUserdata);
-
-router.post("/appointmentBooked", async (req, res) => {
-  emailConfirmation();
-});
 
 module.exports = router;

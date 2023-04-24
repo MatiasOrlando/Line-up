@@ -1,6 +1,8 @@
 const router = require("express").Router();
-const adminController = require("../controllers/admin_controller")
+const adminController = require("../controllers/admin_controller");
 const validateMiddleware = require("../middleWare/validateMiddleware");
+const Branch = require("../models/branch");
+const User = require("../models/user");
 
 /**
  * @openapi
@@ -53,10 +55,6 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *       NotFound:
  *         description: (NotFound) No se encontró información
  */
-
-
-
-
 
 /**
  * @openapi
@@ -131,9 +129,6 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *           - message
  */
 
-
-
-
 /**
  * @openapi
  * /api/admin/edit-operator/{branchId}/token:
@@ -146,7 +141,7 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *     parameters:
  *       - name: branchId
  *         in: path
- *         schema: 
+ *         schema:
  *           type: string
  *         required: true
  *       - in: query
@@ -191,22 +186,21 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *         description: (Bad Request) key data is missing
  *       ServerError:
  *         description: Error en servidor
- */  
-
+ */
 
 /**
  * @openapi
  * /api/admin/edit-branch-info/{branchId}/token:
  *   put:
  *     tags:
- *       - branches 
+ *       - branches
  *     summary: Edit branch Closing-Hour, Opening-Hour and AllowedClients.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
  *       - name: branchId
  *         in: path
- *         schema: 
+ *         schema:
  *           type: string
  *         required: true
  *       - in: query
@@ -258,14 +252,14 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  * /api/admin/delete-user/{userId}/token:
  *   delete:
  *     tags:
- *       - branch 
+ *       - branch
  *     summary: Delete user from the database.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
  *       - name: userId
  *         in: path
- *         schema: 
+ *         schema:
  *           type: string
  *         required: true
  *       - in: query
@@ -307,14 +301,14 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  * /api/admin/delete-branch/{branchId}/token:
  *   delete:
  *     tags:
- *       - branches 
+ *       - branches
  *     summary: Delete a branch from the database.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
  *       - name: branchId
  *         in: path
- *         schema: 
+ *         schema:
  *           type: string
  *         required: true
  *       - in: query
@@ -356,14 +350,14 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  * /api/admin/get-all-users/{number}/token:
  *   get:
  *     tags:
- *       - users 
+ *       - users
  *     summary: Get all users based on the number of page requested.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
  *       - name: number
  *         in: path
- *         schema: 
+ *         schema:
  *           type: number
  *         required: true
  *       - in: query
@@ -405,14 +399,14 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  * /api/admin/get-all-branches/{number}/token:
  *   get:
  *     tags:
- *       - branches 
+ *       - branches
  *     summary: Get all the branches based on the number of page requested.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
  *       - name: number
  *         in: path
- *         schema: 
+ *         schema:
  *           type: number
  *         required: true
  *       - in: query
@@ -454,14 +448,14 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  * /api/admin/get-all-operators/{number}/token:
  *   get:
  *     tags:
- *       - operators 
+ *       - operators
  *     summary: Get all the operators based on the number of page requested.
  *     security:
  *       - ApiKeyAuth: []
  *     parameters:
  *       - name: number
  *         in: path
- *         schema: 
+ *         schema:
  *           type: number
  *         required: true
  *       - in: query
@@ -498,48 +492,113 @@ const validateMiddleware = require("../middleWare/validateMiddleware");
  *         description: Error en servidor
  */
 
-
-
-
-
-
-
-
-
-// admin id 
+// admin id
 // CREA OPERADOR(REQ.BODY) Y LE PISA EL BRANCH.USER(VACIO) CON LOS DATOS DEL NUEVO OPERADOR, ASIGNANDOLE UN OPERADOR A LA SUCURSAL(hay que pasarle req.boy.location) Y VICE VERSA
-router.post("/create-operator/token", validateMiddleware.isAdmin, adminController.create_operator_post);
+router.post(
+  "/create-operator/token",
+  validateMiddleware.isAdmin,
+  adminController.create_operator_post
+);
 
 // CREA UN OPERADOR(REQ.BODY.USER) Y CREA UNA SUCURSAL(REQ.BODY) Y LE ASIGNA LOS DATOS DEL OPERADOR CREADO COMO USER
-router.post("/create-branch-and-operator/token", validateMiddleware.isAdmin, adminController.createOperatorAndBranch);
+router.post(
+  "/create-branch-and-operator/token",
+  validateMiddleware.isAdmin,
+  adminController.createOperatorAndBranch
+);
 
 // CREA UNA SUCURSAL SIN NINGUN OPERADOR PARA QUE DESPUES SE LO ASIGNES CUANDO LO CREES EN LA PRIMERA RUTA COMO EN EL FIGMA
-router.post("/create-branch/token", validateMiddleware.isAdmin, adminController.createBranchContoller);
+router.post(
+  "/create-branch/token",
+  validateMiddleware.isAdmin,
+  adminController.createBranchContoller
+);
 
-
-// MODIFICA EL OPERADOR DE UNA SUCURSAL, LA BRANCH LA ENCUENTRA POR(req.params.branchId) y le llega por body todos los datos del nuevo operador para crear 
+// MODIFICA EL OPERADOR DE UNA SUCURSAL, LA BRANCH LA ENCUENTRA POR(req.params.branchId) y le llega por body todos los datos del nuevo operador para crear
 //const body = { email: req.body.email, phone: req.body.phone, operator: req.body.operator, name: req.body.name, password: req.body.password }
-router.put("/edit-operator/:branchId/token", validateMiddleware.isAdmin, adminController.edit_operator_put);
+router.put(
+  "/edit-operator/:branchId/token",
+  validateMiddleware.isAdmin,
+  adminController.edit_operator_put
+);
 
-// MODIFICA LA INFORMACION DE LA BRANCH(NO EL OPERADOR),  const { hourRange, allowedClients } = req.body, const { branchId } = req.params  
+// MODIFICA LA INFORMACION DE LA BRANCH(NO EL OPERADOR),  const { hourRange, allowedClients } = req.body, const { branchId } = req.params
 // LA SUCURSAL LA ENCUETRA POR branchId y le modifica el hourRange o u y AllowedClients
-router.put("/edit-branch-info/:branchId/token", validateMiddleware.isAdmin, adminController.edit_branch_info);
-
+router.put(
+  "/edit-branch-info/:branchId/token",
+  validateMiddleware.isAdmin,
+  adminController.edit_branch_info
+);
 
 // BORRA UNA SUCURSAL QUE SE LE PASE POR PARAMS  const { branchId } = req.params
-router.delete("/delete-branch/:branchId/token", validateMiddleware.isAdmin , adminController.delete_branch_delete);
+router.delete(
+  "/delete-branch/:branchId/token",
+  validateMiddleware.isAdmin,
+  adminController.delete_branch_delete
+);
 
 // BORRA UN USUARIO QUE SE LE PASE POR PARAMS  const { userId } = req.params
-router.delete("/delete-user/:userId/token", validateMiddleware.isAdmin, adminController.delete_user_delete);
+router.delete(
+  "/delete-user/:userId/token",
+  validateMiddleware.isAdmin,
+  adminController.delete_user_delete
+);
 
 // TRAE TODOS LOS USUARIOS DEL LA PAGINA QUE LE PASES COMO PARAMS, SI EL NUMERO ES 1 TRAE LOS USUARIOS DEL 1 AL 7, SI EL NUMERO ES 2 TRAE LOS USUARIOS DEL 7 AL 14
-router.get("/get-all-users/:number/token", validateMiddleware.isAdmin, adminController.get_all_users_get);
+router.get(
+  "/get-all-users/:number/token",
+  validateMiddleware.isAdmin,
+  adminController.get_all_users_get
+);
 
 // TRAE TODOS LOS OPERADORES DE LA PAGINA QUE LE PASES COMO PARAMS, SI EL NUMERO ES 1 TRAE LOS OPERADORES DEL 1 AL 7, SI EL NUMERO ES 2 TRAE LOS OPERADORES DEL 7 AL 14
-router.get("/get-all-operators/:number/token", validateMiddleware.isAdmin, adminController.get_all_operators_get);
+router.get(
+  "/get-all-operators/:number/token",
+  validateMiddleware.isAdmin,
+  adminController.get_all_operators_get
+);
 
 // TRAE TODOS LOS SUCURSALES DE LA PAGINA QUE LE PASES COMO PARAMS, SI EL NUMERO ES 1 TRAE LAS SUCURSALES DEL 1 AL 7, SI EL NUMERO ES 2 TRAE LAS SUCURSALES DEL 7 AL 14
-router.get("/get-all-branches/:number/token", validateMiddleware.isAdmin, adminController.get_all_branches_get);
- 
+
+router.get(
+  "/get-all-branches/:number/token",
+  validateMiddleware.isAdmin,
+  adminController.get_all_branches_get
+);
+
+router.get(
+  "/get-one-operator/:number/token",
+  validateMiddleware.isAdmin,
+  async (req, res) => {
+    let id = req.params.number;
+    let opFind = await User.findById(id);
+    let suc = await Branch.findOne({ "user.email": opFind.email });
+    let idLocation = suc._id.toString();
+    let nameLocation = suc?.location || "";
+    res.send({
+      user: opFind,
+      branchName: nameLocation,
+      idLocation: idLocation,
+    });
+  }
+);
+
+router.get(
+  "/get-enabled-branches/token",
+  validateMiddleware.isAdmin,
+  adminController.get_all_branches_enabled_get
+);
+
+router.get(
+  "/get-one-branch/:id/token",
+  validateMiddleware.isAdmin,
+  adminController.get_one_branche_get
+);
+
+router.put(
+  "/edit-one-operator/:idUser/token",
+  validateMiddleware.isAdmin,
+  adminController.edit_one_operator
+);
 
 module.exports = router;

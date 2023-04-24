@@ -17,6 +17,7 @@ export async function getServerSideProps(context) {
       `http://localhost:3001/api/operator/appointment/${pagination}/token?token=${token.user}`
     );
     const data = await response.json();
+
     if (pagination > Math.ceil(data.length / 7) && data.length > 1) {
       return {
         redirect: {
@@ -30,12 +31,12 @@ export async function getServerSideProps(context) {
       props: {
         branches: data.data,
         length: data.length,
-        pagination: pagination,
+        token: token,
       },
     };
   }
 }
 
-export default function Register({ branches, length }) {
-  return <ListAppoinments branches={branches} length={length} />;
+export default function Register({ branches, length, token }) {
+  return <ListAppoinments token={token} branches={branches} length={length} />;
 }

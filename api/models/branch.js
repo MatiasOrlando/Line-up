@@ -7,6 +7,7 @@ const BranchSchema = new mongoose.Schema({
   openingHour: { type: String, required: true },
   closingHour: { type: String, required: true },
   allowedClients: { type: Number, required: true },
+  enabled: {type: Boolean, default: false},
   user: {
     id: { type: mongoose.Schema.Types.ObjectId, default: null },
     email: {
@@ -22,6 +23,20 @@ const BranchSchema = new mongoose.Schema({
     },
     operator: { type: Boolean, default: true },
   },
+});
+
+BranchSchema.pre("save", function (next) {
+  const name = this.name;
+  this.name = name
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .replace(/\s+/g, " ");
+  const location = this.location;
+  this.location = location
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .replace(/\s+/g, " ");
+  next();
 });
 
 const Branch = mongoose.model("branch", BranchSchema);

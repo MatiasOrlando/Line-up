@@ -8,14 +8,13 @@ import { useRouter } from "next/router";
 import validationNewOperator from "./validation/validation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-export default function FormNewOperator() {
+export default function FormNewOperator({ branches }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
   const [repeatPasswordShown, setRepeatPasswordShown] = useState(false);
   const { data } = useSession();
   const router = useRouter();
   const [error, setError] = useState("");
-
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -23,45 +22,49 @@ export default function FormNewOperator() {
       password: "",
       phone: "",
       dni: "",
-      location: "",
+      location: "Seleciona un valor",
       repeatPassword: "",
     },
 
     onSubmit: async (dat) => {
-      const { name, email, password, dni, location } = dat;
-      try {
-        await axios.post(
-          `http://localhost:3001/api/admin/create-operator/token?token=${data.user}`,
-          {
-            name,
-            email,
-            password,
-            dni,
-            location,
-            phone: 111608,
-            operator: true,
+      if (dat.location !== "Seleciona un valor") {
+        const { name, email, password, dni, location } = dat;
+        try {
+          await axios.post(
+            `http://localhost:3001/api/admin/create-operator/token?token=${data.user}`,
+            {
+              name,
+              email,
+              password,
+              dni,
+              location,
+              phone: 111608,
+              operator: true,
+            }
+          );
+          setModalIsOpen(true);
+        } catch (err) {
+          const message = err.response.data.message;
+          if (message.includes("email")) {
+            setError("error-input-email");
+          } else if (message.includes("dni")) {
+            setError("error-input-dni");
+          } else {
+            setError("error-input-location");
           }
-        );
-        setModalIsOpen(true);
-      } catch (err) {
-        const message = err.response.data.message;
-        if (message.includes("email")) {
-          setError("error-input-email");
-        } else if (message.includes("dni")) {
-          setError("error-input-dni");
-        } else {
-          setError("error-input-location");
+          if (err) {
+            setTimeout(() => {
+              setError("");
+            }, 2000);
+          }
         }
-        if (err) {
-          setTimeout(() => {
-            setError("");
-          }, 2000);
-        }
+      } else {
+        setError("error-input-location");
       }
     },
     validationSchema: validationNewOperator.validationSchema,
   });
-  console.log(error);
+
   const togglePasswordVisibility = (password) => {
     password === "password"
       ? setPasswordShown(!passwordShown)
@@ -78,12 +81,15 @@ export default function FormNewOperator() {
               formik.handleSubmit();
             }}
             className="login-form"
+            style={{ marginTop: "5px" }}
           >
             <div className="login-form_box-title">
               <h2>Crear una nuevo operador</h2>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="name">Nombre</label>
+              <label htmlFor="name" style={{ marginTop: "5px" }}>
+                Nombre
+              </label>
               <input
                 className={`input-primary width-100 ${
                   formik.touched.name && formik.errors.name ? "error-input" : ""
@@ -96,7 +102,7 @@ export default function FormNewOperator() {
               <div className="box-span"></div>
             </div>
             <div className="login-form_box-input">
-              <label htmlFor="email">Correo electronico</label>
+              <label htmlFor="email">Correo electrónico</label>
               <input
                 className={`input-primary width-100 ${
                   formik.touched.email && formik.errors.email
@@ -111,7 +117,7 @@ export default function FormNewOperator() {
               <div className="email-error">
                 {error === "error-input-email" ? (
                   <span className="email-span">
-                    Este mail ya se encuentra en uso
+                    Este correo ya se encuentra en uso
                   </span>
                 ) : (
                   ""
@@ -142,7 +148,7 @@ export default function FormNewOperator() {
               </div>
               <div className="div-inter-50-right">
                 <label htmlFor="location">Sucursal</label>
-                <input
+                <select
                   className={`input-primary width-100 ${
                     formik.touched.location && formik.errors.location
                       ? "error-input"
@@ -152,11 +158,22 @@ export default function FormNewOperator() {
                   id="location"
                   onChange={formik.handleChange}
                   value={formik.values.location}
-                />
+                >
+                  <option value={"Seleciona un valor"}>
+                    Seleciona un valor
+                  </option>
+                  {branches.map((branch) => {
+                    return (
+                      <option value={branch.name} key={branch.id}>
+                        {branch.name}
+                      </option>
+                    );
+                  })}
+                </select>
                 <div className="email-error">
                   {error === "error-input-location" ? (
                     <span className="email-span">
-                      Esta sucursal no se encuentra registrada
+                      Debe seleccionar una sucursal
                     </span>
                   ) : (
                     ""
@@ -224,7 +241,11 @@ export default function FormNewOperator() {
               </div>
             </div>
             <div>
-              <button className="btn-primary width-100" type="submit">
+              <button
+                className="btn-primary width-100"
+                type="submit"
+                style={{ marginTop: "10px" }}
+              >
                 Aceptar
               </button>
             </div>
@@ -237,8 +258,7 @@ export default function FormNewOperator() {
         redirect={{ function: router.push, rute: "/sucursales/1" }}
         modalContent={{
           title: "Operador creado correctamente",
-          description:
-            "El operador ya puede iniciar sesion con su nueva cuenta",
+          description: "El operador ya puede iniciar sesión con su cuenta",
           button: "Aceptar",
           icon: <BsCheckSquare className="icon" />,
         }}

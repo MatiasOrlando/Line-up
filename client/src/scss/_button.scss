@@ -78,17 +78,24 @@
   }
 }
 
+.border-asis-ok {
+  border: 1px solid $successColor;
+}
+.border-asis-not {
+  border: 1px solid $errorColor;
+}
+
 .button-cancel {
-display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: center;
-padding: 12px 24px;
-width: 200px;
-height: 44px;
-background: #E53939;
-border-radius: 8px;
-flex: none;
-order: 2;
-flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 24px;
+  width: 200px;
+  height: 44px;
+  background: #e53939;
+  border-radius: 8px;
+  flex: none;
+  order: 2;
+  flex-grow: 0;
 }

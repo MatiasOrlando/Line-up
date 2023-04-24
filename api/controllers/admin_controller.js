@@ -1,9 +1,7 @@
-const User = require("../models/user");
-const Branch = require("../models/branch");
 const { admin_services } = require("../services/admin_services");
+const BranchsService = require("../services/branch_services");
 
 exports.create_operator_post = async (req, res, next) => {
-  console.log(req.body);
   const operatorInfo = {
     name: req.body.name,
     email: req.body.email,
@@ -11,6 +9,7 @@ exports.create_operator_post = async (req, res, next) => {
     operator: req.body.operator,
     password: req.body.password,
     dni: req.body.dni,
+    status: "enabled"
   };
   const { location } = req.body;
   try {
@@ -120,17 +119,13 @@ exports.edit_operator_put = async (req, res, next) => {
   const branchId = req.params.branchId;
   const body = {
     email: req.body.email,
-    phone: req.body.phone,
-    operator: req.body.operator,
     name: req.body.name,
     password: req.body.password,
     dni: req.body.dni,
   };
   try {
     if (
-      typeof body.phone !== "number" ||
       typeof body.email !== "string" ||
-      typeof body.operator !== "boolean" ||
       typeof body.name !== "string" ||
       typeof body.password !== "string"
     ) {
@@ -254,5 +249,56 @@ exports.get_all_branches_get = async (req, res, next) => {
       message:
         "failed to get all branches in page " + number + " from the database",
     });
+  }
+};
+
+exports.get_all_branches_enabled_get = async (req, res, next) => {
+  try {
+    const allBranches = await admin_services.getAllBrachesEnabled();
+    if (!allBranches.error) {
+      return res.status(200).send(allBranches);
+    }
+    return res.status(400).send({ message: allBranches.data.message });
+  } catch (err) {
+    return res.status(400).send({
+      message: "failed to get all enabled branches from the database",
+    });
+  }
+};
+
+exports.get_one_branche_get = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const branche = await admin_services.getOneBrache(id);
+    if (!branche.error) {
+      return res.status(200).send(branche);
+    }
+    return res.status(400).send({ message: allBranches.data.message });
+  } catch (err) {
+    return res.status(400).send({
+      message: "failed to get one branches whit this id from the database",
+    });
+  }
+};
+
+exports.edit_one_operator = async (req, res, next) => {
+  try {
+    const idUser = req.params.idUser;
+    const { name, email, password, dni, location, idLocation } = req.body;
+
+    const updateUser = await admin_services.editOneOperator(
+      idUser,
+      name,
+      email,
+      password,
+      dni
+    );
+    if (!updateUser.err) {
+
+      const updateBranch = await BranchsService.editOneBranch(idLocation, name, email)
+      res.status(200).send("Change correct")
+    }
+  } catch (err) {
+    res.send(401).send("Error")
   }
 };

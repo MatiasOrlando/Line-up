@@ -28,17 +28,17 @@ export default function Header({ hide }) {
           </Link>
         </div>
         <div className="options-item">
-          <Link href="/operadores" className="link-text">
+          <Link href="/operadores/1" className="link-text">
             <span>Operadores</span>
             <Image src={operate} alt="operadores" className="link-icon" />
           </Link>
         </div>
-        <div className="options-item">
+        {/* <div className="options-item">
           <Link href="/reportes">
             <span>Reportes</span>
             <Image src={note} alt="reportes" />
           </Link>
-        </div>
+        </div> */}
       </>
     );
   };
@@ -71,7 +71,7 @@ export default function Header({ hide }) {
             <>
               <div className="options-item">
                 <Link
-                  href={user?.operator ? "/operadorReservas/1" : "/reservas"}
+                  href={user?.operator ? "/operadorReservas/1" : "/reservas/1"}
                 >
                   <span>{user?.operator ? "Reservas" : "Mis Reservas"}</span>
                   <Image src={calendar} alt="reservas" />

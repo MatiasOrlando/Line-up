@@ -16,7 +16,8 @@
 .content-container{
     display: flex;
     flex-wrap: wrap;
-    gap: 5rem;
+    column-gap: 5rem;
+    row-gap: 2.5rem;
     max-width: 80%;
     margin: 0 auto;
 }
@@ -39,11 +40,7 @@
     border-radius: 8px;
     padding: 32px 40px;
     gap: 32px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    max-width: 60%;
-    flex-basis: 50%;
+    max-width: 65%;
     flex-grow: 1;
 }
 
@@ -56,7 +53,8 @@
     gap: 10px;
     padding: 32px;
     text-align: center;
-    max-width: 40%;
+    max-width: 45%;
+    max-height: 428px;
     flex-basis: 35%;
 }
 
@@ -87,20 +85,20 @@
 
   .w95{
     width: 95%;
-    margin: 0 auto
+    margin: 0 auto;
+    column-gap: 1rem
   }
 
   .formReserva > div {
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 20px; /* Para agregar un margen entre los elementos */
+    display: flex;
   }
   
 .countdown-container{
   width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: flex-end;
+  padding: 20px 0px 80px 0px;
+  
 }
     
 .sc{
@@ -166,14 +164,14 @@ color: white;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 240px;
+  width: 33.3%
 }
 
 
 .violet {
 appearance: none;
-width: 32px;
-height: 32px;
+width: 4rem;
+height: 4rem;
 background: #A442F1;
 border-radius: 8px;
 border: none;
@@ -183,8 +181,8 @@ color: white;
 
 .gray {
 appearance: none;
-width: 32px;
-height: 32px;
+width:  4rem;
+height:  4rem;
 border-radius: 8px;
 border: none;
 color: white;
@@ -193,8 +191,8 @@ background: gray;
 
 .green {
 appearance: none;
-width: 32px;
-height: 32px;
+width:4rem;
+height:4rem;
 border-radius: 8px;
 border: none;
 color: white;

@@ -1,232 +1,415 @@
 const router = require("express").Router();
-const User = require("../models/user");
-const Branch = require("../models/branch");
-const Appointment = require("../models/appointment");
-const { DateTime } = require("luxon");
-const moment = require("moment");
+const appointmentsController = require("../controllers/appointments_controller");
 
-// router.post("/add", async (req, res) => {
-//   const idUser = "6421daa054ed9950496a68b3";
-//   const idBranch = "6421daa154ed9950496a68f4";
-//   const dateNumber = "2023-10-67742";
-//   try {
-//     const userFound = await User.findById(idUser).exec();
-//     const selectedBranch = await Branch.findById(idBranch).exec();
-//     const userAppointments = await Appointment.find({
-//       "user.id": userFound.id,
-//     });
-//     const arrayAppointmentsDate = userAppointments.filter((appointment) => {
-//       return appointment.date == dateNumber;
-//     });
-//     if (arrayAppointmentsDate.length) {
-//       return res.status(404).send(`No puede reservar mas de un turno por dia`);
-//     } else {
-//       const newAppointment = await Appointment.create({
-//         date: dateNumber,
-//         timeOfAppontment: "10:30",
-//         status: "pending",
-//         user: {
-//           id: userFound.id,
-//           name: userFound.name,
-//           email: userFound.email,
-//           phone: userFound.phone,
-//         },
-//         sucursal: {
-//           id: selectedBranch.id,
-//           location: selectedBranch.location,
-//           allowedClients: selectedBranch.allowedClients,
-//           hourRange: selectedBranch.hourRange,
-//         },
-//       });
-//       newAppointment.save();
-//       return res.send(newAppointment);
-//     }
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
+/**
+ * @openapi
+ * /api/appointments/add:
+ *   post:
+ *     tags:
+ *       - appointments
+ *     summary: Create a new Appoinment 
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AddnewAppoinment'
+ *       required: true
+ *     responses:
+ *       201:
+ *         description: (OK) Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AddnewAppoinment'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         description: (NotFound) No se encontró información
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ */
 
-router.post("/add", async (req, res) => {
-  const { branch, name, email, phoneNew, day, time } = req.body;
-  try {
-    const selectedBranch = await Branch.find({ name: branch });
-    const { allowedClients, openingHour, closingHour } = selectedBranch[0];
-    const user = await User.findOne({ email: email });
-    const { phone } = user;
-    const fullAppoinment = await Appointment.find({
-      day: day,
-      timeOfAppontment: time,
-    });
-    if (fullAppoinment.length < allowedClients) {
-      let turno = {
-        date: day,
-        timeOfAppontment: time,
-        user: {
-          id: user._id,
-          name: name,
-          email: email,
-          phone: phoneNew,
-        },
-        sucursal: {
-          id: selectedBranch[0]._id,
-          name: branch,
-          allowedClients: allowedClients,
-          openingHour: openingHour,
-          closingHour: closingHour,
-        },
-      };
-      await Appointment.create(turno);
-      if (phone !== phoneNew) {
-        await User.updateOne({ email: email }, { phone: phoneNew });
-      }
-      res.status(201).send(turno);
-    } else {
-      res.send("Turnos completos en el horario solicitado");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
+/**
+ * @openapi
+ * /api/appointments/branches:
+ *   get:
+ *     tags:
+ *       - appointments
+ *     summary: Get all branches 
+ *     responses:
+ *       200:
+ *         description: (OK) FOUND
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         description: (NotFound) No se encontró información
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ */
 
-router.get("/branches", async (req, res) => {
-  try {
-    const names = [];
-    const branchesNames = await Branch.find({});
-    branchesNames.map((branch) => {
-      return names.push(branch.name);
-    });
-    return res.status(200).send(names);
-  } catch (error) {
-    console.log(error);
-  }
-});
 
-router.post("/daysavailable", async (req, res) => {
-  const { days, branch } = req.body;
-  try {
-    const selectedBranch = await Branch.find({ name: branch });
-    const { openingHour, closingHour, allowedClients } = selectedBranch[0];
-    const openingTime = DateTime.fromFormat(openingHour, "HH:mm");
-    const closingTime = DateTime.fromFormat(closingHour, "HH:mm");
-    const hoursOpen = closingTime.diff(openingTime, "hours").hours;
-    const appoinmentsPerDay = hoursOpen * 4 * allowedClients;
-    const arrayToSend = [];
-    const promises = days.map(async (day) => {
-      const availableAppoinments = await Appointment.find({ date: day });
-      if (availableAppoinments.length < appoinmentsPerDay) {
-        arrayToSend.push(day);
-      }
-    });
+/**
+ * @openapi
+ * /api/appointments/daysavailable:
+ *   post:
+ *     tags:
+ *       - appointments
+ *     summary: Get days available based on the branche selected
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GetdayAvailable'
+ *       required: true
+ *     responses:
+ *       201:
+ *         description: (OK) Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetdayAvailable'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         description: (NotFound) No se encontró información
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ */
 
-    await Promise.all(promises);
+/**
+ * @openapi
+ * /api/appointments/hoursavailable:
+ *   post:
+ *     tags:
+ *       - appointments
+ *     summary: Get hours available based on the day and branch selected
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GetHoursAvailable'
+ *       required: true
+ *     responses:
+ *       201:
+ *         description: (OK) Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetHoursAvailable'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         description: (NotFound) No se encontró información
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ */
 
-    return res.status(200).send(arrayToSend);
-  } catch (error) {
-    console.log(error);
-  }
-});
+/**
+ * @openapi
+ * /api/appointments/edit:
+ *   put:
+ *     tags:
+ *       - appointments
+ *     summary: Edit Appoinments the user previously took
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EditAppoinment'
+ *       required: true
+ *     responses:
+ *       201:
+ *         description: (OK) Found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EditAppoinment'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         description: (NotFound) No se encontró información
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ */
 
-router.post("/hoursavailable", async (req, res) => {
-  const { day, branch } = req.body;
-  try {
-    const fechaSeleccionada = day;
-    const selectedBranch = await Branch.find({ name: branch });
-    const { openingHour, closingHour, allowedClients } = selectedBranch[0];
-    const openingTime = moment(openingHour, "HH:mm");
-    const closingTime = moment(closingHour, "HH:mm");
-    const duration = moment.duration(closingTime.diff(openingTime));
-    const numIntervals = Math.ceil(duration.asMinutes() / 15);
 
-    const horarios = {};
-    for (let i = 0; i < numIntervals; i++) {
-      const start = openingTime.clone().add(i * 15, "minutes");
-      const horario = start.format("HH:mm");
-      horarios[horario] = { horario: horario, count: 0 };
-    }
+/**
+ * @openapi
+ * /api/appointments/cancel/{idApp}/token:
+ *   put:
+ *     tags:
+ *       - appointments
+ *     summary: Cancel an appoinment that you previously took.
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: idApp
+ *         in: path
+ *         schema:
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CancelAppoinment'
+ *       required: true
+ *     responses:
+ *       200:
+ *         description: (OK) Modified
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CancelAppoinment'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         description: (NotFound) No se encontró información
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
 
-    const appointments = await Appointment.aggregate([
-      {
-        $match: { fecha: fechaSeleccionada },
-      },
-      {
-        $group: {
-          _id: "$horario",
-          count: { $sum: 1 },
-        },
-      },
-    ]);
+/**
+ * @openapi
+ * /api/appointments/lastAppointment/token:
+ *   get:
+ *     tags:
+ *       - appointments
+ *     summary: Get last appoinment of the user.
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     responses:
+ *       200:
+ *         description: (OK) OK
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         description: (NotFound) No se encontró información
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User Unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
 
-    appointments.forEach((appointment) => {
-      const horario = appointment._id;
-      const count = appointment.count;
-      if (horarios.hasOwnProperty(horario)) {
-        horarios[horario].count = count;
-      }
-    });
+/**
+ * @openapi
+ * /api/appointments/{idApp}/token:
+ *   get:
+ *     tags:
+ *       - appointments
+ *     summary: Get User appoinment by idApp.
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: idApp
+ *         in: path
+ *         schema:
+ *           type: string
+ *         required: true
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     responses:
+ *       200:
+ *         description: (OK) OK
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         description: (NotFound) No se encontró información
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User Unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
 
-    const resultados = Object.values(horarios);
-    const horariosDisponibles = [];
-    resultados.map((resultado) => {
-      if (resultado.count < allowedClients) {
-        horariosDisponibles.push(resultado.horario);
-      }
-    });
-    res.status(200).send(horariosDisponibles);
-  } catch (error) {
-    console.log(error);
-  }
-});
+/**
+ * @openapi
+ * /api/appointments/user-appointments:
+ *   get:
+ *     tags:
+ *       - appointments
+ *     summary: Get all users Appoinments by decoding the user with the token.
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Token for authentication
+ *     responses:
+ *       200:
+ *         description: (OK) OK
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         description: (NotFound) No se encontró información
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ *   components:
+ *     securitySchemes:
+ *       ApiKeyAuth:
+ *         type: apiKey
+ *         name: token
+ *         in: query
+ *     responses:
+ *       Unauthorized:
+ *         description: (Unauthorized) User Unauthorized
+ *       NotFound:
+ *         description: (NotFound) No se encontró información
+ *       BadRequest:
+ *         description: (Bad Request) key data is missing
+ *       ServerError:
+ *         description: Error en servidor
+ */
 
-router.get("/:id", async (req, res) => {
-  try {
-    const idUser = "6422b1e34da6f9b3f79ba531";
-    /* const userAppointments = await Appointment.find({
-      "user.id": idUser,
-    }); */
-    const userAppointments = await Appointment.find({});
-    return res.status(200).send(userAppointments);
-  } catch (error) {
-    console.error(error);
-  }
-});
 
-router.put("/", async (req, res) => {
-  // Recibo por body/params idAppointment, newDate, newTime,y Name de la newBranch y updateo en coleccion apppointments con el id correspondiente
-  const idAppointment = "6421daa154ed9950496a692f";
-  const date = "2024-02-67742";
-  const timeOfAppontment = "09:58";
-  const branchData = await Branch.find({ name: "Sydney SUCURSAL" });
-  const sucursal = {
-    id: branchData[0].id,
-    location: branchData[0].location,
-    hourRange: branchData[0].hourRange,
-    allowedClients: branchData[0].allowedClients,
-  };
-  try {
-    const appointmentUpdate = await Appointment.findById(idAppointment);
-    appointmentUpdate.date = date;
-    appointmentUpdate.timeOfAppontment = timeOfAppontment;
-    appointmentUpdate.sucursal = sucursal;
-    appointmentUpdate.save();
-    return res.send(appointmentUpdate);
-  } catch (error) {
-    console.error(error);
-  }
-});
 
-router.put("/cancelar/:reservaId", async (req, res) => {
-  // Recibimos por params id Appointment y por body la reason de la cancelacion. Actualizamos status..
-  const id = "6421daa154ed9950496a6933";
-  const cancelReason = "Me quede dormido";
-  try {
-    const canceledAppointment = await Appointment.findById(id);
-    canceledAppointment.cancelReason = cancelReason;
-    canceledAppointment.status = "Cancel";
-    canceledAppointment.save();
-    return res.send(canceledAppointment);
-  } catch (error) {
-    console.error(error);
-  }
-});
+
+
+
+router.post("/add", appointmentsController.createAppointment);
+router.get("/branches", appointmentsController.getAllBranchs);
+router.post("/daysavailable", appointmentsController.getDaysAvailable);
+router.post("/hoursavailable", appointmentsController.getHoursAvailable);
+router.put("/edit", appointmentsController.editAppointment);
+router.put("/cancel/:idApp/token", appointmentsController.cancelAppointment);
+router.get("/lastAppointment/token", appointmentsController.getUserLastAppointment);
+router.get("/:idApp/token", appointmentsController.getUserAppointmentById);
+router.get("/user-appointments/:number", appointmentsController.getAllUserAppointmentsById);
+
+/* router.get("/user-appointments/:number", async(req,res)=>{
+    const number = req.params.number;
+    const limit = number * 7;
+}); */
+
+
+
 
 module.exports = router;
