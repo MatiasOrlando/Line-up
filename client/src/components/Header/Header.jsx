@@ -33,12 +33,12 @@ export default function Header({ hide }) {
             <Image src={operate} alt="operadores" className="link-icon" />
           </Link>
         </div>
-        <div className="options-item">
+        {/* <div className="options-item">
           <Link href="/reportes">
             <span>Reportes</span>
             <Image src={note} alt="reportes" />
           </Link>
-        </div>
+        </div> */}
       </>
     );
   };

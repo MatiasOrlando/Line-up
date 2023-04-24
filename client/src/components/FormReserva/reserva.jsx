@@ -524,7 +524,7 @@ export default function FormReserva({ branches, user }) {
           )}
         </div>
         <div className="countdown-container">
-          <button className="btn-primary sc">
+          <button className="btn-primary">
             Quedan {formatearTiempo(tiempoRestante)}
           </button>
         </div>
