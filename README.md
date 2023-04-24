@@ -1,6 +1,6 @@
 # LINE-UP APP :hourglass_flowing_sand:
 
-LINE-UP is a web application that allows its users to book appointments online at different locations. It provides convenience and flexibility, allowing users to quickly and easily reserve and manage their appointments. It also enables operators at these locations to efficiently and effectively manage the flow of appointments.
+LINE-UP is a web application that allows users to book appointments online at different locations. It provides convenience and flexibility, allowing users to quickly and easily reserve and manage their appointments. It also enables operators at these locations to efficiently and effectively manage the flow of appointments.
 
 User/Client: Users can view the availability of appointments at a particular location, reserve an appointment, cancel it, and modify it if necessary. Additionally, they will receive reminders to keep them informed about their scheduled appointments.
 
