@@ -5,12 +5,12 @@ const Appointment = require("../models/appointment");
 const users = [
   {
     name: "Administrador General",
-    email: "admin@lineup.com",
-    phone: 1112345678,
+    email: "admin@example.com",
+    phone: 3112345678,
     password: "testing",
     admin: true,
     operator: false,
-    dni: 23453333,
+    dni: 93453333,
     status: "enabled",
   },
   {
