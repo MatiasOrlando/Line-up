@@ -2,15 +2,17 @@ const nodemailer = require("nodemailer");
 
 async function passwordUpdate(email, token) {
   let transporter = nodemailer.createTransport({
-    service: "hotmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: "lineupdemo@hotmail.com",
-      pass: "Testlinedemo3",
+      user: "lineupfast@gmail.com",
+      pass: "pgmbdyklrdrjaigy",
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupdemo@hotmail.com`,
+    from: `lineupfast@gmail.com`,
     to: `${email}`,
     subject: `Actualiza tu contraseña`,
     html: `<p><b></b><a href="http://localhost:3000/password/${token}">Haz click aqui para cambiar tu contraseña</a></p>
@@ -30,15 +32,18 @@ async function appointmentConfirmation(appointment) {
   const hour = `${createdAt.getHours()}:${createdAt.getMinutes()}`;
 
   let transporter = nodemailer.createTransport({
-    service: "hotmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: "lineupdemo@hotmail.com",
-      pass: "Testlinedemo3",
+      user: "lineupfast@gmail.com",
+      pass: "pgmbdyklrdrjaigy",
     },
   });
+
   try {
     let info = await transporter.sendMail({
-      from: `lineupdemo@hotmail.com`,
+      from: `lineupfast@gmail.com`,
       to: `${user.email}`,
       subject: `Confirmacion de turno`,
       html: `
@@ -56,15 +61,17 @@ async function appointmentConfirmation(appointment) {
 
 async function accountActivation(email, token) {
   let transporter = nodemailer.createTransport({
-    service: "hotmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: "lineupdemo@hotmail.com",
-      pass: "Testlinedemo3",
+      user: "lineupfast@gmail.com",
+      pass: "pgmbdyklrdrjaigy",
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupdemo@hotmail.com`,
+    from: `lineupfast@gmail.com`,
     to: `${email}`,
     subject: `Activa tu cuenta`,
     html: `<p><b></b><a href="http://localhost:3000?secret=${token}">Haz click aqui en este link activar tu cuenta</a></p>
@@ -80,15 +87,17 @@ async function cancelAppointmentEmail(appointment) {
   const branchName = appointment.sucursal.name;
   const timeOfAppoinment = appointment.timeOfAppoinment;
   let transporter = nodemailer.createTransport({
-    service: "hotmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: "lineupdemo@hotmail.com",
-      pass: "Testlinedemo3",
+      user: "lineupfast@gmail.com",
+      pass: "pgmbdyklrdrjaigy",
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupdemo@hotmail.com`,
+    from: `lineupfast@gmail.com`,
     to: `${email}`,
     subject: `Turno cancelado`,
     html: `<p><b></b>Su reserva ha sido cancelada exitosamente. Le agradecemos por informarnos.</></p>
@@ -107,15 +116,17 @@ async function editAppointmentEmail(appointment) {
   const branchName = appointment.sucursal.name;
   const timeOfAppoinment = appointment.timeOfAppoinment;
   let transporter = nodemailer.createTransport({
-    service: "hotmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
-      user: "lineupdemo@hotmail.com",
-      pass: "Testlinedemo3",
+      user: "lineupfast@gmail.com",
+      pass: "pgmbdyklrdrjaigy",
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupdemo@hotmail.com`,
+    from: `lineupfast@gmail.com`,
     to: `${email}`,
     subject: `Turno editado`,
     html: `<p><b></b>Su reserva ha sido editada exitosamente. Le agradecemos por informarnos.</></p>

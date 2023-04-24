@@ -71,13 +71,13 @@ export default function FormReserva({ branches, user }) {
     }
   }
 
-  // useEffect(() => {
-  //   const intervalo = setInterval(() => {
-  //     setTiempoRestante((tiempoRestante) => tiempoRestante - 1);
-  //   }, 1000);
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      setTiempoRestante((tiempoRestante) => tiempoRestante - 1);
+    }, 1000);
 
-  //   return () => clearInterval(intervalo);
-  // }, []);
+    return () => clearInterval(intervalo);
+  }, []);
 
   function formatearTiempo(tiempo) {
     const minutos = Math.floor(tiempo / 60);
@@ -522,13 +522,13 @@ export default function FormReserva({ branches, user }) {
             })}
           </div>
           {message && (
-            <span style={{ fontSize: "20px", color: "#e53939" }}>
+            <span style={{ fontSize: "15px", color: "#e53939" }}>
               {message}
             </span>
           )}
         </div>
         <div className="countdown-container">
-          <button className="btn-primary sc">
+          <button className="btn-primary">
             Quedan {formatearTiempo(tiempoRestante)}
           </button>
         </div>

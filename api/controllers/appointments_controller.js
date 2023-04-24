@@ -271,10 +271,7 @@ const getUserLastAppointment = async (req, res) => {
       if (userAppointment.error) {
         return res.status(401).send({ message: userAppointment.data.message });
       }
-      const testEmailUser = await appointmentConfirmation(userAppointment.data);
-      if (testEmailUser) {
-        return res.status(401).send(`Mail invalido`);
-      }
+      appointmentConfirmation(userAppointment.data);
       return res.status(200).send(userAppointment.data);
     } else {
       return res.status(400).send(`Credenciales invalidas`);
