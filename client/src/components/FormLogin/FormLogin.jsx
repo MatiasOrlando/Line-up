@@ -144,7 +144,7 @@ export default function FormLogin({ secret }) {
                 display: "flex",
               }}
             >
-              <button
+              {/* <button
                 className="btn-primary width-100"
                 onClick={(e) => {
                   handleGoogleSignIn(e);
@@ -163,7 +163,7 @@ export default function FormLogin({ secret }) {
                     alt="google logo"
                   />
                 </div>
-              </button>
+              </button> */}
             </div>
           </div>
           <hr />
