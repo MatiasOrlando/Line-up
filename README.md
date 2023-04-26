@@ -14,10 +14,6 @@ Admin User: Admin users can create, edit, and delete new locations, determine ho
 
 Link <a href="https://lineup-front.vercel.app"/>LINE-UP</a>
 
-For testing purposes till email activation account is finished use the following user:
-
-Username : german@example.com
-Password: testing
 
 <br>
 
