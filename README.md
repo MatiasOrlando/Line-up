@@ -6,7 +6,7 @@ User/Client: Users can view the availability of appointments at a particular loc
 
 Location Operators: Operators can view and manage the list of appointments at their location, as well as modify the status of appointments that have been made.
 
-Admin User: Admin users can create, edit, and delete new locations, determine hours of operation for each location, have access to all appointments made at all locations, and have privileges to create new operators/branches.
+Admin User: Admin users can create, and edit new locations. Also, they determine hours of operation for each location, have access to all appointments made at all locations, and have privileges to create new operators/branches.
 
 <br>
 
