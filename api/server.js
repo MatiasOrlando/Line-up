@@ -27,7 +27,7 @@ app.use(express.json());
 app.use("/api", routerIndex);
 // Rutas
 
-app.listen(3001, () => {
-  console.log(`Servidor corriendo en puerto ${3001}`);
-  swaggerDocs(app, 3001);
+app.listen(process.env.PORT, () => {
+  console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
+  swaggerDocs(app, process.env.PORT);
 });

@@ -222,7 +222,7 @@ const editAppointment = async (req, res) => {
         await UsersService.updateUserPhone(email, phoneNew);
       }
     }
-    editAppointmentEmail(appointmentUpdate.data);
+    // editAppointmentEmail(appointmentUpdate.data);
     return res.status(200).send(appointmentUpdate.data);
   } catch (error) {
     return res
@@ -248,7 +248,7 @@ const cancelAppointment = async (req, res) => {
           .status(401)
           .send({ message: canceledAppointment.data.message });
       }
-      cancelAppointmentEmail(canceledAppointment.data);
+      // cancelAppointmentEmail(canceledAppointment.data);
       return res.status(200).send(canceledAppointment.data);
     } else {
       return res.status(400).send("Usuario no encontrado");
@@ -271,7 +271,7 @@ const getUserLastAppointment = async (req, res) => {
       if (userAppointment.error) {
         return res.status(401).send({ message: userAppointment.data.message });
       }
-      appointmentConfirmation(userAppointment.data);
+      // appointmentConfirmation(userAppointment.data);
       return res.status(200).send(userAppointment.data);
     } else {
       return res.status(400).send(`Credenciales invalidas`);
