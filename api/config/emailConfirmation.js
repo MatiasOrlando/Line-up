@@ -15,7 +15,7 @@ async function passwordUpdate(email, token) {
     from: `lineupwebapp1@gmail.com`,
     to: `${email}`,
     subject: `Actualiza tu contraseña`,
-    html: `<p><b></b><a href="https://lineup-front.vercel.app/password/${token}">Haz click aqui para cambiar tu contraseña</a></p>
+    html: `<p><b></b><a href="http://localhost:3000/password/${token}">Haz click aqui para cambiar tu contraseña</a></p>
                 <p>Sus datos estan protegidos. Muchas gracias por confiar en nosotros.</p>
                 <img src=""/>`,
   });
@@ -74,7 +74,7 @@ async function accountActivation(email, token) {
     from: `lineupwebapp1@gmail.com`,
     to: `${email}`,
     subject: `Activa tu cuenta`,
-    html: `<p><b></b><a href="https://lineup-front.vercel.app/?secret=${token}">Haz click aqui en este link activar tu cuenta</a></p>
+    html: `<p><b></b><a href="http://localhost:3000?secret=${token}">Haz click aqui en este link activar tu cuenta</a></p>
                 <p>Sus datos estan protegidos. Muchas gracias por confiar en nosotros.</p>
                 <img src=""/>`,
   });
