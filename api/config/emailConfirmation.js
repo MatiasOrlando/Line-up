@@ -36,14 +36,14 @@ async function appointmentConfirmation(appointment) {
     port: 465,
     secure: true,
     auth: {
-      user: "lineupfast@gmail.com",
-      pass: "pgmbdyklrdrjaigy",
+      user: "lineupwebapp1@gmail.com",
+      pass: "cemqxsdvqtswecjl",
     },
   });
 
   try {
     let info = await transporter.sendMail({
-      from: `lineupfast@gmail.com`,
+      from: `lineupwebapp1@gmail.com`,
       to: `${user.email}`,
       subject: `Confirmacion de turno`,
       html: `
@@ -65,13 +65,13 @@ async function accountActivation(email, token) {
     port: 465,
     secure: true,
     auth: {
-      user: "lineupfast@gmail.com",
-      pass: "pgmbdyklrdrjaigy",
+      user: "lineupwebapp1@gmail.com",
+      pass: "cemqxsdvqtswecjl",
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupfast@gmail.com`,
+    from: `lineupwebapp1@gmail.com`,
     to: `${email}`,
     subject: `Activa tu cuenta`,
     html: `<p><b></b><a href="http://localhost:3000?secret=${token}">Haz click aqui en este link activar tu cuenta</a></p>
@@ -91,13 +91,13 @@ async function cancelAppointmentEmail(appointment) {
     port: 465,
     secure: true,
     auth: {
-      user: "lineupfast@gmail.com",
-      pass: "pgmbdyklrdrjaigy",
+      user: "lineupwebapp1@gmail.com",
+      pass: "cemqxsdvqtswecjl",
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupfast@gmail.com`,
+    from: `lineupwebapp1@gmail.com`,
     to: `${email}`,
     subject: `Turno cancelado`,
     html: `<p><b></b>Su reserva ha sido cancelada exitosamente. Le agradecemos por informarnos.</></p>
@@ -120,13 +120,13 @@ async function editAppointmentEmail(appointment) {
     port: 465,
     secure: true,
     auth: {
-      user: "lineupfast@gmail.com",
-      pass: "pgmbdyklrdrjaigy",
+      user: "lineupwebapp1@gmail.com",
+      pass: "cemqxsdvqtswecjl",
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupfast@gmail.com`,
+    from: `lineupwebapp1@gmail.com`,
     to: `${email}`,
     subject: `Turno editado`,
     html: `<p><b></b>Su reserva ha sido editada exitosamente. Le agradecemos por informarnos.</></p>
