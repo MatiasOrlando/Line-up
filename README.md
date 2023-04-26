@@ -8,6 +8,14 @@ Location Operators: Operators can view and manage the list of appointments at th
 
 Admin User: Admin users can create, edit, and delete new locations, determine hours of operation for each location, have access to all appointments made at all locations, and have privileges to create new operators/branches.
 
+<br>
+
+## Deploy
+
+Link <a href="https://lineup-front-git-main-matiaso2194.vercel.app"/>LINE-UP</a>
+
+<br>
+
 ## Installation 🔧
 
 To run this project in a development environment, simply clone this repository.
