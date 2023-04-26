@@ -12,7 +12,7 @@ Admin User: Admin users can create, edit, and delete new locations, determine ho
 
 ## Deploy
 
-Link <a href="https://lineup-front.vercel.app/"/>LINE-UP</a>
+Link <a href="https://lineup-front-git-main-matiaso2194.vercel.app"/>LINE-UP</a>
 
 <br>
 
