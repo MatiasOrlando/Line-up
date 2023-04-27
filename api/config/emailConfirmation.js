@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 async function passwordUpdate(email, token) {
   let transporter = nodemailer.createTransport({
@@ -6,13 +7,13 @@ async function passwordUpdate(email, token) {
     port: 465,
     secure: true,
     auth: {
-      user: "lineupwebapp1@gmail.com",
-      pass: "cemqxsdvqtswecjl",
+      user: process.env.USER_GMAIL,
+      pass: process.env.PASSWORD_GMAIL,
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupwebapp1@gmail.com`,
+    from: process.env.USER_GMAIL,
     to: `${email}`,
     subject: `Actualiza tu contraseña`,
     html: `<p><b></b><a href="http://localhost:3000/password/${token}">Haz click aqui para cambiar tu contraseña</a></p>
@@ -36,14 +37,14 @@ async function appointmentConfirmation(appointment) {
     port: 465,
     secure: true,
     auth: {
-      user: "lineupwebapp1@gmail.com",
-      pass: "cemqxsdvqtswecjl",
+      user: process.env.USER_GMAIL,
+      pass: process.env.PASSWORD_GMAIL,
     },
   });
 
   try {
     let info = await transporter.sendMail({
-      from: `lineupwebapp1@gmail.com`,
+      from: process.env.USER_GMAIL,
       to: `${user.email}`,
       subject: `Confirmacion de turno`,
       html: `
@@ -65,13 +66,13 @@ async function accountActivation(email, token) {
     port: 465,
     secure: true,
     auth: {
-      user: "lineupwebapp1@gmail.com",
-      pass: "cemqxsdvqtswecjl",
+      user: process.env.USER_GMAIL,
+      pass: process.env.PASSWORD_GMAIL,
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupwebapp1@gmail.com`,
+    from: process.env.USER_GMAIL,
     to: `${email}`,
     subject: `Activa tu cuenta`,
     html: `<p><b></b><a href="http://localhost:3000?secret=${token}">Haz click aqui en este link activar tu cuenta</a></p>
@@ -91,13 +92,13 @@ async function cancelAppointmentEmail(appointment) {
     port: 465,
     secure: true,
     auth: {
-      user: "lineupwebapp1@gmail.com",
-      pass: "cemqxsdvqtswecjl",
+      user: process.env.USER_GMAIL,
+      pass: process.env.PASSWORD_GMAIL,
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupwebapp1@gmail.com`,
+    from: process.env.USER_GMAIL,
     to: `${email}`,
     subject: `Turno cancelado`,
     html: `<p><b></b>Su reserva ha sido cancelada exitosamente. Le agradecemos por informarnos.</></p>
@@ -120,13 +121,13 @@ async function editAppointmentEmail(appointment) {
     port: 465,
     secure: true,
     auth: {
-      user: "lineupwebapp1@gmail.com",
-      pass: "cemqxsdvqtswecjl",
+      user: process.env.USER_GMAIL,
+      pass: process.env.PASSWORD_GMAIL,
     },
   });
 
   let info = await transporter.sendMail({
-    from: `lineupwebapp1@gmail.com`,
+    from: process.env.USER_GMAIL,
     to: `${email}`,
     subject: `Turno editado`,
     html: `<p><b></b>Su reserva ha sido editada exitosamente. Le agradecemos por informarnos.</></p>
